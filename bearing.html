@@ -32,13 +32,19 @@
         }
 
         #container {
+            /* This tells the container to be a reference for "cqw" units */
+            container-type: inline-size;
+
             width: 100%;
-            max-width: 540px;
+            max-width: 540px; /* All 'cqw' units are based on this 540px max width */
             aspect-ratio: 9/16;
             background: var(--dark-bg);
             border: 3px solid var(--primary);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            
+            /* Converted to cqw for scaling */
+            border-radius: 5.55cqw; /* 30px / 540px * 100 */
+            box-shadow: 0 0 11.11cqw rgba(0, 102, 255, 0.3); /* 60px / 540px */
+            
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -52,7 +58,10 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            padding: 30px 25px;
+            
+            /* Converted to cqw for scaling */
+            padding: 5.55cqw 4.63cqw; /* 30px 25px / 540px */
+            
             text-align: center;
             opacity: 0;
             animation: fadeInScene 1s ease-out forwards;
@@ -70,22 +79,24 @@
 
         .hidden { display: none !important; }
 
-        /* Text Styles */
+        /* Text Styles - Converted to cqw */
         .title {
-            font-size: 52px;
+            font-size: 9.63cqw; /* 52px / 540px */
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 2.77cqw; /* 15px / 540px */
             line-height: 1.1;
             animation: slideDownIn 0.8s ease-out;
+            word-break: break-word; /* Added to prevent overflow */
         }
 
         .subtitle {
-            font-size: 40px;
+            font-size: 7.4cqw; /* 40px / 540px */
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 3.7cqw; /* 20px / 540px */
             line-height: 1.15;
             animation: slideUpIn 0.8s ease-out 0.15s forwards;
             opacity: 0;
+            word-break: break-word; /* Added to prevent overflow */
         }
 
         .text-primary { color: var(--primary); }
@@ -96,21 +107,22 @@
         .text-dim { color: var(--text-dim); }
 
         .description {
-            font-size: 26px;
+            font-size: 4.81cqw; /* 26px / 540px */
             font-weight: 500;
-            margin: 12px 0;
+            margin: 2.22cqw 0; /* 12px / 540px */
             line-height: 1.3;
             animation: slideUpIn 0.8s ease-out 0.3s forwards;
             opacity: 0;
+            word-break: break-word; /* Added to prevent overflow */
         }
 
-        /* Cards */
+        /* Cards - Converted to cqw */
         .card {
             background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
+            border: 2px solid var(--primary); /* Kept border in px for crispness */
+            border-radius: 2.96cqw; /* 16px / 540px */
+            padding: 3.7cqw; /* 20px / 540px */
+            margin: 1.48cqw 0; /* 8px / 540px */
             animation: scaleUpIn 0.7s ease-out;
             width: 100%;
         }
@@ -131,39 +143,53 @@
         }
 
         .card-title {
-            font-size: 28px;
+            font-size: 5.18cqw; /* 28px / 540px */
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 1.48cqw; /* 8px / 540px */
+            word-break: break-word; /* Added to prevent overflow */
         }
 
         .card-value {
-            font-size: 48px;
+            font-size: 8.88cqw; /* 48px / 540px */
             font-weight: 800;
-            margin: 10px 0;
+            margin: 1.85cqw 0; /* 10px / 540px */
         }
 
         .card-text {
-            font-size: 22px;
+            font-size: 4.07cqw; /* 22px / 540px */
             font-weight: 500;
-            margin: 8px 0;
+            margin: 1.48cqw 0; /* 8px / 540px */
+            word-break: break-word; /* Added to prevent overflow */
         }
 
-        /* List */
+        /* List - Converted to cqw */
         .list {
             text-align: left;
-            margin: 10px 0;
+            margin: 1.85cqw 0; /* 10px / 540px */
             width: 100%;
         }
 
         .list-item {
-            font-size: 24px;
+            font-size: 4.44cqw; /* 24px / 540px */
             font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
+            margin: 1.48cqw 0; /* 8px / 540px */
+            padding-left: 2.77cqw; /* 15px / 540px */
             animation: slideUpIn 0.6s ease-out forwards;
             opacity: 0;
             line-height: 1.3;
         }
+
+        /* --- More specific font size conversions --- */
+        .description[style*="font-size: 22px"] { font-size: 4.07cqw !important; } /* 22px / 540px */
+        .text-dim[style*="font-size: 20px"] { font-size: 3.7cqw !important; } /* 20px / 540px */
+        .card-text[style*="font-size: 24px"] { font-size: 4.44cqw !important; } /* 24px / 540px */
+        .card-text[style*="font-size: 20px"] { font-size: 3.7cqw !important; } /* 20px / 540px */
+        .card-title[style*="font-size: 24px"] { font-size: 4.44cqw !important; } /* 24px / 540px */
+        .list-item [style*="font-size: 20px"] { font-size: 3.7cqw !important; } /* 20px / 540px */
+        .description[style*="font-size: 22px"] { font-size: 4.07cqw !important; } /* 22px / 540px */
+        .icon[style*="font-size: 80px"] { font-size: 14.81cqw !important; } /* 80px / 540px */
+        /* --- End specific font sizes --- */
+
 
         .list-item:nth-child(1) { animation-delay: 0.2s; }
         .list-item:nth-child(2) { animation-delay: 0.35s; }
@@ -182,52 +208,55 @@
         .list-item:nth-child(15) { animation-delay: 2.3s; }
         .list-item:nth-child(16) { animation-delay: 2.45s; }
 
-        /* CTA Box */
+        /* CTA Box - Converted to cqw */
         .cta-box {
             background: rgba(0, 204, 68, 0.15);
             border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
+            border-radius: 2.96cqw; /* 16px / 540px */
+            padding: 3.33cqw; /* 18px / 540px */
+            margin-top: 2.77cqw; /* 15px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.3s forwards;
             opacity: 0;
             width: 100%;
         }
 
         .cta-text {
-            font-size: 22px;
+            font-size: 4.07cqw; /* 22px / 540px */
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 1.48cqw; /* 8px / 540px */
         }
 
         .cta-url {
-            font-size: 24px;
+            font-size: 4.44cqw; /* 24px / 540px */
             font-weight: 800;
             animation: pulse 2s ease-in-out infinite;
             word-break: break-all;
         }
 
         .icon {
-            font-size: 60px;
-            margin: 12px 0;
+            font-size: 11.11cqw; /* 60px / 540px */
+            margin: 2.22cqw 0; /* 12px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.2s forwards;
             opacity: 0;
         }
 
         .formula {
             font-family: 'Poppins', 'Arial', sans-serif;
-            font-size: 28px;
+            font-size: 5.18cqw; /* 28px / 540px */
             font-weight: 700;
             color: var(--text-main);
-            margin: 15px 0;
+            margin: 2.77cqw 0; /* 15px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.4s forwards;
             opacity: 0;
             word-break: break-all;
         }
-        .formula-sm { font-size: 24px; }
+        .formula-sm, 
+        .formula[style*="font-size: 24px"] { 
+            font-size: 4.44cqw !important; /* 24px / 540px */
+        }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
+        .spacing-small { height: 1.48cqw; } /* 8px / 540px */
+        .spacing-medium { height: 2.22cqw; } /* 12px / 540px */
 
         /* Helper for formula */
         sub { font-size: 0.6em; }
@@ -247,7 +276,7 @@
         <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">This is the core of Plant Reliability.</div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -272,7 +301,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -290,7 +319,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -315,7 +344,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -341,7 +370,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -364,7 +393,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -388,7 +417,7 @@
         <div class="description text-primary" style="font-size: 22px;">This is the ISO 281 / SKF standard.</div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -414,7 +443,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -439,7 +468,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -462,7 +491,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -485,7 +514,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -508,7 +537,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -535,7 +564,7 @@
         <div class="description text-warning" style="font-size: 22px;">Your 9-year bearing is now a 2-year bearing due to bad lube & dirt!</div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -558,7 +587,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -583,7 +612,7 @@
         </div>
         
         <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px; word-break: break-all;">
             prepared by https://designcalculators.co.in
         </div>
     </div>
@@ -629,9 +658,12 @@
     ];
     
     let currentSceneIndex = 0;
-    let sceneInterval;
+    let sceneTimeout; // Use setTimeout instead of setInterval
 
     function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
         // Hide all scenes
         document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
         
@@ -646,6 +678,13 @@
             } else {
                 console.error(`Scene with id "scene${sceneId}" not found.`);
             }
+
+            // Get the duration for the new current scene
+            let duration = sceneConfig[index].duration;
+            
+            // Schedule the next scene
+            sceneTimeout = setTimeout(nextScene, duration);
+
         } else {
              console.error(`Invalid scene index: ${index}`);
         }
@@ -654,33 +693,16 @@
     function nextScene() {
         currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
         showScene(currentSceneIndex);
-        resetInterval(); // Reset interval with new duration
     }
     
     function prevScene() {
         currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
         showScene(currentSceneIndex);
-        resetInterval(); // Reset interval with new duration
-    }
-    
-    function resetInterval() {
-        clearInterval(sceneInterval);
-        
-        // Get the duration for the new current scene
-        let duration = 7000; // Default duration
-        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
-            duration = sceneConfig[currentSceneIndex].duration;
-        } else {
-            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
-        }
-        
-        sceneInterval = setInterval(nextScene, duration);
     }
 
     // Initial setup
     if (sceneConfig.length > 0) {
         showScene(0);
-        resetInterval();
     } else {
         console.error("Scene configuration is empty.");
     }
@@ -694,6 +716,12 @@
             e.preventDefault();
             prevScene();
         }
+    });
+
+    /* --- ADDED TOUCH/CLICK CONTROLS --- */
+    document.getElementById('container').addEventListener('click', (e) => {
+        // Simple click advances to the next scene
+        nextScene();
     });
 </script>
 
