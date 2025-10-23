@@ -6,7 +6,7 @@
     <title>E&I Cable Sizing Guide</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #0066ff;
@@ -42,13 +42,19 @@
         }
 
         #container {
+            /* This tells the container to be a reference for "cqw" units */
+            container-type: inline-size;
+
             width: 100%;
-            max-width: 540px;
+            max-width: 540px; /* All 'cqw' units are based on this 540px max width */
             aspect-ratio: 9/16;
             background: var(--dark-bg);
             border: 3px solid var(--warning); /* Changed border color */
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(255, 153, 0, 0.3); /* Changed shadow color */
+            
+            /* Converted to cqw for scaling */
+            border-radius: 5.55cqw; /* 30px / 540px * 100 */
+            box-shadow: 0 0 11.11cqw rgba(255, 153, 0, 0.3); /* 60px / 540px */
+            
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -62,7 +68,10 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            padding: 30px 25px;
+
+            /* Converted to cqw for scaling */
+            padding: 5.55cqw 4.63cqw; /* 30px 25px / 540px */
+            
             text-align: center;
             opacity: 0;
             animation: fadeInScene 1s ease-out forwards; 
@@ -80,40 +89,42 @@
 
         .hidden { display: none !important; }
 
-        /* Text Styles */
+        /* Text Styles - Converted to cqw */
         .title {
-            font-size: 58px;
+            font-size: 10.74cqw; /* 58px / 540px */
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 2.77cqw; /* 15px / 540px */
             line-height: 1.15;
             animation: slideDownIn 0.8s ease-out;
+            word-break: break-word; /* Added for responsiveness */
         }
 
         .subtitle {
-            font-size: 42px;
+            font-size: 7.77cqw; /* 42px / 540px */
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 3.7cqw; /* 20px / 540px */
             line-height: 1.2;
             animation: slideUpIn 0.8s ease-out 0.15s forwards;
             opacity: 0;
+            word-break: break-word; /* Added for responsiveness */
         }
 
         .description {
-            font-size: 30px;
+            font-size: 5.55cqw; /* 30px / 540px */
             font-weight: 500;
-            margin: 12px 0;
+            margin: 2.22cqw 0; /* 12px / 540px */
             line-height: 1.3;
             animation: slideUpIn 0.8s ease-out 0.3s forwards;
             opacity: 0;
+            word-break: break-word; /* Added for responsiveness */
         }
 
-        /* Cards */
+        /* Cards - Converted to cqw */
         .card {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
+            border: 2px solid var(--primary); /* Kept border in px for crispness */
+            border-radius: 2.96cqw; /* 16px / 540px */
+            padding: 3.7cqw; /* 20px / 540px */
+            margin: 1.48cqw 0; /* 8px / 540px */
             animation: scaleUpIn 0.7s ease-out;
             width: 100%;
         }
@@ -125,40 +136,56 @@
         .card.info { background: rgba(0, 188, 212, 0.1); border-color: var(--info); }
 
         .card-title {
-            font-size: 32px;
+            font-size: 5.92cqw; /* 32px / 540px */
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 1.48cqw; /* 8px / 540px */
+            word-break: break-word; /* Added for responsiveness */
         }
 
         .card-value {
-            font-size: 50px;
+            font-size: 9.26cqw; /* 50px / 540px */
             font-weight: 800;
-            margin: 10px 0;
+            margin: 1.85cqw 0; /* 10px / 540px */
         }
 
         .card-text {
-            font-size: 26px;
+            font-size: 4.81cqw; /* 26px / 540px */
             font-weight: 500;
-            margin: 8px 0;
+            margin: 1.48cqw 0; /* 8px / 540px */
             line-height: 1.3;
+            word-break: break-word; /* Added for responsiveness */
         }
 
-        /* List */
+        /* List - Converted to cqw */
         .list {
             text-align: left;
-            margin: 10px 0;
+            margin: 1.85cqw 0; /* 10px / 540px */
             width: 100%;
         }
 
         .list-item {
-            font-size: 26px;
+            font-size: 4.81cqw; /* 26px / 540px */
             font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
+            margin: 1.48cqw 0; /* 8px / 540px */
+            padding-left: 2.77cqw; /* 15px / 540px */
             animation: slideUpIn 0.6s ease-out forwards;
             opacity: 0;
             line-height: 1.3;
         }
+
+        /* --- Specific font size conversions --- */
+        .subtitle[style*="font-size: 32px"] { font-size: 5.92cqw !important; } /* 32px / 540px */
+        .description[style*="font-size: 32px"] { font-size: 5.92cqw !important; } /* 32px / 540px */
+        .card-text[style*="font-size: 24px"] { font-size: 4.44cqw !important; } /* 24px / 540px */
+        .card-text[style*="font-size: 22px"] { font-size: 4.07cqw !important; } /* 22px / 540px */
+        .subtitle[style*="font-size: 30px"] { font-size: 5.55cqw !important; } /* 30px / 540px */
+        .list[style*="font-size: 22px"] { font-size: 4.07cqw !important; } /* 22px / 540px */
+        .list-item[style*="font-size: 22px"] { font-size: 4.07cqw !important; } /* 22px / 540px */
+        .list-item[style*="font-size: 24px"] { font-size: 4.44cqw !important; } /* 24px / 540px */
+        .description[style*="font-size: 28px"] { font-size: 5.18cqw !important; } /* 28px / 540px */
+        .description[style*="font-size: 20px"] { font-size: 3.7cqw !important; } /* 20px / 540px */
+        .icon[style*="font-size: 80px"] { font-size: 14.81cqw !important; } /* 80px / 540px */
+        /* --- End specific font sizes --- */
 
         .list-item:nth-child(1) { animation-delay: 0.2s; }
         .list-item:nth-child(2) { animation-delay: 0.35s; }
@@ -169,49 +196,64 @@
         .list-item:nth-child(7) { animation-delay: 1.1s; }
         .list-item:nth-child(8) { animation-delay: 1.25s; }
 
-        /* CTA Box */
+        /* CTA Box - Converted to cqw */
         .cta-box {
             background: rgba(0, 204, 68, 0.15);
             border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
+            border-radius: 2.96cqw; /* 16px / 540px */
+            padding: 3.33cqw; /* 18px / 540px */
+            margin-top: 2.77cqw; /* 15px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.3s forwards;
             opacity: 0;
             width: 100%;
         }
 
         .cta-text {
-            font-size: 26px;
+            font-size: 4.81cqw; /* 26px / 540px */
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 1.48cqw; /* 8px / 540px */
         }
 
         .cta-url {
-            font-size: 30px;
+            font-size: 5.55cqw; /* 30px / 540px */
             font-weight: 800;
             animation: pulse 2s ease-in-out infinite;
             white-space: nowrap;
         }
 
         .icon {
-            font-size: 60px;
-            margin: 12px 0;
+            font-size: 11.11cqw; /* 60px / 540px */
+            margin: 2.22cqw 0; /* 12px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.2s forwards;
             opacity: 0;
         }
 
         .formula {
-            font-size: 34px;
+            font-size: 6.29cqw; /* 34px / 540px */
             font-weight: 700;
-            margin: 15px 0;
+            margin: 2.77cqw 0; /* 15px / 540px */
             animation: scaleUpIn 0.7s ease-out 0.3s forwards;
             opacity: 0;
             word-wrap: break-word;
         }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
+        .spacing-small { height: 1.48cqw; } /* 8px / 540px */
+        .spacing-medium { height: 2.22cqw; } /* 12px / 540px */
+
+        /* --- FOOTER FIX --- */
+        .footer-credit {
+            font-size: 3.7cqw; /* 20px / 540px */
+            margin-top: auto;
+            padding-top: 2.77cqw; /* 15px / 540px */
+            word-break: break-all;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+        .footer-credit .url {
+            color: var(--primary); /* Brighter color for visibility */
+            font-weight: 600;
+        }
+        /* --- END FOOTER FIX --- */
     </style>
 </head>
 <body>
@@ -226,9 +268,8 @@
         <div class="spacing-medium"></div>
         <div class="description text-accent" style="font-size: 32px; animation-delay: 0.4s;">Safety & Uptime depend on sizing.</div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -248,9 +289,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">(Sized for Signal Integrity, Noise, Loop R)</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -264,9 +304,8 @@
             <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;">BUT... this value is almost always "derated".</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -284,9 +323,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -301,9 +339,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">(Often requires a LARGER cable than ampacity!)</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -317,9 +354,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">(This is a thermal shock calculation!)</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -337,9 +373,8 @@
             <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">You MUST select the <b>LARGEST</b> cable size from the three calculations.</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -353,9 +388,8 @@
             <div class="card-text text-success" style="font-size: 24px; margin-top: 10px;"><b>The Fix:</b> Twisting & Shielding</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -369,9 +403,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">The receiver (DCS) reads the *difference*, so the identical noise is "common-mode rejected" and ignored.</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -388,9 +421,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -405,9 +437,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">(Standard 1.5mm² or 18AWG is fine for most runs < 1km).</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -425,9 +456,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -443,9 +473,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">Standard for power. Rated 90°C. Can carry ~15-20% more current than same-size PVC.</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -461,9 +490,8 @@
             <div class="card-text text-dim" style="font-size: 22px;">For SINGLE CORE power (steel is magnetic, would overheat).</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -480,9 +508,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -499,9 +526,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -516,9 +542,8 @@
             <div class="card-text text-accent" style="font-size: 22px; margin-top: 10px;"><b>MANDATORY:</b> IS (blue) cables MUST be segregated from ALL other cables (Non-IS, Power).</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -536,9 +561,8 @@
             </div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 
@@ -555,9 +579,8 @@
             <div class="list-item text-accent" style="font-size: 24px;">DON'T: Forget derating factors.</div>
         </div>
 
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
     
@@ -578,8 +601,8 @@
 
         <!-- ADDED FOOTER -->
         <div class="spacing-medium"></div>
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="footer-credit">
+            prepared by <span class="url">https://designcalculators.co.in</span>
         </div>
     </div>
 </div>
@@ -661,28 +684,11 @@
         }
     });
 
-    // Add touch controls for mobile
-    let touchstartX = 0;
-    let touchendX = 0;
-
-    function handleGesture() {
-        if (touchendX < touchstartX - 50) { // Swiped left
-            nextScene();
-        }
-        if (touchendX > touchstartX + 50) { // Swiped right
-            prevScene();
-        }
-    }
-
-    const container = document.getElementById('container');
-    container.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    container.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        handleGesture();
-    }, { passive: true });
+    /* --- ADDED TOUCH/CLICK CONTROLS --- */
+    document.getElementById('container').addEventListener('click', (e) => {
+        // Simple click advances to the next scene
+        nextScene();
+    });
 
 </script>
 
