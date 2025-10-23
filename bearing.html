@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Bearing Life (L10) Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+        .list-item:nth-child(13) { animation-delay: 2.0s; }
+        .list-item:nth-child(14) { animation-delay: 2.15s; }
+        .list-item:nth-child(15) { animation-delay: 2.3s; }
+        .list-item:nth-child(16) { animation-delay: 2.45s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.4s forwards;
+            opacity: 0;
+            word-break: break-all;
+        }
+        .formula-sm { font-size: 24px; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        /* Helper for formula */
+        sub { font-size: 0.6em; }
+        sup { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">⚙️</div>
+        <div class="title text-accent">BEARING FAILURE?</div>
+        <div class="subtitle text-primary">Stop Guessing. Start Calculating.</div>
+        <div class="description text-dim">Unplanned Downtime costs $50,000/hr. A bearing costs $500.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">This is the core of Plant Reliability.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: What Is It? -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">What is L<sub>10</sub> Life?</div>
+        <div class="subtitle text-white">The "Catalog Life"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-text text-white" style="font-size: 24px;">
+                L<sub>10</sub> is the STATISTICAL life that <b>90%</b> of bearings will survive.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-accent" style="font-size: 24px;"><b>10%</b> will fail before this time.</div>
+        </div>
+
+        <div class="card warning">
+             <div class="card-title text-warning">The Trap:</div>
+             <div class="card-text text-white">This assumes PERFECT lab conditions (clean, perfect lube). This is NOT your plant!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 3: Why Should YOU Care? -->
+    <div id="scene3" class="scene">
+        <div class="title text-warning">Why Should YOU Care?</div>
+        <div class="subtitle text-white">It's Not Just "Mechanical"...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white"><b>Reliability:</b> This is how you PREDICT failures and prevent downtime.</div>
+            <div class="list-item text-white"><b>Electrical:</b> A failing bearing draws more current, tripping the motor.</div>
+            <div class="list-item text-white"><b>Managers:</b> This calculation justifies spending on better lube & seals.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 4: Bearing Type -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 1: Choose Your Fighter</div>
+        <div class="subtitle text-white">The Right Tool for the Job</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+             <div class="card-title text-success" style="font-size: 24px;">Ball Bearings</div>
+             <div class="card-text text-white">Good for HIGH SPEED, low load. (e.g., small motors)</div>
+        </div>
+        <div class="card">
+             <div class="card-title text-warning" style="font-size: 24px;">Roller Bearings</div>
+             <div class="card-text text-white">Good for HIGH LOAD, low speed. (e.g., gearboxes, conveyors)</div>
+        </div>
+        <div class="card">
+             <div class="card-title text-accent" style="font-size: 24px;">Thrust Bearings</div>
+             <div class="card-text text-white">Only for PURE AXIAL load. (e.g., vertical pump shaft)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Basic L10 (was 4) -->
+    <div id="scene5" class="scene">
+        <div class="title text-success">STEP 2: Basic L<sub>10</sub></div>
+        <div class="subtitle text-white">The "Ideal World" Calc</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">L<sub>10</sub> = (C / P)<sup>p</sup></div>
+            <div class="card-text text-dim" style="font-size: 20px;">(in Million Revolutions)</div>
+        </div>
+
+        <div class="list" style="text-align: center;">
+            <div class="list-item text-white"><b>C</b> = Dynamic Load Rating<br><span class="text-dim" style="font-size: 20px;">(From Catalog)</span></div>
+            <div class="list-item text-white"><b>P</b> = Equivalent Dynamic Load<br><span class="text-dim" style="font-size: 20px;">(Your Calculated Load)</span></div>
+            <div class="list-item text-white"><b>p</b> = The "Secret" Exponent:<br>
+                <span class="text-success" style="font-size: 20px;"><b>3</b> for Ball Bearings</span><br>
+                <span class="text-warning" style="font-size: 20px;"><b>10/3</b> for Roller Bearings</span>
+            </div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Calculating 'P' (was 5) -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">The #1 Sizing Trap!</div>
+        <div class="subtitle text-white">Calculating 'P'</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">'P' is NOT just the radial load. You must combine Radial (F<sub>r</sub>) and Axial (F<sub>a</sub>) loads.</div>
+        </div>
+        
+        <div class="card primary" style="margin-top: 20px;">
+             <div class="card-title text-primary">The Formula</div>
+             <div class="formula text-white">P = X * F<sub>r</sub> + Y * F<sub>a</sub></div>
+             <div class="card-text text-dim">X and Y are complex factors from the OEM catalog based on your specific load ratio.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: Modified Life (was 6) -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">STEP 3: Modified Life</div>
+        <div class="subtitle text-white">The "Expert-Level" Secret</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">This is the REAL life!</div>
+            <div class="card-text text-white">This formula adjusts the "ideal" L<sub>10</sub> life for real-world conditions.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">The Pro Formula</div>
+            <div class="formula text-white" style="font-size: 24px;">L<sub>10m</sub> = a<sub>1</sub> * a<sub>SKF</sub> * L<sub>10</sub></div>
+        </div>
+        
+        <div class="description text-primary" style="font-size: 22px;">This is the ISO 281 / SKF standard.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: Deconstruct 'a1' (was 7) -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">What is 'a<sub>1</sub>'?</div>
+        <div class="subtitle text-white">The Reliability Factor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">This is your "Risk" factor.</div>
+            <div class="card-text text-white">L<sub>10</sub> (90% reliability) uses a<sub>1</sub> = <b>1</b></div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">For Critical Apps:</div>
+            <div class="list" style="text-align: center;">
+                <div class="list-item text-white">L<sub>5</sub> (95%) → a<sub>1</sub> = <b>0.62</b></div>
+                <div class="list-item text-white">L<sub>1</sub> (99%) → a<sub>1</sub> = <b>0.21</b></div>
+            </div>
+            <div class="card-text text-dim">Want 99% reliability? Your "life" is 1/5th!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 9: Deconstruct 'a_SKF' (was 8) -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">What is 'a<sub>SKF</sub>'?</div>
+        <div class="subtitle text-white">The "Real World" Factor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+             <div class="card-title text-primary" style="font-size: 24px;">1. Lubrication (κ)</div>
+             <div class="card-text text-white">Is the oil/grease viscosity correct for the speed and temp?</div>
+        </div>
+        <div class="card accent">
+             <div class="card-title text-accent" style="font-size: 24px;">2. Contamination (η<sub>c</sub>)</div>
+             <div class="card-text text-white">How clean is the oil? Are the seals effective? (This is a HUGE factor!)</div>
+        </div>
+        <div class="card warning">
+             <div class="card-title text-warning" style="font-size: 24px;">3. Fatigue Load (P<sub>u</sub>)</div>
+             <div class="card-text text-white">Is your load below the bearing's endurance limit?</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 10: Lube Method -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary">The "Lube Method" Trap</div>
+        <div class="subtitle text-white">Grease vs. Oil</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+             <div class="card-title text-success" style="font-size: 24px;">Grease (Default)</div>
+             <div class="card-text text-white">Simple, sealed, cheap. Good for "sealed for life" or low-duty.</div>
+             <div class="card-text text-dim">Trap: Can't remove heat.</div>
+        </div>
+        <div class="card warning">
+             <div class="card-title text-warning" style="font-size: 24px;">Oil (Bath / Mist)</div>
+             <div class="card-text text-white">The Pro choice. Actively COOLS the bearing and flushes contaminants.</div>
+             <div class="card-text text-dim">Required for high speed & high temp.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 11: Shaft Fits -->
+    <div id="scene11" class="scene">
+        <div class="title text-accent">The "Expert" Trap</div>
+        <div class="subtitle text-white">Shaft & Housing Fits</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">A "loose" fit (slip fit) feels easy to install.</div>
+        </div>
+
+        <div class="card warning">
+             <div class="card-title text-warning">The Reality: "Creep"</div>
+             <div class="card-text text-white">A rotating shaft MUST have a TIGHT "interference fit" on the inner ring, or the ring will slip ('creep') and fail.</div>
+             <div class="card-text text-dim">Use ISO 286 (e.g., k5, M6) fits!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 12: Installation -->
+    <div id="scene12" class="scene">
+        <div class="title text-accent">The #1 Bearing Killer!</div>
+        <div class="subtitle text-white">Bad Installation</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">THE TRAP (Brinelling)</div>
+            <div class="card-text text-white">Using a HAMMER. This creates tiny dents in the raceway. The bearing is DEAD on Day 1.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">THE PRO WAY</div>
+             <div class="card-text text-white">1. Use an Induction Heater to expand the bearing.</div>
+             <div class="card-text text-white">2. Never press or impact the WRONG ring (e.g., pressing the outer ring to fit a shaft).</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: The "Money Slide" (was 9) -->
+    <div id="scene13" class="scene">
+        <div class="title text-warning">The "Money Slide"</div>
+        <div class="subtitle text-white">Why This Matters</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+             <div class="card-title text-success" style="font-size: 24px;">Ideal L<sub>10</sub> Life (Lab)</div>
+             <div class="card-value text-success">80,000 hrs</div>
+             <div class="card-text text-dim">(~9.1 Years)</div>
+        </div>
+        
+        <div class="card accent">
+             <div class="card-title text-accent" style="font-size: 24px;">L<sub>10m</sub> Life (Real Plant)</div>
+             <div class="card-text text-white" style="font-size: 20px;">(a<sub>1</sub>=1) * (a<sub>SKF</sub>=0.2) * (80,000)</div>
+             <div class="card-value text-accent">16,000 hrs</div>
+             <div class="card-text text-dim">(~1.8 Years)</div>
+        </div>
+        
+        <div class="description text-warning" style="font-size: 22px;">Your 9-year bearing is now a 2-year bearing due to bad lube & dirt!</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 14: The "Payback" (was 10) -->
+    <div id="scene14" class="scene">
+        <div class="title text-success">The "Payback"</div>
+        <div class="subtitle text-white">The Case for Better Lube</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">This calc PROVES:</div>
+            <div class="card-text text-white" style="font-size: 24px;">Clean, correct lubrication is NOT a "cost."</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">It is the #1 Factor</div>
+            <div class="card-text text-white">It is the most important factor in extending asset life and preventing downtime.</div>
+            <div class="card-text text-dim">This formula is your justification for filtered, sealed, high-quality lubrication.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 15: Final Specs (was 11) -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">OEM Spec Sheet</div>
+        <div class="subtitle text-white">What to tell the vendor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Bearing Type (Deep Groove, etc.)</div>
+            <div class="list-item text-white">✓ `C` (Dynamic Load Rating)</div>
+            <div class="list-item text-white">✓ `F<sub>r</sub>` (Radial) & `F<sub>a</sub>` (Axial) Load</div>
+            <div class="list-item text-white">✓ `n` (RPM)</div>
+            <div class="list-item text-white">✓ Target Reliability (L<sub>10</sub>, L<sub>1</sub>)</div>
+            <div class="list-item text-white">✓ Lube Method (Grease / Oil)</div>
+            <div class="list-item text-white">✓ Lube Viscosity (cSt)</div>
+            <div class="list-item text-white">✓ Contamination Factor (η<sub>c</sub>)</div>
+            <div class="list-item text-white">✓ Operating Temperature</div>
+            <div class="list-item text-white">✓ Shaft/Housing Fit (e.g., k5)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: Final Message (was 12) -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Guess.</div>
+        <div class="title text-primary">CALCULATE.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success">This is the heart of Proactive Maintenance.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations visit website</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Reliability Team</div>
+    </div>
+</div>
+
+<script>
+    const sceneConfig = [
+        { id: 1, duration: 8000 },  // Hook
+        { id: 2, duration: 10000 }, // What is L10
+        { id: 3, duration: 10000 }, // Why Care
+        { id: 4, duration: 10000 }, // NEW: Bearing Type
+        { id: 5, duration: 12000 }, // Basic L10
+        { id: 6, duration: 12000 }, // Trap: Calculating P
+        { id: 7, duration: 10000 }, // Expert: L10m
+        { id: 8, duration: 12000 }, // Deconstruct a1
+        { id: 9, duration: 12000 }, // Deconstruct a_SKF
+        { id: 10, duration: 10000 },// NEW: Lube Method
+        { id: 11, duration: 12000 },// NEW: Shaft Fits
+        { id: 12, duration: 12000 },// NEW: Installation
+        { id: 13, duration: 14000 },// The "Money Slide"
+        { id: 14, duration: 10000 },// The Payback
+        { id: 15, duration: 14000 },// Final Spec
+        { id: 16, duration: 10000 } // Final
+    ];
+    
+    let currentSceneIndex = 0;
+    let sceneInterval;
+
+    function showScene(index) {
+        // Hide all scenes
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        // Find and show the correct scene
+        if (sceneConfig[index]) {
+            const sceneId = sceneConfig[index].id;
+            const sceneElement = document.getElementById(`scene${sceneId}`);
+            
+            if (sceneElement) {
+                sceneElement.classList.remove('hidden');
+                sceneElement.scrollTop = 0; // Scroll to top
+            } else {
+                console.error(`Scene with id "scene${sceneId}" not found.`);
+            }
+        } else {
+             console.error(`Invalid scene index: ${index}`);
+        }
+    }
+
+    function nextScene() {
+        currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function prevScene() {
+        currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function resetInterval() {
+        clearInterval(sceneInterval);
+        
+        // Get the duration for the new current scene
+        let duration = 7000; // Default duration
+        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
+            duration = sceneConfig[currentSceneIndex].duration;
+        } else {
+            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
+        }
+        
+        sceneInterval = setInterval(nextScene, duration);
+    }
+
+    // Initial setup
+    if (sceneConfig.length > 0) {
+        showScene(0);
+        resetInterval();
+    } else {
+        console.error("Scene configuration is empty.");
+    }
+
+    // Allow keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene();
+        }
+    });
+</script>
+
+</body>
+</html>

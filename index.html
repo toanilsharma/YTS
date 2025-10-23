@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Engineering Calculator Portal</title>
+    <style>
+        :root {
+            --electrical: #3498db;
+            --mechanical: #e67e22;
+            --instrumentation: #2ecc71;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a2a6c, #2a4b8d);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #search {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .discipline-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+        }
+
+        .electrical-title {
+            color: var(--electrical);
+            border-color: var(--electrical);
+        }
+
+        .mechanical-title {
+            color: var(--mechanical);
+            border-color: var(--mechanical);
+        }
+
+        .instrumentation-title {
+            color: var(--instrumentation);
+            border-color: var(--instrumentation);
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .calculator-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border-left: 4px solid;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .electrical-card {
+            border-left-color: var(--electrical);
+        }
+
+        .mechanical-card {
+            border-left-color: var(--mechanical);
+        }
+
+        .instrumentation-card {
+            border-left-color: var(--instrumentation);
+        }
+
+        .calculator-icon {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .calculator-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Industrial Engineering Calculator Portal</h1>
+            <p class="tagline">World's Smartest Industrial Engineering Calculators — Design, Verify & Optimize.</p>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search for calculators...">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="discipline-section">
+            <h2 class="section-title electrical-title">
+                <span class="calculator-icon">⚡</span> Electrical Engineering Calculators
+            </h2>
+            <div class="calculator-grid" id="electrical-calculators">
+                <!-- Electrical calculators will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="discipline-section">
+            <h2 class="section-title mechanical-title">
+                <span class="calculator-icon">⚙️</span> Mechanical Engineering Calculators
+            </h2>
+            <div class="calculator-grid" id="mechanical-calculators">
+                <!-- Mechanical calculators will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <section class="discipline-section">
+            <h2 class="section-title instrumentation-title">
+                <span class="calculator-icon">🧠</span> Instrumentation & Control Engineering Calculators
+            </h2>
+            <div class="calculator-grid" id="instrumentation-calculators">
+                <!-- Instrumentation calculators will be populated by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2023 Industrial Engineering Calculator Portal</p>
+            <p>150+ calculators for industrial and design applications</p>
+        </div>
+    </footer>
+
+    <script>
+        // Calculator data with file names
+        const calculators = {
+            electrical: [
+                { name: "Motor Sizing / Load HP-kW Converter", file: "motor.html" },
+                { name: "Transformer Sizing & Rating Calculator", file: "transformer.html" },
+                { name: "Cable Sizing (Copper/Aluminum)", file: "cable.html" },
+                { name: "Voltage Drop Calculator", file: "voltagedrop.html" },
+                { name: "Load Current & Power Calculator", file: "loadcurrent.html" },
+                { name: "Power Factor Correction (kVAR Bank)", file: "powerfactor.html" },
+                { name: "UPS Sizing Calculator", file: "ups.html" },
+                { name: "Battery Backup / Runtime Calculator", file: "battery.html" },
+                { name: "Generator Capacity Calculator", file: "generator.html" },
+                { name: "VFD Selection / Rating Calculator", file: "vfd.html" },
+                { name: "Earthing Resistance Estimator", file: "earthing.html" },
+                { name: "Lighting Load / Lux Level Calculator", file: "lighting.html" },
+                { name: "Short Circuit / Fault Current Calculator", file: "shortcircuit.html" },
+                { name: "Demand Load & Diversity Estimator", file: "demandload.html" },
+                { name: "MCC / Switchgear Rating Calculator", file: "mcc.html" },
+                { name: "HT/LT Busbar Sizing Calculator", file: "busbar.html" },
+                { name: "Circuit Breaker Trip Setting Calculator", file: "circuitbreaker.html" },
+                { name: "Transformer Efficiency / Losses", file: "transformerefficiency.html" },
+                { name: "Reactive Power Compensation Calculator", file: "reactivepower.html" },
+                { name: "Harmonic Distortion (THD) Calculator", file: "harmonic.html" },
+                { name: "Current Transformer (CT/PT) Ratio Calculator", file: "currenttransformer.html" },
+                { name: "Protection Relay Coordination Check", file: "relay.html" },
+                { name: "Arc Flash Energy / PPE Level Estimator", file: "arcflash.html" },
+                { name: "Cable Derating Factor Calculator", file: "cablederating.html" },
+                { name: "Motor Starting Current & Starter Selection", file: "motorstarting.html" },
+                { name: "Power Consumption & Energy Cost Calculator", file: "energycost.html" },
+                { name: "Voltage Regulation Calculator", file: "voltageregulation.html" },
+                { name: "Load Balancing (3-Phase) Calculator", file: "loadbalancing.html" },
+                { name: "Motor Efficiency / Slip Calculator", file: "motorefficiency.html" },
+                { name: "Motor Torque vs Speed Calculator", file: "motortorque.html" },
+                { name: "Substation Fault Level Calculator", file: "substation.html" },
+                { name: "Distribution Transformer Sizing", file: "distributiontransformer.html" },
+                { name: "DG Synchronization Load Sharing Calculator", file: "dgsynchronization.html" },
+                { name: "Solar PV Array Sizing Calculator", file: "solar.html" },
+                { name: "Inverter Selection Calculator", file: "inverter.html" },
+                { name: "Battery Charger Sizing Calculator", file: "batterycharger.html" },
+                { name: "Cable Tray Fill / Size Estimator", file: "cabletray.html" },
+                { name: "Earthing Conductor Sizing Calculator", file: "earthingconductor.html" },
+                { name: "Bus Duct Heat Rise Calculator", file: "busduct.html" },
+                { name: "Lightning Protection (Air Terminal) Calculator", file: "lightning.html" }
+            ],
+            mechanical: [
+                { name: "Pump Head / Flow / Power Calculator", file: "pumphead.html" },
+                { name: "Pump Affinity Laws Calculator", file: "pumpaffinity.html" },
+                { name: "Centrifugal Pump Efficiency Calculator", file: "pumpefficiency.html" },
+                { name: "NPSH Margin Calculator", file: "npsh.html" },
+                { name: "Fan / Blower Sizing & Power Calculator", file: "fan.html" },
+                { name: "Pipe Flow Pressure Drop (Darcy-Weisbach)", file: "pipeflow.html" },
+                { name: "Compressor Power & CFM Calculator", file: "compressor.html" },
+                { name: "Heat Exchanger LMTD Calculator", file: "heatexchanger.html" },
+                { name: "Cooling Tower Capacity / Approach Calculator", file: "coolingtower.html" },
+                { name: "Chiller Load Calculator", file: "chiller.html" },
+                { name: "HVAC Air Flow & Duct Sizing Calculator", file: "hvac.html" },
+                { name: "Bearing Life (L10) Calculator", file: "bearing.html" },
+                { name: "Shaft Torque / Stress Calculator", file: "shaft.html" },
+                { name: "Pipe Wall Thickness / Schedule Calculator", file: "pipewall.html" },
+                { name: "Pipe Expansion / Contraction Calculator", file: "pipeexpansion.html" },
+                { name: "Pump System Curve Calculator", file: "pumpsystem.html" },
+                { name: "Valve Cv / Flow Capacity Calculator", file: "valve.html" },
+                { name: "Hydraulic Cylinder Force & Power Calculator", file: "hydraulic.html" },
+                { name: "Steam Flow Rate Calculator", file: "steam.html" },
+                { name: "Steam Trap Sizing Calculator", file: "steamtrap.html" },
+                { name: "Boiler Efficiency Calculator", file: "boiler.html" },
+                { name: "Thermal Expansion of Metals Calculator", file: "thermalexpansion.html" },
+                { name: "Heat Transfer Coefficient Estimator", file: "heattransfer.html" },
+                { name: "Centrifugal Force Calculator", file: "centrifugal.html" },
+                { name: "Belt Drive Power / Tension Calculator", file: "belt.html" },
+                { name: "Gear Ratio / Output Speed Calculator", file: "gear.html" },
+                { name: "Chain Drive Power Calculator", file: "chain.html" },
+                { name: "Vibration Frequency / Critical Speed Calculator", file: "vibration.html" },
+                { name: "Bolt Torque / Preload Calculator", file: "bolt.html" },
+                { name: "Flange Load / Gasket Stress Calculator", file: "flange.html" },
+                { name: "Pressure Vessel Thickness (ASME Basic)", file: "pressurevessel.html" },
+                { name: "Safety Valve Sizing Calculator", file: "safetyvalve.html" },
+                { name: "Fluid Velocity / Reynolds Number Calculator", file: "fluidvelocity.html" },
+                { name: "Pump Specific Speed Calculator", file: "pumpspecific.html" },
+                { name: "Fan Laws / Airflow Correction Calculator", file: "fanlaws.html" },
+                { name: "Cooling Water Flow Requirement Calculator", file: "coolingwater.html" },
+                { name: "Pump Power vs Efficiency Comparison", file: "pumppower.html" },
+                { name: "Energy Consumption & Cost Estimator", file: "energyconsumption.html" },
+                { name: "Centrifugal Compressor Power Calculator", file: "centrifugalcompressor.html" },
+                { name: "Heat Load Distribution Calculator", file: "heatload.html" }
+            ],
+            instrumentation: [
+                { name: "Control Valve Sizing (Cv/Kv) Calculator", file: "controlvalve.html" },
+                { name: "Orifice Flow Meter DP Calculator", file: "orifice.html" },
+                { name: "Venturi / Nozzle Flow Calculator", file: "venturi.html" },
+                { name: "Flow Transmitter Range & Calibration", file: "flowtransmitter.html" },
+                { name: "Pressure Transmitter Range Setting", file: "pressuretransmitter.html" },
+                { name: "Level Transmitter Calibration (Flat / Spherical / Cylindrical Tanks)", file: "leveltransmitter.html" },
+                { name: "DP Level Transmitter Range (Open / Closed Tank)", file: "dplevel.html" },
+                { name: "Temperature Conversion (°C/°F/K)", file: "temperature.html" },
+                { name: "RTD Resistance vs Temperature Calculator", file: "rtd.html" },
+                { name: "Thermocouple mV vs °C Conversion", file: "thermocouple.html" },
+                { name: "4–20 mA Signal Conversion Tool", file: "signal.html" },
+                { name: "Loop Power Supply Calculator", file: "looppower.html" },
+                { name: "Instrument Cable Voltage Drop Calculator", file: "instrumentcable.html" },
+                { name: "PLC I/O Load Calculator", file: "plc.html" },
+                { name: "PLC Memory / Scan Time Estimator", file: "plcmemory.html" },
+                { name: "PID Tuning (Ziegler–Nichols / IMC)", file: "pid.html" },
+                { name: "Sensor Linearity / Accuracy Calculator", file: "sensor.html" },
+                { name: "pH Probe Calibration Tool", file: "ph.html" },
+                { name: "Flow Totalizer Calculator", file: "flowtotalizer.html" },
+                { name: "Pressure Drop Across Control Valve Calculator", file: "pressuredrop.html" },
+                { name: "Valve Cv to Flow Conversion", file: "valvecv.html" },
+                { name: "Pneumatic Signal Conversion (3–15 psi ↔ 4–20 mA)", file: "pneumatic.html" },
+                { name: "Thermowell Wake Frequency Calculator", file: "thermowell.html" },
+                { name: "Flow Reynolds Number Estimator", file: "reynolds.html" },
+                { name: "Density Compensation Calculator", file: "density.html" },
+                { name: "DCS Tag Load & Channel Count Estimator", file: "dcs.html" },
+                { name: "Control Loop Time Constant Calculator", file: "controlloop.html" },
+                { name: "Transmitter Drift & Calibration Interval Estimator", file: "transmitterdrift.html" },
+                { name: "Signal Isolation / Ground Loop Checker", file: "signalisolation.html" },
+                { name: "Vibration Sensor Range Calculator", file: "vibrationsensor.html" },
+                { name: "Infrared Temperature Spot Ratio Calculator", file: "infrared.html" },
+                { name: "Ultrasonic Level Signal Time-of-Flight Calculator", file: "ultrasonic.html" },
+                { name: "Instrument Air Flow & Dew Point Estimator", file: "instrumentair.html" },
+                { name: "Control System Power Budget Calculator", file: "controlsystem.html" },
+                { name: "Pressure Unit Converter", file: "pressureunit.html" },
+                { name: "Flow Unit Converter", file: "flowunit.html" },
+                { name: "Process Gain / Dead Time Calculator", file: "processgain.html" },
+                { name: "Signal Noise Ratio (SNR) Estimator", file: "signalnoise.html" },
+                { name: "Data Acquisition Rate Calculator", file: "dataacquisition.html" },
+                { name: "Calibration Uncertainty Estimator", file: "calibration.html" }
+            ]
+        };
+
+        // Initialize the calculator grid
+        function initializeCalculatorGrid() {
+            const electricalGrid = document.getElementById('electrical-calculators');
+            const mechanicalGrid = document.getElementById('mechanical-calculators');
+            const instrumentationGrid = document.getElementById('instrumentation-calculators');
+
+            // Populate electrical calculators
+            calculators.electrical.forEach(calculator => {
+                const card = createCalculatorCard(calculator, 'electrical');
+                electricalGrid.appendChild(card);
+            });
+
+            // Populate mechanical calculators
+            calculators.mechanical.forEach(calculator => {
+                const card = createCalculatorCard(calculator, 'mechanical');
+                mechanicalGrid.appendChild(card);
+            });
+
+            // Populate instrumentation calculators
+            calculators.instrumentation.forEach(calculator => {
+                const card = createCalculatorCard(calculator, 'instrumentation');
+                instrumentationGrid.appendChild(card);
+            });
+        }
+
+        // Create calculator card element
+        function createCalculatorCard(calculator, type) {
+            const card = document.createElement('a');
+            card.className = `calculator-card ${type}-card`;
+            card.setAttribute('data-name', calculator.name.toLowerCase());
+            card.href = calculator.file;
+            card.target = "_blank";
+            
+            const icon = document.createElement('span');
+            icon.className = 'calculator-icon';
+            
+            // Set appropriate icon based on type
+            if (type === 'electrical') {
+                icon.textContent = '⚡';
+            } else if (type === 'mechanical') {
+                icon.textContent = '⚙️';
+            } else {
+                icon.textContent = '🧠';
+            }
+            
+            const nameElement = document.createElement('span');
+            nameElement.className = 'calculator-name';
+            nameElement.textContent = calculator.name;
+            
+            card.appendChild(icon);
+            card.appendChild(nameElement);
+            
+            return card;
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('search');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                // Get all calculator cards
+                const allCards = document.querySelectorAll('.calculator-card');
+                
+                // If search term is empty, show all cards
+                if (searchTerm === '') {
+                    allCards.forEach(card => {
+                        card.style.display = 'flex';
+                    });
+                    return;
+                }
+                
+                // Filter cards based on search term
+                let hasResults = false;
+                
+                allCards.forEach(card => {
+                    const calculatorName = card.getAttribute('data-name');
+                    
+                    if (calculatorName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                        hasResults = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show "no results" message if needed
+                showNoResultsMessage(!hasResults);
+            });
+        }
+
+        // Show or hide "no results" message
+        function showNoResultsMessage(show) {
+            // Remove existing message if any
+            const existingMessage = document.querySelector('.no-results');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            if (show) {
+                const message = document.createElement('div');
+                message.className = 'no-results';
+                message.textContent = 'No calculators found matching your search.';
+                
+                // Insert message after the search bar
+                const mainElement = document.querySelector('main');
+                mainElement.insertBefore(message, mainElement.firstChild);
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCalculatorGrid();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Compressor Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+        
+        .formula-box {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 10px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-main);
+            word-wrap: break-word;
+        }
+        
+        .formula-box.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .formula-box.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+            font-size: 20px;
+        }
+        
+        .formula-box.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+            font-size: 22px;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px; /* Slightly smaller for long lists */
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.3s; }
+        .list-item:nth-child(3) { animation-delay: 0.4s; }
+        .list-item:nth-child(4) { animation-delay: 0.5s; }
+        .list-item:nth-child(5) { animation-delay: 0.6s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💨</div>
+        <div class="title text-accent">COMPRESSOR SIZING</div>
+        <div class="subtitle text-primary">The #1 "Viral" Trap</div>
+        <div class="description text-dim">Is your "100 CFM" compressor undersized?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">The ACFM vs. SCFM Secret</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 2: The #1 Trap: ACFM vs. SCFM -->
+    <div id="scene2" class="scene">
+        <div class="title text-accent">The #1 "Secret"</div>
+        <div class="subtitle text-white" style="font-size: 32px;">ACFM vs. SCFM</div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">SCFM (Standard CFM)</div>
+            <div class="card-text text-white">The "mass" of air your tools need. Measured at a standard (e.g., 14.7 psi, 68°F).</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">ACFM (Actual CFM)</div>
+            <div class="card-text text-white">The "volume" of air the compressor *actually* inhales at your plant's altitude & temp.</div>
+        </div>
+        
+        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>TRAP:</b> You MUST buy a compressor rated for <b>ACFM</b> to deliver the required <b>SCFM</b>.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1 - Demand (SCFM) -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1: Demand</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Find Total Required SCFM</div>
+        
+        <div class="list">
+            <div class="list-item text-white">1. Sum all tool SCFM needs.</div>
+            <div class="list-item text-white">2. Apply Diversity Factor (e.g., 0.8 if not all run at once).</div>
+            <div class="list-item text-white">3. Add Future Growth (25%).</div>
+        </div>
+        
+        <div class="formula-box success" style="animation-delay: 0.4s; font-size: 20px;">
+            (Tool 1 + Tool 2) * Diversity * 1.25 = <b>Total SCFM</b>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">This is the "mass" of air you must deliver.</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2 - Correction (ACFM) -->
+    <div id="scene4" class="scene">
+        <div class="title text-warning">STEP 2: Correction</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Convert SCFM to ACFM</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Correct for your site's altitude & temperature.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box" style="animation-delay: 0.1s; font-size: 18px; line-height: 1.3;">
+            ACFM = SCFM &times; (P<sub>std</sub> / P<sub>actual</sub>) &times; (T<sub>actual</sub> / T<sub>std</sub>)
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">High Altitude?</div>
+            <div class="card-text text-white">Air is thinner (P<sub>actual</sub> is low). You need a *higher* ACFM compressor to deliver the same SCFM mass.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Step 3 - Total Pressure -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">STEP 3: Total Pressure</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The "OpEx" Trap</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your compressor must fight the *entire* system.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box accent" style="animation-delay: 0.1s; font-size: 20px;">
+            P<sub>comp</sub> = P<sub>tool</sub> + &Delta;P<sub>dryer</sub> + &Delta;P<sub>filters</sub> + &Delta;P<sub>piping</sub>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">The "OpEx" Trap</div>
+            <div class="card-text text-white">Every 2 psi of extra pressure drop costs 1% in energy. Size pipes and filters correctly!</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: Step 4 - The "Real" Physics -->
+    <div id="scene6" class="scene">
+        <div class="title text-primary">STEP 4: The Physics</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Polytropic Compression</div>
+        
+        <div class="card" style="animation-delay: 0.1s;">
+            <div class="card-title text-dim">Isothermal (n=1)</div>
+            <div class="card-text text-white">Perfectly cooled. 100% efficient. Impossible.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Isentropic (n=k)</div>
+            <div class="card-text text-white">No cooling (adiabatic). Hot, inefficient.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.3s;">
+            <div class="card-title text-success">Polytropic (n=~1.3)</div>
+            <div class="card-text text-white">The real-world path *with* intercooling. This is what you must calculate.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: The "Money" Formula -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">STEP 5: The Power</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Brake Horsepower (BHP)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">The industrial formula:</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box success" style="animation-delay: 0.1s; font-size: 16px; line-height: 1.3;">
+            BHP = [ (P<sub>in</sub> &times; ACFM) / (229 &times; &eta;<sub>poly</sub>) ] &times; [ (P<sub>out</sub>/P<sub>in</sub>)<sup>(n-1)/n</sup> - 1 ]
+        </div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 22px;">P<sub>in</sub>/P<sub>out</sub> = Inlet/Outlet Pressure</div>
+            <div class="list-item text-white" style="font-size: 22px;">n = Polytropic Exponent (~1.3)</div>
+            <div class="list-item text-white" style="font-size: 22px;">&eta;<sub>poly</sub> = Polytropic Efficiency</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: Air Treatment -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">STEP 6: Air Quality</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Hot, Wet & Oily Air</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Air from the compressor is useless for instruments.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Aftercooler & Dryer</div>
+            <div class="card-text text-white">Cools the air and removes moisture. (Refrigerated or Desiccant)</div>
+        </div>
+        
+        <div class="card warning" style.animation-delay: 0.2s;>
+            <div class="card-title text-warning">Filters (Coalescing)</div>
+            <div class="card-text text-white">Removes oil aerosols. Critical for "Instrument Air."</div>
+        </div>
+        
+        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>Pro Tip:</b> Specify air quality via **ISO 8573.1 Class** (e.g., "Class 1.2.1").</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 9: Compressor Types -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">STEP 7: The Choice</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Compressor Types</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Positive Displacement</div>
+            <div class="card-text text-white">(Reciprocating / Screw) <br> Good efficiency at part-load. Best for variable demand.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Centrifugal (Dynamic)</div>
+            <div class="card-text text-white">High efficiency at *full* load. Best for steady, high-demand baseloads. Risk of "Surge."</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: The "Viral" Tip -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">The $10,000 Leak</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The "Real" OpEx Killer</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your #1 enemy isn't efficiency. It's leaks.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">A Single 1/4" (6mm) Leak</div>
+            <div class="card-text text-white">At 100 psi, a tiny leak like this can cost over <b>$10,000 per year</b> in wasted electricity.</div>
+        </div>
+        
+        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>Pro Tip:</b> An ultrasonic leak detector will pay for itself in one day.</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: Final Spec Sheet -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">STEP 8: OEM Spec</div>
+        <div class="subtitle text-white" style="font-size: 32px;">What to Tell the Vendor</div>
+        
+        <div class="list" style="font-size: 24px; line-height: 1.3;">
+            <div class="list-item text-white">✓ <b>Required SCFM</b></div>
+            <div class="list-item text-white">✓ <b>Site Conditions:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Altitude, Ambient Temp</div>
+            <div class="list-item text-white">✓ <b>Calculated ACFM</b></div>
+            <div class="list-item text-white">✓ <b>Discharge Pressure</b></div>
+            <div class="list-item text-white">✓ <b>Required Air Quality:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">ISO 8573.1 Class</div>
+            <div class="list-item text-white">✓ <b>Compressor Type</b></div>
+            <div class="list-item text-white">✓ <b>Motor (kW/BHP, VFD?)</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Final Message -->
+    <div id="scene12" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Buy "CFM"</div>
+        <div class="title text-primary">Demand "SCFM"!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">This is the #1 secret to industrial air sizing.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    // Updated scenes array
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
+    // Updated durations in ms
+    const sceneDurations = [
+        8000,  // Scene 1: Hook
+        15000, // Scene 2: The #1 Trap (ACFM vs SCFM)
+        12000, // Scene 3: Demand (SCFM)
+        15000, // Scene 4: Correction (ACFM)
+        15000, // Scene 5: Total Pressure (The OpEx Trap)
+        12000, // Scene 6: The "Real" Physics
+        15000, // Scene 7: The "Money" Formula (BHP)
+        15000, // Scene 8: Air Treatment (ISO Class)
+        12000, // Scene 9: Compressor Types
+        12000, // Scene 10: The "Viral" Tip ($10k Leak)
+        15000, // Scene 11: Final Spec Sheet
+        8000   // Scene 12: Final Message
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Cooling Tower Sizing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .formula-sm { font-size: 24px; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        /* Helper for formula */
+        sub { font-size: 0.6em; }
+        sup { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🌬️💧</div>
+        <div class="title text-accent">Cooling Tower Sizing</div>
+        <div class="subtitle text-primary">The #1 OpEx in Your Plant</div>
+        <div class="description text-dim">Is your "Approach" costing you?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">This is NOT a chiller.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 2: The #1 Secret -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The #1 Secret</div>
+        <div class="subtitle text-white">The WET BULB (WBT) Limit</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Law of Physics</div>
+            <div class="card-text text-white" style="font-size: 24px;">
+                A cooling tower uses EVAPORATION.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-white">You can NEVER cool your water below the Wet Bulb Temperature of the air.</div>
+        </div>
+
+        <div class="card">
+             <div class="card-title text-primary">This is your site's limit!</div>
+             <div class="card-text text-dim">(e.g., 28°C in summer)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 3: Step 1 - The "Range" -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1: The "Range"</div>
+        <div class="subtitle text-white">This is your Process Load</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">Range = T<sub>Hot,in</sub> - T<sub>Cold,out</sub></div>
+            <div class="card-text text-white" style="font-size: 24px;">This is the temperature DROP your process needs.</div>
+        </div>
+        
+        <div class="card success" style="margin-top: 20px;">
+             <div class="card-title text-success">Example</div>
+             <div class="card-text text-white" style="font-size: 24px;">Process sends 40°C water</div>
+             <div class="card-text text-white" style="font-size: 24px;">Needs 32°C water back</div>
+             <div class="spacing-small"></div>
+             <div class="card-value text-success" style="font-size: 44px;">Range = 8°C</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2 - The "Approach" -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">STEP 2: The "Approach"</div>
+        <div class="subtitle text-white">The REAL Performance Spec</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Approach = T<sub>Cold,out</sub> - T<sub>WET BULB</sub></div>
+            <div class="card-text text-white" style="font-size: 24px;">This is how *close* you get to the physical limit.</div>
+        </div>
+
+        <div class="card warning" style="margin-top: 20px;">
+             <div class="card-title text-warning">Expert Tip</div>
+             <div class="card-text text-white">A 2°C Approach is EXPONENTIALLY larger and more expensive than a 4°C Approach.</div>
+             <div class="card-text text-dim">Standard is 4-5°C (7-9°F).</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Step 3 - Heat Load (Q) -->
+    <div id="scene5" class="scene">
+        <div class="title text-success">STEP 3: Heat Load (Q)</div>
+        <div class="subtitle text-white">This Sets The Tower Size</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Q = ṁ × C<sub>p</sub> × Range</div>
+        </div>
+
+        <div class="list" style="text-align: center;">
+            <div class="list-item text-white"><b>Q</b> = Heat Load (kW)</div>
+            <div class="list-item text-white"><b>ṁ</b> = Water Flow Rate (kg/s)</div>
+            <div class="list-item text-white"><b>C<sub>p</sub></b> = Specific Heat (~4.18)</div>
+            <div class="list-item text-white"><b>Range</b> = Your T-Drop (°C)</div>
+        </div>
+        
+        <div class="description text-primary" style="font-size: 22px;">This 'Q' is your "Tons of Refrigeration".</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The "OpEx Killer" -->
+    <div id="scene6" class="scene">
+        <div class="title text-warning">The "OpEx Killer"</div>
+        <div class="subtitle text-white">Total Makeup Water</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Makeup = Evap + Blowdown + Drift</div>
+        </div>
+
+        <div class="list" style="font-size: 22px; text-align: center;">
+            <div class="list-item text-white"><b>Evaporation:</b> The cooling! ~1% of flow per 5.5°C Range.</div>
+            <div class="list-item text-white"><b>Blowdown:</b> Draining water to control mineral (TDS) buildup.</div>
+            <div class="list-item text-white"><b>Drift:</b> Mist lost to air (small with good drift eliminators).</div>
+        </div>
+        
+        <div class="description text-success" style="font-size: 22px;">This is your 24/7 water bill!</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 7: Cycles of Concentration -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">Expert Tip: "COC"</div>
+        <div class="subtitle text-white">Cycles of Concentration</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">What is it?</div>
+            <div class="card-text text-white" style="font-size: 24px;">
+                Measures how "concentrated" the minerals are in your tower vs. makeup water.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-dim">e.g., 3 COC = 3x the minerals</div>
+        </div>
+
+        <div class="card accent">
+             <div class="card-title text-accent">Why it Matters:</div>
+             <div class="card-text text-white">Higher COC = LESS Blowdown = Less Water Wasted.</div>
+             <div class="card-text text-dim">...but requires better chemical treatment to prevent scale.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 8: Fill Media -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">The #1 Design Trap</div>
+        <div class="subtitle text-white">Fill Media: Film vs. Splash</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">❌ Film Fill</div>
+            <div class="card-text text-white">Thin plastic sheets. HIGHLY efficient.</div>
+            <div class="card-text text-warning" style="font-size: 24px;">BUT clogs instantly with dirty/process water. (Clean HVAC only!)</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">✅ Splash Fill</div>
+             <div class="card-text text-white">Bars/grids that "splash" water. Less efficient.</div>
+             <div class="card-text text-success" style="font-size: 24px;">REQUIRED for dirty water (Refineries, Steel, Chemical).</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 9: VFDs -->
+    <div id="scene9" class="scene">
+        <div class="title text-success">The #1 Energy Saver</div>
+        <div class="subtitle text-white">Use a VFD on The Fan</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">The Fan Affinity Law</div>
+            <div class="card-text text-white" style="font-size: 24px;">
+                Power ∝ Speed³ (Cube Law)
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-white">80% Fan Speed = ~51% Power!</div>
+        </div>
+
+        <div class="card">
+             <div class="card-title text-primary">How?</div>
+             <div class="card-text text-white">Your WBT is lower at night and in winter. The VFD slows the fan to match the WBT, saving massive energy.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: Types (Draft) -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary">STEP 4: Choose Draft</div>
+        <div class="subtitle text-white">How the Air Moves</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Forced Draft</div>
+            <div class="card-text text-white">Fan at bottom, BLOWING air IN. High velocity, but can re-circulate air.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">Induced Draft</div>
+            <div class="card-text text-white">Fan at top, SUCKING air OUT. Most common & efficient. Good discharge velocity.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: Types (Flow) -->
+    <div id="scene11" class="scene">
+        <div class="title text-primary">STEP 5: Choose Flow</div>
+        <div class="subtitle text-white">Air vs. Water Path</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">Cross-Flow</div>
+            <div class="card-text text-white">Air moves HORIZONTALLY through the fill as water falls.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">Counter-Flow</div>
+            <div class="card-text text-white">Air moves VERTICALLY up, against the falling water. MOST EFFICIENT.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: The LETHAL Safety Trap -->
+    <div id="scene12" class="scene">
+        <div class="title text-accent">The LETHAL Trap</div>
+        <div class="subtitle text-white">Water Treatment & Safety</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">DANGER: Legionella</div>
+            <div class="card-text text-white" style="font-size: 24px;">The warm, wet environment (30-45°C) is a perfect breeding ground for Legionella bacteria.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">Non-Negotiable Solution</div>
+             <div class="card-text text-white">A robust treatment program is mandatory for:</div>
+             <div class="card-text text-primary" style="font-size: 24px;">Scale • Corrosion • Bio-Growth</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 13: Final Specs -->
+    <div id="scene13" class="scene">
+        <div class="title text-warning">OEM Spec Sheet</div>
+        <div class="subtitle text-white">What to tell the vendor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Heat Load (Q) in kW</div>
+            <div class="list-item text-white">✓ Water Flow Rate (m³/hr)</div>
+            <div class="list-item text-white">✓ T<sub>Hot,in</sub> & T<sub>Cold,out</sub></div>
+            <div class="list-item text-white">✓ Site WET BULB Temp (WBT)</div>
+            <div class="list-item text-white">✓ Required Approach (T<sub>Cold,out</sub> - WBT)</div>
+            <div class="list-item text-white">✓ Fill Media (Film or Splash)</div>
+            <div class="list-item text-white">✓ Cycles of Concentration (COC)</div>
+            <div class="list-item text-white">✓ Type (Induced Draft, etc.)</div>
+            <div class="list-item text-white">✓ Fan VFD Required?</div>
+            <div class="list-item text-white">✓ Materials (FRP, SS, etc.)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: Final Message -->
+    <div id="scene14" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Cool...</div>
+        <div class="title text-primary">Cool SMART.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success">Control Your OpEx & Safety</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations visit website</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const sceneConfig = [
+        { id: 1, duration: 7000 },  // Hook
+        { id: 2, duration: 10000 }, // WBT Limit
+        { id: 3, duration: 9000 },  // Range
+        { id: 4, duration: 10000 }, // Approach
+        { id: 5, duration: 9000 },  // Heat Load
+        { id: 6, duration: 11000 }, // Makeup Water
+        { id: 7, duration: 11000 }, // NEW: COC
+        { id: 8, duration: 12000 }, // NEW: Fill Media
+        { id: 9, duration: 11000 }, // NEW: VFDs
+        { id: 10, duration: 8000 }, // Draft Types
+        { id: 11, duration: 8000 }, // Flow Types
+        { id: 12, duration: 12000 }, // Water Treatment
+        { id: 13, duration: 14000 }, // NEW: OEM Spec
+        { id: 14, duration: 10000 }  // Final
+    ];
+    
+    let currentSceneIndex = 0;
+    let sceneInterval;
+
+    function showScene(index) {
+        // Hide all scenes
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        // Find and show the correct scene
+        if (sceneConfig[index]) {
+            const sceneId = sceneConfig[index].id;
+            const sceneElement = document.getElementById(`scene${sceneId}`);
+            
+            if (sceneElement) {
+                sceneElement.classList.remove('hidden');
+                sceneElement.scrollTop = 0; // Scroll to top
+            } else {
+                console.error(`Scene with id "scene${sceneId}" not found.`);
+            }
+        } else {
+             console.error(`Invalid scene index: ${index}`);
+        }
+    }
+
+    function nextScene() {
+        currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function prevScene() {
+        currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function resetInterval() {
+        clearInterval(sceneInterval);
+        
+        // Get the duration for the new current scene
+        let duration = 7000; // Default duration
+        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
+            duration = sceneConfig[currentSceneIndex].duration;
+        } else {
+            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
+        }
+        
+        sceneInterval = setInterval(nextScene, duration);
+    }
+
+    // Initial setup
+    if (sceneConfig.length > 0) {
+        showScene(0);
+        resetInterval();
+    } else {
+        console.error("Scene configuration is empty.");
+    }
+
+    // Allow keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene();
+        }
+    });
+</script>
+
+</body>
+</html>

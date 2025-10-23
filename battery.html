@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Battery Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 10px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🔋</div>
+        <div class="title text-accent">BLACKOUT?</div>
+        <div class="subtitle text-primary">Industrial Battery Sizing</div>
+        <div class="description text-dim">This is NOT a simple formula.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">The #1 Most Failed Calculation</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: Step 1: Find DC Load -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Find Your DC Load (Amps)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Find the *true* DC current your battery must supply.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">DC Amps =</div>
+            <div class="card-text text-white">(UPS kVA × PF) / (Inverter Eff. × DC Volts)</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Example:</div>
+            <div class="card-text text-white">(50kVA × 0.9) / (0.95 × 120V)</div>
+            <div class="card-value text-success" style="font-size: 44px;">= 395 Amps</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 2: Define Autonomy -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 2</div>
+        <div class="subtitle text-white">Define Autonomy (Time)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">How long must it last?</div>
+        <div class="spacing-medium"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">30 Minutes?</div>
+            <div class="card-text text-white">Standard for safe shutdown of a process.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">60 Minutes?</div>
+            <div class="card-text text-white">Common if you need time to start a backup generator.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.3s;">
+            <div class="card-title text-accent">8 Hours?</div>
+            <div class="card-text text-white">Rare. Used for critical remote sites (e.g., wellheads, pipelines).</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 4: NEW - How Many Cells? -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 3</div>
+        <div class="subtitle text-white">How Many Cells?</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Find the cell count for your DC voltage.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Lead-Acid (2V)</div>
+            <div class="card-text text-white">120V System / 2.0V per cell</div>
+            <div class="card-value text-success" style="font-size: 44px;">= 60 Cells</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">Ni-Cd (1.2V)</div>
+            <div class="card-text text-white">120V System / 1.2V per cell</div>
+            <div class="card-value text-success" style="font-size: 44px;">= 100 Cells</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: NEW - EODV Constraint -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">STEP 4: The #1 Constraint</div>
+        <div class="subtitle text-warning" style="font-size: 32px;">The EODV Check</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your battery's final voltage MUST be > your Inverter's minimum DC input.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Min. Battery Volts =</div>
+            <div class="card-text text-white">Total Cells × EODV per cell</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Example (Lead-Acid):</div>
+            <div class="card-text text-white">60 Cells × 1.75V/cell = <b>105 Volts</b></div>
+            <div class="card-text text-dim" style="font-size: 20px;">This MUST be > Inverter Min. DC (e.g., 100V)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: (was 4) The "Pro" Factors -->
+    <div id="scene6" class="scene">
+        <div class="title text-warning">STEP 5: The "Pro" Factors</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Correct Your Load (Amps)</div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">Aging Factor (1.25)</div>
+            <div class="card-text text-white">Size for Year 10/20, not Year 1. Add +25%. (IEEE 485)</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">Temperature (Kt)</div>
+            <div class="card-text text-white">Batteries hate cold. At 10°C, you may need +15% more Ah.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.3s;">
+            <div class="card-title text-primary">Design Margin (1.15)</div>
+            <div class="card-text text-white">For load uncertainty and inverter inefficiency. Add +15%.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: (was 5) The Corrected Load -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">STEP 6</div>
+        <div class="subtitle text-white">The Corrected Load</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This is the *real* load the battery must supply.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Corrected Amps =</div>
+            <div class="card-text text-white">Load Amps × Aging × Temp × Margin</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Example:</div>
+            <div class="card-text text-white">395 A × 1.25 × 1.15 × 1.10</div>
+            <div class="card-value text-success" style="font-size: 44px;">= 625 Amps</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: NEW - Load Profile -->
+    <div id="scene8" class="scene">
+        <div class="title text-primary">STEP 7: Expert Sizing</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Use a Load Profile!</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">A flat load is wrong. A real plant has steps.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Load 1 (Momentary)</div>
+            <div class="card-text text-white">600 Amps for 1 minute (e.g., Inrush, Breakers)</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">Load 2 (Steady)</div>
+            <div class="card-text text-white">350 Amps for 29 minutes (e.g., Control Systems)</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Give this profile to the OEM!</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: (was 6) The "Viral" Secret -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">STEP 8: The "C-Rate Lie"</div>
+        <div class="subtitle text-warning" style="font-size: 32px;">The #1 Sizing Trap</div>
+        <div class="icon" style="font-size: 80px;">❌</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">A 100Ah (C/10) Battery...</div>
+            <div class="card-text text-white">...gives 10A for 10 hours.</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">It CANNOT give 100A for 1 hour! It will die in ~40 minutes.</div>
+        </div>
+        
+        <div class="description text-white" style="font-size: 22px;">Why? (Peukert's Law). The faster the discharge, the less Ah you get.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: (was 7) The *Real* Solution -->
+    <div id="scene10" class="scene">
+        <div class="title text-success">STEP 9: The *Real* Solution</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Use OEM Discharge Tables</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This is the only correct way.</div>
+        <div class="spacing-medium"></div>
+
+        <div class="card success">
+            <div class="card-title text-success">Ask The OEM For:</div>
+            <div class="card-text text-white" style="font-size: 24px;">"The battery model that can supply my full Load Profile (after correction factors)."</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Your Job:</div>
+            <div class="card-text text-white">The OEM will find the battery model that meets all steps of your profile.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: (was 8) Battery Chemistries -->
+    <div id="scene11" class="scene">
+        <div class="title text-primary">STEP 10</div>
+        <div class="subtitle text-white">Industrial Battery Types</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Vented Lead-Acid (LA 2V)</div>
+            <div class="card-text text-white">20-25yr life. High maintenance (needs water). EODV: ~1.75V/cell.</div>
+        </div>
+
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">VRLA (SMF 2V / 12V)</div>
+            <div class="card-text text-white">10-12yr life. Maintenance-free. Must be in cool, clean room.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.3s;">
+            <div class="card-title text-warning">Nickel-Cadmium (Ni-Cd 1.2V)</div>
+            <div class="card-text text-white">25+ yr life. Loves high temps. Different EODV: ~1.1V/cell.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 12: NEW - Safety -->
+    <div id="scene12" class="scene">
+        <div class="title text-accent">STEP 11: The *LETHAL* Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Installation Safety</div>
+        <div class="icon" style="font-size: 80px;">💥</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Hydrogen (H₂) Gas!</div>
+            <div class="card-text text-white">Vented Lead-Acid (LA) and Ni-Cd batteries release explosive H₂ gas during charging.</div>
+        </div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning">✓ MUST be in a dedicated room.</div>
+            <div class="list-item text-warning">✓ MUST have forced ventilation.</div>
+            <div class="list-item text-warning">✓ All fans/lights MUST be HazLoc/ATEX rated.</div>
+            <div class="list-item text-warning">✓ NO other electrical equipment in room.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: (was 9) Final Spec Sheet -->
+    <div id="scene13" class="scene">
+        <div class="title text-warning">STEP 12</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Full Industrial Spec</div>
+        
+        <div class="list" style="font-size: 22px; line-height: 1.4;">
+            <div class="list-item text-white">✓ Battery Type (VRLA, LA, Ni-Cd)</div>
+            <div class="list-item text-white">✓ DC System Voltage & # of Cells</div>
+            <div class="list-item text-accent">✓ <b>Load Profile (Amps vs. Time)</b></div>
+            <div class="list-item text-accent">✓ <b>Final EODV (e.g., 1.75V/cell)</b></div>
+            <div class="list-item text-warning">✓ <b>Min/Max Ambient Temp</b></div>
+            <div class="list-item text-warning">✓ <b>Required Design Life (10/20yr)</b></div>
+            <div class="list-item text-warning">✓ <b>Aging & Design Margin %</b></div>
+            <div class="list-item text-white">✓ Room Ventilation (H₂ Safety)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: (was 10) Final Message -->
+    <div id="scene14" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Guess Your Lifeline</div>
+        <div class="title text-primary">Protect Your Process!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">A failed battery = A failed UPS</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1: Hook
+        10000, // Scene 2: Find DC Load
+        9000,  // Scene 3: Define Autonomy
+        9000,  // Scene 4: NEW - Cell Count
+        10000, // Scene 5: NEW - EODV Constraint
+        10000, // Scene 6: Pro Factors (was 4)
+        9000,  // Scene 7: Corrected Load (was 5)
+        10000, // Scene 8: NEW - Load Profile
+        10000, // Scene 9: C-Rate Lie (was 6)
+        12000, // Scene 10: Real Solution (was 7)
+        12000, // Scene 11: Battery Types (was 8)
+        10000, // Scene 12: NEW - Safety
+        12000, // Scene 13: Final Spec (was 9)
+        7000   // Scene 14: Final Message (was 10)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Transmitter Calibration Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        /* Fixed CSS syntax error below: replaced comma with semicolon */
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">📈</div>
+        <div class="title text-primary">PRESSURE CALIBRATION</div>
+        <div class="subtitle text-warning">The #1 Job: LEVEL</div>
+        <div class="description text-dim">In industry, "Pressure" almost always means "Level".</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">Get this wrong, and you flood a tank.</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Goal -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Goal</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">Translate Physics to a Signal</div>
+        
+        <div class="card primary">
+            <div class="card-text text-white" style="font-size: 26px;">Physical Pressure (e.g., 0-1000 mbar)</div>
+            <div class="card-value text-primary" style="font-size: 40px;">⬇</div>
+            <div class="card-text text-white" style="font-size: 26px;">Transmitter</div>
+            <div class="card-value text-success" style="font-size: 40px;">⬇</div>
+            <div class="card-text text-white" style="font-size: 26px;">4-20mA Signal</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The #1 Job: LRV & URV -->
+    <div id="scene3" class="scene">
+        <div class="title text-accent">The Core Task</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Set The Range</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">LRV: 4mA</div>
+            <div class="card-text text-white" style="font-size: 22px;">Lower Range Value</div>
+            <div class="card-text text-dim" style="font-size: 20px;">(Your 0% Level)</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">URV: 20mA</div>
+            <div class="card-text text-white" style="font-size: 22px;">Upper Range Value</div>
+            <div class="card-text text-dim" style="font-size: 20px;">(Your 100% Level)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: The 3 Applications -->
+    <div id="scene4" class="scene">
+        <div class="title text-success">The 3 Applications</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 24px;">1. Gauge / Absolute</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Simple pressure reading)</div>
+
+            <div class="list-item text-primary" style="font-size: 24px;">2. Level (Open Tank)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Vented to atmosphere)</div>
+            
+            <div class="list-item text-warning" style="font-size: 24px;">3. DP Level (Closed Tank)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Pressurized, e.g., Steam Drum)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Case 1: Open Tank -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">Case 1: Open Tank</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Hydrostatic Head)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Pressure = h × SG</div>
+            <div class="card-text text-white" style="font-size: 22px;">(Level Height × Specific Gravity)</div>
+        </div>
+        
+        <div class="card success" style="text-align: left; padding: 15px 25px;">
+            <div class="card-text text-white" style="font-size: 20px;"><b>0% (LRV):</b> 0 mbar</div>
+            <div class="card-text text-white" style="font-size: 20px;"><b>100% (URV):</b> (Max Height) × SG</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: Case 2: Closed Tank -->
+    <div id="scene6" class="scene">
+        <div class="title text-warning">Case 2: Closed Tank</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Using a DP Transmitter)</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">This is CRITICAL.</div>
+            <div class="card-text text-white" style="font-size: 22px;">You must cancel out the blanket pressure.</div>
+            <div class="card-text text-primary" style="font-size: 24px; margin-top: 10px;">HP Tap (Bottom) - LP Tap (Top) = Level</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Expert Cal #1: "Zero ELEVATION" -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">Expert Cal #1</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Zero ELEVATION"</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Problem:</div>
+            <div class="card-text text-white" style="font-size: 22px;">Transmitter is 1m BELOW the 0% tank tap.</div>
+            <div class="card-title text-success" style="margin-top: 10px;">Solution:</div>
+            <div class="card-text text-white" style="font-size: 22px;">This 1m of liquid head *elevates* the zero.</div>
+            <div class="card-text text-warning" style="font-size: 24px;">LRV (4mA) = +Head (e.g., +100 mbar)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: Expert Cal #2: "Zero SUPPRESSION" -->
+    <div id="scene8" class="scene">
+        <div class="title text-primary">Expert Cal #2</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Zero SUPPRESSION"</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Problem: (Wet Leg)</div>
+            <div class="card-text text-white" style="font-size: 22px;">The LP tap on a steam drum *fills with water*. This false head must be removed.</div>
+            <div class="card-title text-success" style="margin-top: 10px;">Solution:</div>
+            <div class="card-text text-white" style="font-size: 22px;">Calibrate to *suppress* this head.</div>
+            <div class="card-text text-warning" style="font-size: 24px;">LRV (4mA) = -Head (e.g., -500 mbar)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: CRITICAL: Safety (PTW) -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Permit to Work (PTW)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">GET A PERMIT.</div>
+            <div class="card-text text-white" style="font-size: 22px;">You are touching a live, hazardous process. Lock-Out, Tag-Out (LOTO).</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Inform Control Room.</div>
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Bypass logic / trips.</div>
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Verify tag & line.</div>
+            </div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: CRITICAL: Safety (The Work) -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(The Work Itself)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Wear PPE (Eyes, Gloves).</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Be aware of HIGH Temp/Pressure.</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Bleed pressure *slowly* & safely.</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ LEAK CHECK all fittings (Snoop) after finishing.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: The Manifold (The Tool) -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">The 3/5-Valve Manifold</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Your Toolkit</div>
+        
+        <div class="card warning" style="text-align: left; padding: 15px 25px;">
+            <div class="card-text text-white" style="font-size: 22px;"><b>Block Valves (HP & LP)</b></div>
+            <div class="card-text text-success" style="font-size: 22px;"><b>Equalizing Valve</b></div>
+            <div class="card-text text-primary" style="font-size: 22px;"><b>Bleed Valves</b></div>
+            <div class="card-text text-dim" style="font-size: 20px; margin-top: 10px;">This is ESSENTIAL for safe zeroing.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: How to "Zero" (Gauge) -->
+    <div id="scene12" class="scene">
+        <div class="title text-success">How to "Zero" (Gauge)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Open Tank / Pressure)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 22px;">1. CLOSE Block Valve.</div>
+            <div class="list-item text-success" style="font-size: 22px;">2. SLOWLY open Bleed Valve to vent.</div>
+            <div class="card-text text-white" style="font-size: 20px;">(Pressure is now 0 barg).</div>
+            <div class="list-item text-success" style="font-size: 22px;">3. Perform "Zero" at transmitter.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">4. CLOSE Bleed, SLOWLY open Block.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: How to "Zero" (DP) -->
+    <div id="scene13" class="scene">
+        <div class="title text-primary">How to "Zero" (DP)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Closed Tank Level)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-primary" style="font-size: 22px;">1. CLOSE both Block Valves (HP & LP).</div>
+            <div class="list-item text-primary" style="font-size: 22px;">2. OPEN the Equalizing Valve.</div>
+            <div class="card-text text-white" style="font-size: 20px;">(DP = 0).</div>
+            <div class="list-item text-primary" style="font-size: 22px;">3. Perform "Zero" at transmitter.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">4. CLOSE Equalizer *firmly*.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">5. SLOWLY open HP, then LP block.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: Dos & Don'ts -->
+    <div id="scene14" class="scene">
+        <div class="title text-warning">CRITICAL: Dos & Don'ts</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 24px;">DO: Use a hand-pump (calibrator) to check URV (100% span).</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Check for filled/blocked impulse lines.</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: "Shock" the transmitter. Open valves SLOWLY.</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Trust a reading until you verify the zero.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    
+    <!-- Scene 15: Final OEM Specification -->
+    <div id="scene15" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 20px;">✓ Calibrated Range (LRV/URV)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Wetted Materials (316L, Hastelloy)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Diaphragm Seals? (For temp/corrosion)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Protocol (HART, Foundation Fieldbus)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Safety Rating (SIL 2/3)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Hazardous Area (Ex d / Ex i)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">A READING IS DATA.</div>
+        <div class="title text-primary">A CALIBRATED READING IS A FACT.</div>
+        <div class="spacing-medium"></div>
+        <div classs="description text-success" style="font-size: 26px;">Never trust an unverified zero.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (Goal)
+        7000,  // Scene 3 (LRV/URV)
+        7000,  // Scene 4 (3 Apps)
+        7000,  // Scene 5 (Open Tank)
+        7000,  // Scene 6 (Closed Tank)
+        9000,  // Scene 7 (Elevation)
+        9000,  // Scene 8 (Suppression)
+        8000,  // Scene 9 (Safety/PTW)
+        8000,  // Scene 10 (Safety/Work)
+        7000,  // Scene 11 (Manifold)
+        9000,  // Scene 12 (Zero Gauge)
+        9000,  // Scene 13 (Zero DP)
+        8000,  // Scene 14 (Dos/Donts)
+        10000, // Scene 15 (Spec Sheet)
+        7000   // Scene 16 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

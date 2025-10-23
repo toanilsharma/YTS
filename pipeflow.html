@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Pressure Drop Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+        
+        .formula-box {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 15px;
+            margin: 10px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+            font-size: 26px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-main);
+        }
+        
+        .formula-box.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .formula-box.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+            font-size: 20px;
+        }
+        
+        .formula-box.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+            font-size: 22px;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px; /* Slightly smaller for long lists */
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.3s; }
+        .list-item:nth-child(3) { animation-delay: 0.4s; }
+        .list-item:nth-child(4) { animation-delay: 0.5s; }
+        .list-item:nth-child(5) { animation-delay: 0.6s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💧</div>
+        <div class="title text-accent">PRESSURE DROP</div>
+        <div class="subtitle text-primary">The "Viral" Guide</div>
+        <div class="description text-dim">Is your pump undersized? Did you miss this?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">The Gold Standard: Darcy-Weisbach</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 2: The Core Formula -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">The Formula</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Total Head Loss (h<sub>L</sub>)</div>
+        
+        <div class="formula-box" style="animation-delay: 0.1s;">
+            h<sub>L</sub> = h<sub>major</sub> + h<sub>minor</sub>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">h<sub>major</sub> (Pipe)</div>
+            <div class="card-text text-white">Friction loss from the pipe itself.</div>
+        </div>
+
+        <div class="card warning" style="animation-delay: 0.3s;">
+            <div class="card-title text-warning">h<sub>minor</sub> (Fittings)</div>
+            <div class="card-text text-white">Loss from valves, elbows, tees, etc.</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">The #1 Trap: Forgetting h<sub>minor</sub> can be 50% of the total!</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The "Major Loss" Formula -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">h<sub>major</sub>: The Core Task</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Darcy-Weisbach</div>
+        
+        <div class="formula-box" style="animation-delay: 0.1s; font-size: 24px;">
+            &Delta;P = <b>f</b> (L/D) (&rho;V<sup>2</sup> / 2)
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">The "Secret" is 'f'</div>
+            <div class="card-text text-white">The Friction Factor (<b>f</b>) is NOT a constant. It's the entire problem.</div>
+        </div>
+
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Anyone using a constant 'f' is wrong. 'f' depends on...</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 1 - Reynolds Number -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 1: Find 'f'</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Reynolds Number (Re)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">First, find the "Flow Identity"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box" style="animation-delay: 0.1s;">
+            Re = (&rho;VD) / &mu;
+        </div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 22px;">&rho; = Fluid Density</div>
+            <div class="list-item text-white" style="font-size: 22px;">V = Fluid Velocity</div>
+            <div class="list-item text-white" style="font-size: 22px;">D = Pipe Diameter</div>
+            <div class="list-item text-white" style="font-size: 22px;">&mu; = Fluid Viscosity</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Step 2 - Flow Regime -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">STEP 2: The Regime</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Laminar vs. Turbulent</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Re < 2300 (Laminar)</div>
+            <div class="card-text text-white">Flow is smooth, predictable. The "easy" one.</div>
+            <div class="formula-box" style="font-size: 24px; margin-top: 10px;"><b>f = 64 / Re</b></div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Re > 4000 (Turbulent)</div>
+            <div class="card-text text-white">Flow is chaotic. This is 99% of industrial flow. 'f' is now much harder...</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The "Turbulent" Trap -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">The "Turbulent" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">'f' has a new dependency</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">For turbulent flow, 'f' depends on Re AND...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box accent" style="animation-delay: 0.1s;">
+            Relative Roughness ( &epsilon; / D )
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">&epsilon; (Pipe Roughness)</div>
+            <div class="card-text text-white">The "grip" of the pipe wall. (e.g., Steel = 0.045 mm, PVC = 0.0015 mm)</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">The relationship is complex, shown by the Moody Diagram...</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: The "Expert" Solution -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">The "Expert" Solution</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Solving the Moody Diagram</div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">The "Real" Formula</div>
+            <div class="card-text text-white">The chart is based on the **Colebrook-White** equation. It's iterative (hard to solve).</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">The "Engineer's Shortcut"</div>
+            <div class="card-text text-white">Use the **Swamee-Jain** equation. A powerful shortcut that solves 'f' directly.</div>
+        </div>
+        
+        <div class="formula-box success" style="animation-delay: 0.3s; font-size: 16px; line-height: 1.3;">
+            f = 0.25 / [ log<sub>10</sub>( (&epsilon;/D)/3.7 + 5.74/Re<sup>0.9</sup> ) ]<sup>2</sup>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The *OTHER* 50% -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">STEP 3: h<sub>minor</sub></div>
+        <div class="subtitle text-white" style="font-size: 32px;">The "Forgotten" 50%</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your pipe isn't straight.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Valves, Bends, Tees...</div>
+            <div class="card-text text-white">Each fitting has a "K-Factor" (Loss Coefficient) from a table.</div>
+        </div>
+        
+        <div class="formula-box warning" style="animation-delay: 0.2s; font-size: 22px;">
+            &Delta;P<sub>minor</sub> = <b>&Sigma;K</b> (&rho;V<sup>2</sup> / 2)
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Sum the K-Factors for ALL fittings. This is your total minor loss.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 9: The Final Calculation (RE-INSERTED) -->
+    <div id="scene9" class="scene">
+        <div class="title text-success">STEP 4: The Result</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Total System Loss</div>
+        
+        <div class="card success" style="animation-delay: 0.1s;">
+            <div class="card-title text-success">Total Head Loss (m)</div>
+            <div class="formula-box" style="font-size: 20px; margin-top: 10px; line-height: 1.3;">
+                h<sub>L</sub> = [ <b>f</b>(L/D) + <b>&Sigma;K</b> ] (V<sup>2</sup> / 2g)
+            </div>
+        </div>
+
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Total Pressure (bar)</div>
+            <div class="formula-box accent" style="font-size: 20px; margin-top: 10px; line-height: 1.3;">
+                &Delta;P = [ <b>f</b>(L/D) + <b>&Sigma;K</b> ] (&rho;V<sup>2</sup> / 2)
+            </div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">This is the friction loss your pump must overcome.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: "Expert" Trap (Gases) -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">The "Expert" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Compressible Flow (Gases)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">The #1 mistake with air or gas.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">Density (&rho;) is NOT constant!</div>
+            <div class="card-text text-white">As pressure drops, gas expands, velocity increases, and density changes.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">The Pro Solution</div>
+            <div class="card-text text-white"><b>1.</b> If &Delta;P < 10% of P<sub>in</sub>, using average density is OK. <br><b>2.</b> If &Delta;P > 10%, you MUST use Isothermal or Adiabatic formulas.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- NEW Scene 11: Velocity Limits -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">The "Other" Constraint</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Velocity Limits (API 14E)</div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Erosion Limit (Liquids)</div>
+            <div class="card-text text-white">Too fast = erosion. Typical limit: 3-6 m/s (10-20 ft/s). For corrosive or sandy fluids, go lower.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Noise/Vibration (Gases)</div>
+            <div class="card-text text-white">Too fast = extreme noise & vibration. Typical limit: 60 m/s (200 ft/s).</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Your pipe MUST pass both &Delta;P and Velocity checks.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 12: CapEx vs OpEx -->
+    <div id="scene12" class="scene">
+        <div class="title text-success">The "Business" Check</div>
+        <div class="subtitle text-white" style="font-size: 32px;">CapEx vs. OpEx</div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">Small Pipe (High &Delta;P)</div>
+            <div class="card-text text-white"><b>Pro:</b> Low CapEx (cheap pipe).<br><b>Con:</b> High OpEx (huge pump, high energy bill for 20 years).</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">Large Pipe (Low &Delta;P)</div>
+            <div class="card-text text-white"><b>Pro:</b> Low OpEx (small pump, low energy).<br><b>Con:</b> High CapEx (expensive pipe).</div>
+        </div>
+        
+        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>The Goal:</b> Find the "Economic Diameter" with the lowest Total Cost of Ownership.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- NEW Scene 13: Water Hammer -->
+    <div id="scene13" class="scene">
+        <div class="title text-accent">The "Surge" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Water Hammer (Transient)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This guide is for *steady* flow. But what happens when a valve slams shut?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">The "Hammer"</div>
+            <div class="card-text text-white">The moving liquid's momentum creates a massive, destructive pressure spike (surge) that can rupture pipes.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">The Pro Solution</div>
+            <div class="card-text text-white">This is a separate, complex "Surge Analysis" to check if you need soft-starters, VFDs, or surge tanks.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: (was 11) The "Why" -->
+    <div id="scene14" class="scene">
+        <div class="title text-success">Why Did We Do This?</div>
+        <div class="subtitle text-white" style="font-size: 32px;">To Build the System Curve</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This calculation is the "k" in your pump curve.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="formula-box success" style="animation-delay: 0.1s;">
+            H<sub>sys</sub> = H<sub>static</sub> + kQ<sup>2</sup>
+        </div>
+
+        <div class="card" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">System Curve</div>
+            <div class="card-text text-white"><b>H<sub>static</sub></b> = Static lift (height). <br><b>kQ<sup>2</sup></b> = Your friction loss (h<sub>L</sub>) that you just calculated!</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Now you can plot this against a pump curve to find the real duty point.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: (was 12) Final Spec Sheet -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">STEP 5</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Inputs You MUST Have</div>
+        
+        <div class="list" style="font-size: 24px; line-height: 1.3;">
+            <div class="list-item text-white">✓ <b>Fluid Properties:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Density (&rho;) & Viscosity (&mu;) at T</div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">State (Liquid, Gas?)</div>
+            <div class="list-item text-white">✓ <b>Flow Rate (Q)</b></div>
+            <div class="list-item text-white">✓ <b>Pipe Details:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Length (L), Diameter (D)</div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Roughness (&epsilon;)</div>
+            <div class="list-item text-white">✓ <b>Minor Losses:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">A full list of K-Factors for all fittings.</div>
+            <div class="list-item text-white">✓ <b>Velocity Check:</b></div>
+            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Max/Min allowed velocity.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: (was 13) Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Guess</div>
+        <div class="title text-primary">Calculate!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">The #1 reason pumps fail is a bad system curve.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    // Updated scenes array
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Updated durations in ms
+    const sceneDurations = [
+        8000,  // Scene 1: Hook
+        12000, // Scene 2: Core Formula (Major/Minor)
+        12000, // Scene 3: Major Loss (The 'f' secret)
+        12000, // Scene 4: Reynolds Number
+        12000, // Scene 5: Flow Regime
+        12000, // Scene 6: Turbulent Trap (Roughness)
+        15000, // Scene 7: "Expert" Solution (Swamee-Jain)
+        15000, // Scene 8: Minor Losses (K-Factors)
+        12000, // Scene 9: Final Calculation
+        12000, // Scene 10: "Expert" Trap (Gases)
+        15000, // Scene 11: NEW Velocity
+        15000, // Scene 12: NEW CapEx/OpEx
+        15000, // Scene 13: NEW Water Hammer
+        12000, // Scene 14: (was 11) The "Why"
+        12000, // Scene 15: (was 12) Final Spec
+        8000   // Scene 16: (was 13) Final Message
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

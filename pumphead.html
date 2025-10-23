@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Pump Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 32px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🌊</div>
+        <div class="title text-primary">THE PLANT'S HEART</div>
+        <div class="subtitle text-accent">Industrial Pump Sizing</div>
+        <div class="description text-dim">Why "Bigger" is NOT Better</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">A Pro-Level Guide</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Cost of Guessing -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The Cost of Guessing</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Too Small = Starvation</div>
+            <div class="card-value text-accent" style="font-size: 44px;">Cavitation 💥</div>
+            <div class="card-text text-dim">Fails to meet flow/pressure, destroys impeller, starves the process.</div>
+        </div>
+
+        <div class="card warning">
+            <div class="card-title text-warning">Too Large = Wasted $$$</div>
+            <div class="card-value text-warning" style="font-size: 44px;">Throttling</div>
+            <div class="card-text text-dim">Massive energy waste, erosion, high maintenance, runs off-curve.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1 - Flow Rate (Q) -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1: Define Flow (Q)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(m³/hr or GPM)</div>
+        <div class="description text-dim" style="font-size: 24px;">This is your Process Requirement.</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Find Your Demand</div>
+            <div class="card-text text-white">From P&ID, Mass Balance, or Process Data Sheets.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Future Proofing</div>
+            <div class="card-text text-white">Add 15-25% Margin for future capacity or control valve operation.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2 - Total Dynamic Head (H) - The Concept -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 2: Find Head (H)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">This is the Total Work</div>
+        <div class="description text-dim" style="font-size: 24px;">It has 3 key parts...</div>
+
+        <div class="card accent" style="animation-delay: 0.3s;">
+            <div class="card-title text-accent" style="font-size: 28px;">H_total = H_static</div>
+        </div>
+        <div class="card primary" style="animation-delay: 0.5s;">
+            <div class="card-title text-primary" style="font-size: 28px;">+ H_friction</div>
+        </div>
+        <div class="card success" style="animation-delay: 0.7s;">
+            <div class="card-title text-success" style="font-size: 28px;">+ H_pressure</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: Head Part 1: Static Head -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">Head: H_static</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The 'Vertical Lift'</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Static Head</div>
+            <div class="card-text text-white" style="font-size: 22px;">H_static = Z_discharge - Z_suction</div>
+            <div class="card-text text-dim">(Discharge Elevation - Suction Elevation)</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Key Concept</div>
+            <div class="card-text text-white">This value is CONSTANT. It does not change with flow rate.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Head Part 2: Friction Head -->
+    <div id="scene6" class="scene">
+        <div class="title text-primary">Head: H_friction</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The 'Resistance'</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Friction Loss</div>
+            <div class="card-text text-white">Loss from liquid rubbing against pipes, valves, elbows, & fittings.</div>
+        </div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">"Wow" Factor</div>
+            <div class="card-text text-white">Friction is flow-dependent!</div>
+            <div class="card-value text-accent" style="font-size: 40px;">H_friction ∝ Q²</div>
+            <div class="card-text text-dim">(Doubling flow = 4x friction)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Head Part 3: Pressure Head -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">Head: H_pressure</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The 'System Pressure'</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Pressure Head</div>
+            <div class="card-text text-white" style="font-size: 22px;">H_pressure = (P_discharge - P_suction) / (ρ * g)</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Example</div>
+            <div class="card-text text-white">Pumping into a 5 bar reactor requires MORE head than an open tank (0 bar).</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The "Critical Check" - NPSH -->
+    <div id="scene8" class="scene">
+        <div class="title text-accent">The Critical Check</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Net Positive Suction Head</div>
+        <div class="description text-dim" style="font-size: 24px;">Can the pump "breathe"?</div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">THE GOLDEN RULE</div>
+            <div class="card-value text-accent" style="font-size: 40px;">NPSH-A > NPSH-R</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">NPSH-A (Available)</div>
+            <div class="card-text text-white">Your system's property. (You must calculate this!)</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">NPSH-R (Required)</div>
+            <div class="card-text text-white">The pump's property. (From the OEM / Curve)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Step 3 - Power Calculation -->
+    <div id="scene9" class="scene">
+        <div class="title text-success">STEP 3: Find Power (P)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Final Step</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-white" style="font-size: 22px;">1. Hydraulic Power (Water)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">P_hyd = (Q × H × ρ × g)</div>
+            
+            <div class="list-item text-white" style="font-size: 22px;">2. Brake Horsepower (Shaft)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">P_brake = P_hyd / η_pump</div>
+            
+            <div class="list-item text-white" style="font-size: 22px;">3. Motor Power (Electrical)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">P_motor = P_brake / η_motor</div>
+            
+            <div class="list-item text-accent" style="font-size: 24px;">η = Efficiency (from Curve)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: The Pump Curve -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary" style="font-size: 60px;">The Pump Curve</div>
+        <div class="subtitle text-white" style="font-size: 36px;">This is your 'Map'</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 34px;">Find Duty Point</div>
+            <div class="card-text text-white" style="font-size: 26px;">Where your System Curve (Q vs H) intersects the Pump Curve.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 34px;">Check BEP</div>
+            <div class="card-text text-white" style="font-size: 26px;">Your Duty Point MUST be near the Best Efficiency Point (BEP).</div>
+            <div class="card-text text-dim" style="font-size: 24px;">(Typically 80-110% of BEP flow)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Final OEM Spec Sheet -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">Final OEM Spec</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Data Sheet</div>
+        
+        <div class="list" style="font-size: 26px;">
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Fluid (Name, Temp, SG, Viscosity)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Flow (Q) (Min / Rated / Max)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Total Head (H) at Rated Flow</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ NPSH Available (NPSH-A)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Pump Type (Centrifugal, PD)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Materials of Construction (Wetted)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Seal Type (Mechanical / Gland)</div>
+            <div class="list-item text-primary" style="font-size: 26px;">✓ Motor Specs (kW, IE Class, Ex)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Final Message -->
+    <div id="scene12" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Select on the CURVE.</div>
+        <div class="title text-primary">Not just the numbers.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Match the Pump to the System.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        6000,  // Scene 1 (Hook)
+        8000,  // Scene 2 (Cost of Guessing)
+        8000,  // Scene 3 (Step 1: Flow)
+        7000,  // Scene 4 (Step 2: Head Concept)
+        8000,  // Scene 5 (Static Head)
+        8000,  // Scene 6 (Friction Head)
+        8000,  // Scene 7 (Pressure Head)
+        9000,  // Scene 8 (NPSH "Wow" Factor)
+        9000,  // Scene 9 (Step 3: Power)
+        9000,  // Scene 10 (Pump Curve)
+        10000, // Scene 11 (Final Spec Sheet)
+        7000   // Scene 12 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Motor Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 26px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">⚙️</div>
+        <div class="title text-accent">THE WORKHORSE</div>
+        <div class="subtitle text-primary">Industrial Motor Sizing</div>
+        <div class="description text-dim">It's More Than Just kW...</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">The OEM-level spec guide</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Problem -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The Cost of 'Close Enough'</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Small = UNDERSIZED</div>
+            <div class="card-value text-accent" style="font-size: 44px;">Constant Overload</div>
+            <div class="card-text text-dim">Trips, overheating, winding failure, production loss.</div>
+        </div>
+
+        <div class="spacing-small"></div>
+
+        <div class="card success">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Large = OVERSIZED</div>
+            <div class="card-value text-success" style="font-size: 44px;">Wasted Energy (OpEx)</div>
+            <div class="card-text text-dim">Poor PF, high inrush, massive energy bills.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1 -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Define the Driven Load</div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Pump (Centrifugal/PD)</div>
+            <div class="list-item text-white">✓ Fan / Blower</div>
+            <div class="list-item text-white">✓ Compressor (Recip/Screw)</div>
+            <div class="list-item text-white">✓ Conveyor / Crusher</div>
+            <div class="list-item text-white">✓ Agitator / Mixer</div>
+            <div class="list-item text-white">✓ Torque Curve (Const/Var)</div>
+            <div class="spacing-small"></div>
+            <div class="list-item text-success" style="font-size: 26px;">Each has a unique Torque-Speed curve!</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2 - Core Specs -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 2</div>
+        <div class="subtitle text-white">Core Power Specs</div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Required Power (kW / HP)</div>
+            <div class="list-item text-white">✓ System Voltage (e.g., 415V)</div>
+            <div class="list-item text-white">✓ Frequency (50Hz / 60Hz)</div>
+            <div class="list-item text-white">✓ Poles & Sync. Speed</div>
+            <div class="list-item text-white">   (e.g., 4-Pole, 1500 RPM)</div>
+            <div class="list-item text-white">✓ Duty Cycle (S1 Continuous)</div>
+            <div class="list-item text-white">✓ Service Factor (e.g., 1.15)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: Step 3 - Environment -->
+    <div id="scene5" class="scene">
+        <div class="title text-warning">STEP 3</div>
+        <div class="subtitle text-white">The Environment</div>
+    
+        <div class="card">
+            <div class="card-title text-primary">Enclosure (IP Rating)</div>
+            <div class="card-text text-white">IP55 (Dust/Water) = Standard</div>
+            <div class="card-value text-primary" style="font-size: 44px;">TEFC</div>
+            <div class="card-text text-dim">(Totally Enclosed Fan Cooled)</div>
+        </div>
+    
+        <div class="card warning">
+            <div class="card-title text-warning">Hazardous Area</div>
+            <div class="card-text text-white">Is it Zone 1, 2, 21, or 22?</div>
+            <div class="card-value text-warning" style="font-size: 44px;">Ex d / Ex e</div>
+            <div class="card-text text-dim">This is a NON-NEGOTIABLE safety spec.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Ambient & Altitude</div>
+            <div class="card-text text-white">Std = 40°C & 1000m</div>
+            <div class="card-text text-dim">Higher? You MUST de-rate the motor.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Step 4 - Performance DNA -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">STEP 4</div>
+        <div class="subtitle text-white">Performance DNA</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Efficiency (IEC 60034-30)</div>
+            <div class="card-value text-success" style="font-size: 44px;">IE3 Premium</div>
+            <div class="card-text text-dim">The modern standard for OpEx.</div>
+            <div class="card-value text-success" style="font-size: 44px; margin-top: 10px;">IE4 Super Premium</div>
+            <div class="card-text text-dim">Lowest Total Cost of Ownership.</div>
+        </div>
+    
+        <div class="card">
+            <div class="card-title text-primary">Insulation Class</div>
+            <div class="card-value text-primary" style="font-size: 44px;">Class F (155°C)</div>
+            <div class="card-text text-white">...with Class B (130°C) Rise.</div>
+            <div class="card-text text-dim">This "thermal margin" is the key to motor longevity.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">NEMA Design</div>
+            <div class="card-text text-white">Defines Torque Curve</div>
+            <div class="card-value text-warning" style="font-size: 44px;">B (Std) or C (High Start)</div>
+            <div class="card-text text-dim">Crucial for hard-to-start loads.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Step 5 - Starting Method -->
+    <div id="scene7" class="scene">
+        <div class="title text-accent">STEP 5</div>
+        <div class="subtitle text-white">The Start-Up</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Starting Method</div>
+            <div class="card-text text-white">DOL? Star-Delta? Soft Starter?</div>
+            <div class="card-value text-accent" style="font-size: 44px;">VFD / Inverter Duty?</div>
+            <div class="card-text text-dim">A VFD-Rated motor is NOT optional.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">Key Torque Data</div>
+            <div class="card-text text-white">Locked Rotor Torque (LRT)</div>
+            <div class="card-text text-white">Breakdown Torque (BDT)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">Motor torque MUST exceed load torque at all speeds.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">Starts per Hour</div>
+            <div class="card-text text-white">How often will it start?</div>
+            <div class="card-text text-dim">Too many starts will overheat and destroy the motor.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: Final Specs -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">Full Spec Sheet</div>
+        <div class="text-dim" style="font-size: 22px; margin-bottom: 15px;">The OEM Checklist</div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Power (kW) & Frame Size (IEC)</div>
+            <div class="list-item text-white">✓ Voltage, Frequency & Poles</div>
+            <div class="list-item text-white">✓ Enclosure (IP) & Cooling (IC)</div>
+            <div class="list-item text-white">✓ Duty Cycle (S1) & S.F. (1.15)</div>
+            <div class="list-item text-white">✓ Efficiency (IE4) & NEMA Design (B)</div>
+            <div class="list-item text-white">✓ Insulation (F/B Rise)</div>
+            <div class="list-item text-white">✓ Ambient Temp (50°C) & Altitude</div>
+            <div class="list-item text-white">✓ Hazardous Area (ATEX/IECEx)</div>
+            <div class="list-item text-white">✓ VFD-Rated & Speed Range</div>
+            <div class="list-item text-white">✓ Torque Data (LRT/BDT)</div>
+            <div class="list-item text-white">✓ Bearing Type & Lube</div>
+            <div classs="list-item text-white">✓ Vibration & Noise Levels</div>
+            <div class="list-item text-white">✓ Paint Spec (e.g., C4 High)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Final Message -->
+    <div id="scene9" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Spec it Right.</div>
+        <div class="title text-primary">Run it Forever.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">The right motor is an asset, not just a component.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">Get More Tools & Guides</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        5000,  // Scene 1 (Hook)
+        8000,  // Scene 2 (Problem)
+        7000,  // Scene 3 (Load)
+        7000,  // Scene 4 (Core Specs)
+        8000,  // Scene 5 (Environment)
+        8000,  // Scene 6 (Performance)
+        8000,  // Scene 7 (Start-up)
+        12000, // Scene 8 (Full Spec Sheet) - More time to read
+        7000   // Scene 9 (Final)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

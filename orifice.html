@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Orifice Flow Meter Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">📈</div>
+        <div class="title text-primary">MASTERING FLOW</div>
+        <div class="subtitle text-warning">Orifice Plate Sizing (DP)</div>
+        <div class="description text-dim">The #1 meter for custody transfer & process control.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">(As per ISO 5167 / API 14.3)</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Core Principle -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Principle</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">Bernoulli's Equation</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Flow ∝ √DP</div>
+            <div class="card-text text-white" style="font-size: 22px;">Flow (Q) is proportional to the SQUARE ROOT of the Differential Pressure (DP).</div>
+            <div class="card-value text-primary" style="font-size: 40px;">This is NON-LINEAR.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The #1 CHALLENGE -->
+    <div id="scene3" class="scene">
+        <div class="icon">❌</div>
+        <div class="title text-white">THE #1 CHALLENGE</div>
+        <div class="subtitle text-warning">The Square Root Problem</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Limited Turndown</div>
+            <div class="card-text text-white" style="font-size: 22px;">Because Q ∝ √DP, to measure a 10:1 flow range, your DP transmitter must measure a 100:1 DP range!</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Typical Range: 3:1</div>
+            <div class="card-text text-white" style="font-size: 22px;">Most orifice meters are only accurate for a 3:1 or 4:1 flow turndown.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 1: Process Data (Foundation) -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">Step 1: Process Data</div>
+        <div class="subtitle text-white" style="font-size: 30px;">(For Min / Normal / Max Flow)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 22px;">1. Fluid (Liquid/Gas) & Density</div>
+            <div class="list-item text-warning" style="font-size: 22px;">2. Flow (Q) (kg/hr or m³/hr)</div>
+            <div class="list-item text-warning" style="font-size: 22px;">3. Operating Pressure (P) & Temp (T)</div>
+            <div class="list-item text-warning" style="font-size: 22px;">4. Viscosity (cP) (for Reynolds No.)</div>
+            <div class="list-item text-warning" style="font-size: 22px;">5. Gas: Isentropic Exponent (k)</div>
+            <div class="list-item text-warning" style="font-size: 22px;">6. Liquid: Vapor Pressure (P<sub>v</sub>)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Step 2: The Beta Ratio (β) -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">Step 2: Sizing (β)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Core Design Choice</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">β = d / D</div>
+            <div class="card-text text-white" style="font-size: 22px;">(Orifice Bore ÷ Pipe ID)</div>
+        </div>
+
+        <div class="card warning">
+            <div class="card-title text-warning">ISO 5167 Limit</div>
+            <div class="formula text-white" style="font-size: 30px;">0.1 < β < 0.75</div>
+            <div class="card-text text-white" style="font-size: 22px;">(Typical design: 0.4 to 0.6)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Beta Ratio Trade-Off -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">The Trade-Off</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Choosing your β)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Low β (Small Hole)</div>
+            <div class="card-text text-white" style="font-size: 22px;">✓ High DP (Good Signal)</div>
+            <div class="card-text text-white" style="font-size: 22px;">✗ High Permanent Pressure Loss</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">High β (Large Hole)</div>
+            <div class="card-text text-white" style="font-size: 22px;">✓ Low Pressure Loss (Energy $)</div>
+            <div class="card-text text-white" style="font-size: 22px;">✗ Low DP (Weaker Signal)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: Step 3: Find DP -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">Step 3: Calculate DP</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Based on Max Flow)</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Goal: Full Scale DP</div>
+            <div class="card-text text-white" style="font-size: 22px;">Typically size for 100 inH₂O or 250 mbar (25 kPa) at max flow.</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">The Formula</div>
+            <div class="card-text text-white" style="font-size: 22px;">ISO 5167 provides the complex formula for the Discharge Coefficient (C) to find the exact DP.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: Expert Check (Liquids) -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">Expert Check (Liquids)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Avoid Flashing!</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Check Vena Contracta</div>
+            <div class="card-text text-white" style="font-size: 22px;">The pressure at the throat (vena contracta) MUST stay above the fluid's Vapor Pressure (P<sub>v</sub>).</div>
+            <div class="card-text text-dim" style="font-size: 20px;">If it flashes, the reading is useless.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Expert Check (Gases) -->
+    <div id="scene9" class="scene">
+        <div class="title text-warning">Expert Check (Gases)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Apply Expansibility (Y)</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Gases Expand</div>
+            <div class="card-text text-white" style="font-size: 22px;">As pressure drops, gas expands, changing its density. You MUST correct for this.</div>
+            <div class="card-text text-dim" style="font-size: 20px;">The Expansibility Factor (Y or ε) is applied. (Calculated from ISO 5167)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: Dos & Don'ts (CRITICAL) -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">CRITICAL: Installation</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(API 14.3 / ISO 5167-2)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 22px;">DO: Install required straight pipe runs (e.g., 22D upstream, 7D downstream).</div>
+            <div class="list-item text-success" style="font-size: 22px;">DO: Ensure sharp edge faces UPSTREAM.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">DON'T: Allow gaskets to protrude.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">DON'T: Install near valves or bends (causes swirl).</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Dos & Don'ts (Taps) -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">CRITICAL: Tap Mounting</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Impulse Lines)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-primary" style="font-size: 24px;">LIQUIDS / STEAM:</div>
+            <div class="list-item text-white" style="font-size: 20px;">Mount transmitter BELOW taps. (Keeps lines full of liquid).</div>
+            
+            <div class="spacing-small"></div>
+            
+            <div class="list-item text-success" style="font-size: 24px;">GASES:</div>
+            <div class="list-item text-white" style="font-size: 20px;">Mount transmitter ABOVE taps. (Allows condensate to drain).</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 12: Final OEM Specification -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 20px;">✓ Full Process Data (All Cases)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Pipe Size, Schedule, Material</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Orifice Bore (d) & Beta (β)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Plate Material, Thickness, Standard</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Tap Type (Flange, Corner, D-D/2)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Calculated DP @ Max Flow</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Max Permanent Pressure Loss (PPL)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: Final Message -->
+    <div id="scene13" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">IT'S A SYSTEM,</div>
+        <div class="title text-primary">NOT A PRODUCT.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Proper installation is 80% of accuracy.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (Principle)
+        9000,  // Scene 3 (Challenge)
+        10000, // Scene 4 (Process Data)
+        9000,  // Scene 5 (Beta Ratio)
+        9000,  // Scene 6 (Trade-Off)
+        8000,  // Scene 7 (Find DP)
+        8000,  // Scene 8 (Expert Liquid)
+        8000,  // Scene 9 (Expert Gas)
+        10000, // Scene 10 (Install Dos/Donts)
+        10000, // Scene 11 (Tap Mounting)
+        10000, // Scene 12 (Spec Sheet)
+        7000   // Scene 13 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

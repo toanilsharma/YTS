@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Generator Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 10px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🏭</div>
+        <div class="title text-accent">GRID DOWN?</div>
+        <div class="subtitle text-primary">Industrial Generator Sizing</div>
+        <div class="description text-dim">More than just kW...</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">It's about Uptime & Compliance.</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The #1 Sizing Trap -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The #1 Sizing Trap</div>
+        <div class="subtitle text-white">kW vs. kVA</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your 1000 kW load is NOT a 1000 kVA generator!</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Motors = Inductive Load</div>
+            <div class="card-text text-white">They have a Power Factor (e.g., 0.85).</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Generator kVA =</div>
+            <div class="card-text text-white">Load (kW) / Power Factor (PF)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">1000 kW / 0.85 PF = <b>1176 kVA</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1: Application -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Define Application</div>
+        <div class="description text-dim" style="font-size: 22px;">(As per ISO 8528-1)</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Standby (ESP)</div>
+            <div class="card-text text-white">Grid failure backup. Must start in <10s (NFPA 110). Not for 24/7 use.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">Prime Power (PRP)</div>
+            <div class="card-text text-white">For off-grid sites or peak shaving. Can run 24/7 but with variable load.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.3s;">
+            <div class="card-title text-accent">Continuous (COP)</div>
+            <div class="card-text text-white">24/7/365 at full base load. The most robust (and expensive) rating.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: NEW - De-rating -->
+    <div id="scene4" class="scene">
+        <div class="title text-warning">STEP 2: The "Hidden" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">De-rating Factors</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">A 1000 kVA gen is only 1000 kVA at sea level & 25°C.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Altitude</div>
+            <div class="card-text text-white">Thinner air = less power. De-rate ~3.5% for every 300m (1000ft) above sea level.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Temperature</div>
+            <div class="card-text text-white">Hotter air = less power. De-rate ~2% for every 5°C above 25°C.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: (was 4) Load Types -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">STEP 3</div>
+        <div class="subtitle text-white">Analyze Your Load</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Running Load</div>
+            <div class="card-text text-white">Sum of all continuous loads (kW/kVA) + Diversity Factor.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Starting Load (LRA)</div>
+            <div class="card-text text-white">The REAL killer. The Locked Rotor Amps (kVA) of your largest motor.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.3s;">
+            <div class="card-title text-success">Harmonic Load (THD)</div>
+            <div class="card-text text-white">VFDs, UPS, LED lighting. This "noise" heats up the alternator.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: (was 5) The "Starting kVA" Trap -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">STEP 4: The "Starting" Trap</div>
+        <div class="subtitle text-warning" style="font-size: 32px;">The Starting kVA Trap</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your 1000 kVA gen CANNOT start a 1000 kVA motor!</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Voltage Dip</div>
+            <div class="card-text text-white">A motor's inrush (LRA) is 6-8x its rating. This causes a massive voltage dip.</div>
+            <div class="card-text text-warning" style="font-size: 22px; margin-top: 10px;">If dip is >30%, contactors drop out and your plant trips. (NEMA MG1)</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Pro Solution</div>
+            <div class="card-text text-white">Use VFDs / Soft Starters to reduce LRA, or... size the gen 3x larger.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: (was 6) The "Harmonic" Trap -->
+    <div id="scene7" class="scene">
+        <div class="title text-warning">STEP 5: The "Harmonic" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">VFDs & UPS Loads</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">These loads export "noise" (harmonics) back to the generator.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">The Problem</div>
+            <div class="card-text text-white">Harmonics (THD) create triple-currents in the alternator's neutral, causing extreme overheating.</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">The Pro Solution</div>
+            <div class="card-text text-white">MUST specify an **Oversized Alternator** and a **PMG/AREP Excitation** for stable voltage.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: NEW - Transient Response -->
+    <div id="scene8" class="scene">
+        <div class="title text-primary">STEP 6: The "Transient" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">ISO 8528-5 Class</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">How fast must your gen respond?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">G1 / G2 Class</div>
+            <div class="card-text text-white">OK for simple loads (lights, heaters). Slower response, wider dip.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">G3 / G4 Class</div>
+            <div class="card-text text-white"><b>MUST HAVE</b> for critical loads (UPS, VFDs, Medical). Fast response, tight voltage/frequency control.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: NEW - Redundancy -->
+    <div id="scene9" class="scene">
+        <div class="title text-success">STEP 7: The "Uptime" Secret</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Redundancy (N+1)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">What if your *only* generator fails?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">N+1 Design</div>
+            <div class="card-text text-white">For a 1000 kVA load, install <b>2 x 1000 kVA</b> gensets. (Or 3 x 500 kVA).</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Paralleling Gear</div>
+            <div class="card-text text-white">Requires advanced controllers to auto-sync and share the load. This is the ultimate in reliability.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: (was 7) The "Legal" Trap -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">STEP 8: The "Legal" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Compliance IS NOT Optional</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This can stop your project cold.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">Emissions</div>
+            <div class="card-text text-white">Must meet local laws (e.g., EPA Tier 4 Final, Euro Stage V). Non-compliance = massive fines.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">Noise</div>
+            <div class="card-text text-white">Must meet local property line limits (e.g., 70 dBA @ 7m). Requires a "Super Silent" acoustic enclosure.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: (was 8) CapEx vs. OpEx -->
+    <div id="scene11" class="scene">
+        <div class="title text-primary">STEP 9: The Payback</div>
+        <div class="subtitle text-white" style="font-size: 32px;">CapEx vs. OpEx (Fuel)</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Diesel</div>
+            <div class="card-text text-white"><b>Pro:</b> Best load response (kVA), lower CapEx. <br><b>Con:</b> High OpEx (fuel cost), complex fuel storage.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">Natural Gas (Gas)</div>
+            <div class="card-text text-white"><b>Pro:</b> Low OpEx (fuel cost), cleaner emissions. <br><b>Con:</b> Higher CapEx, weaker load response.</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Payback: Gas gens cost more upfront but save thousands in fuel.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: NEW - ATS Types -->
+    <div id="scene12" class="scene">
+        <div class="title text-warning">STEP 10: The "Transfer" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">ATS Types</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">How fast is your "automatic" transfer?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Open Transition (Std)</div>
+            <div class="card-text text-white">Breaks from Grid, then Makes to Gen. A 1-2 second "blink." Fine for motors.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Closed Transition</div>
+            <div class="card-text text-white"><b>(Make-Before-Break)</b> Syncs to grid, parallels for <100ms. NO blink. Vital for critical loads.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: NEW - Grounding -->
+    <div id="scene13" class="scene">
+        <div class="title text-accent">STEP 11: The "Grounding" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">3-Pole vs. 4-Pole ATS</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">This is a critical safety choice.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">3-Pole (Std)</div>
+            <div class="card-text text-white">Switches the 3 Phases. Neutral is common. Simple. (Requires single ground point at service).</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">4-Pole (Switched-N)</div>
+            <div class="card-text text-white">Switches all 3 Phases + Neutral. Creates a "Separately Derived System." Required by many codes.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: (was 9) Safety & Installation -->
+    <div id="scene14" class="scene">
+        <div class="title text-success">STEP 12: Pro Installation</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Dos & Don'ts</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success">✓ Massive Airflow (Ventilation)</div>
+            <div class="list-item text-success">✓ Solid, Level Concrete Foundation</div>
+            <div class="list-item text-success">✓ Anti-Vibration Mounts</div>
+            <div class="list-item text-success">✓ Correct Grounding (3/4-Pole)</div>
+            <div class="list-item text-accent">❌ Long Exhaust Pipe Runs</div>
+            <div class="list-item text-accent">❌ Ignoring Exhaust Back-Pressure</div>
+            <div class="list-item text-accent">❌ Fuel Leaks & Poor Ventilation</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: (was 10) Final Spec Sheet -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">STEP 13</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Full Industrial Spec</div>
+        
+        <div class="list" style="font-size: 22px; line-height: 1.4;">
+            <div class="list-item text-white">✓ Application (Standby/Prime)</div>
+            <div class="list-item text-warning">✓ <b>De-rated kVA/kW @ Site Alt/Temp</b></div>
+            <div class="list-item text-accent">✓ <b>Max. Motor Starting kVA</b></div>
+            <div class="list-item text-accent">✓ <b>% Non-Linear (Harmonic) Load</b></div>
+            <div class="list-item text-accent">✓ <b>ISO 8528-5 Class (G2/G3)</b></div>
+            <div class="list-item text-white">✓ Redundancy (N, N+1, N+2)</div>
+            <div class="list-item text-white">✓ Fuel Type (Diesel/Gas)</div>
+            <div class="list-item text-warning">✓ <b>Emission Standard (Tier 4)</b></div>
+            <div class="list-item text-warning">✓ <b>Noise Level (dBA @ 7m)</b></div>
+            <div class="list-item text-white">✓ ATS Type (Open/Closed, 3/4-Pole)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: (was 11) Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Buy Power</div>
+        <div class="title text-primary">Buy *Compliant* Uptime!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Get the spec right, once.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1: Hook
+        10000, // Scene 2: kW vs kVA
+        10000, // Scene 3: Application
+        10000, // Scene 4: NEW - De-rating
+        10000, // Scene 5: Load Types (was 4)
+        12000, // Scene 6: Starting kVA Trap (was 5)
+        10000, // Scene 7: Harmonic Trap (was 6)
+        10000, // Scene 8: NEW - Transient
+        10000, // Scene 9: NEW - Redundancy
+        10000, // Scene 10: Legal Trap (was 7)
+        12000, // Scene 11: CapEx vs OpEx (was 8)
+        10000, // Scene 12: NEW - ATS Types
+        10000, // Scene 13: NEW - Grounding
+        10000, // Scene 14: Safety (was 9)
+        12000, // Scene 15: Final Spec (was 10)
+        7000   // Scene 16: Final Message (was 11)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>
+

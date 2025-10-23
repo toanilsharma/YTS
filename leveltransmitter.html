@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Transmitter Calibration Guide (Non-Linear Tanks)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        /* --- FIX: Added text color definitions --- */
+        .text-white { color: var(--text-main); }
+        .text-dim { color: var(--text-dim); }
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        /* --- END FIX --- */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+            /* Added default text color for safety */
+            color: var(--text-dim); 
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            /* Animation runs when display changes from 'none' */
+            animation: fadeInScene 1s ease-out forwards; 
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 58px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .description {
+            font-size: 30px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        /* Card variants need to select the right text colors */
+        .card.primary {
+            background: rgba(0, 102, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 30px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">📐</div>
+        <div class="title text-warning">THE BIG MISTAKE</div>
+        <div class="subtitle text-white" style="font-size: 32px;">50% Level ≠ 50% Volume</div>
+        <div class="description text-dim">In 90% of tanks, Level is NOT linear with Volume.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 32px; animation-delay: 0.4s;">This is for INVENTORY & CUSTODY TRANSFER.</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Tanks -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Tanks</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Non-Linear)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Horizontal Cylinder</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., Bullet Tank, FWKO)</div>
+            <div class="card-text text-dim" style="font-size: 22px;">Volume changes fast in the middle.</div>
+        </div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Spherical Tank</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., LPG, Butane Storage)</div>
+            <div class="card-text text-dim" style="font-size: 22px;">Also changes fast in the middle.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The Problem Visualized -->
+    <div id="scene3" class="scene">
+        <div class="title text-accent">The Problem</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Horizontal Tank)</div>
+        
+        <div class="card accent">
+            <div class="card-text text-white" style="font-size: 24px;">The first 10% of Level (0-10%) might only be 3% of the Volume.</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-text text-white" style="font-size: 24px;">The middle 10% of Level (45-55%) might be 15% of the Volume.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Level vs. Volume vs. MASS -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">The Real Goal: MASS</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Custody Transfer)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">MASS = Volume × Density</div>
+            <div class="card-text text-white" style="font-size: 24px;">For true accuracy, you must compensate for density (which changes with temp/pressure).</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">This requires a *second* transmitter! (e.g., Densitometer or P/T sensor)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The "Easy" Tank (Recap) -->
+    <div id="scene5" class="scene">
+        <div class="title text-success">Case 1: "Easy" Tank</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Vertical Cylinder)</div>
+
+        <div class="card success">
+            <div class="card-title text-success">Linear Relationship</div>
+            <div class="card-text text-white" style="font-size: 24px;">Level ∝ Volume</div>
+            <div class="card-text text-primary" style="font-size: 26px; margin-top: 10px;">Here, 50% Level = 50% Volume.</div>
+            <div class="card-text text-dim" style="font-size: 22px;">(This is the *only* easy case)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: The Solution: "Characterization" -->
+    <div id="scene6" class="scene">
+        <div class="title text-primary">The Solution</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"CHARACTERIZATION"</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Strapping Table</div>
+            <div class="card-text text-white" style="font-size: 24px;">A certified lookup table that maps linear Level (m) to non-linear Volume (m³).</div>
+            <div class="card-text text-dim" style="font-size: 22px;">(Based on physical tank "strapping")</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: Where is the Magic? (DCS/PLC) -->
+    <div id="scene7" class="scene">
+        <div class="title text-warning">Where does this live?</div>
+        <div class="subtitle text-white" style="font-size: 32px;">NOT in the Transmitter!</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">99% of the time:</div>
+            <div class="card-text text-white" style="font-size: 24px;">The calculation is done in the <b>DCS or PLC</b>. (e.g., a "CHAR" Function Block)</div>
+        </div>
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-primary" style="font-size: 22px;"><b>Transmitter:</b> Measures 0-100% *Level* (Pressure) and sends a 4-20mA signal.</div>
+            <div class="list-item text-success" style="font-size: 22px;"><b>DCS/PLC:</b> Receives 4-20mA, applies the strapping table, and displays % *Volume*.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The "Smart" Transmitter -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">The 1% Case</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Smart" Transmitters</div>
+        
+        <div class="card success">
+            <div class="card-text text-white" style="font-size: 24px;">Some modern transmitters (HART, Fieldbus) can have the strapping table loaded *directly* into them.</div>
+            <div class="card-text text-dim" style="font-size: 22px;">The 4-20mA signal then represents % *Volume*.</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">This is less common and harder to maintain.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Expert Choice: GWR vs Radar vs DP -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">Tech Choice</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Why GWR / Radar?)</div>
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 22px;"><b>DP Sensor:</b> Bad for this. Density changes (temp) will create large errors in Mass/Volume.</div>
+            <div class="list-item text-success" style="font-size: 22px;"><b>Radar (GWR):</b> Excellent. Measures *true level* regardless of density changes. The modern standard.</div>
+            <div class="list-item text-primary" style="font-size: 22px;"><b>Non-Contact Radar:</b> Also excellent, but can be affected by foam or vapor.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: Expert Detail: Dielectric (εr) -->
+    <div id="scene10" class="scene">
+        <div class="title text-warning">Expert Spec: GWR/Radar</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Dielectric Constant (ε<sub>r</sub>)</div>
+        <div class="card warning">
+            <div class="card-title text-warning">This is CRITICAL.</div>
+            <div class="card-text text-white" style="font-size: 24px;">Radar works by reflection. The signal strength depends on the fluid's (ε<sub>r</sub>).</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-primary" style="font-size: 22px;"><b>Water (ε<sub>r</sub> ≈ 80):</b> Easy. Strong reflection.</div>
+                <div class="list-item text-accent" style="font-size: 22px;"><b>LPG/Butane (ε<sub>r</sub> ≈ 1.8):</b> Hard. Very weak signal. Needs a high-end sensor.</div>
+            </div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: Expert Detail: Stilling Wells -->
+    <div id="scene11" class="scene">
+        <div class="title text-success">Expert Install</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Stilling Wells</div>
+        <div class="card success">
+            <div class="card-title text-success">Got Turbulence?</div>
+            <div class="card-text text-white" style="font-size: 24px;">For tanks with agitators, mixers, or turbulent inlets, you MUST install the sensor (GWR/Radar/DP) in a <b>stilling well</b>.</div>
+            <div class="card-text text-dim" style="font-size: 22px;">(A slotted bypass pipe that provides a calm surface to measure).</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Expert Detail: Vapor Comp (DP) -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">Expert Detail: DP</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Vapor Space Comp</div>
+        <div class="card primary">
+            <div class="card-text text-white" style="font-size: 24px;">If using a DP sensor on a closed tank, the "Low" side of the sensor MUST be connected to the tank's vapor space.</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">This subtracts the blanket gas pressure, otherwise a 1 PSI pressure change looks like a 27.7" level change!</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: Expert App: Interface Level -->
+    <div id="scene13" class="scene">
+        <div class="title text-success">Expert App: INTERFACE</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(e.g., Oil / Water)</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">GWR is King</div>
+            <div class="card-text text-white" style="font-size: 24px;">A GWR sensor can measure BOTH:</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-primary" style="font-size: 22px;">1. The top (Total) Level</div>
+                <div class="list-item text-warning" style="font-size: 22px;">2. The Interface (Oil/Water) Level</div>
+            </div>
+            <div class="card-text text-dim" style="font-size: 22px;">...at the same time! It sees both reflections.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: CRITICAL: Safety (PTW) -->
+    <div id="scene14" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Permit to Work (PTW)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">GET A PERMIT.</div>
+            <div class="card-text text-white" style="font-size: 24px;">LOTO the instrument. Inform the Control Room. Bypass trips.</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-warning" style="font-size: 24px;">✓ This is a CUSTODY TRANSFER instrument.</div>
+                <div class="list-item text-warning" style="font-size: 24px;">✓ DO NOT calibrate without clearance.</div>
+            </div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: CRITICAL: Safety (The Work) -->
+    <div id="scene15" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(The Work Itself)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 24px;">✓ Wear PPE (Eyes, Gloves).</div>
+            <div class="list-item text-warning" style="font-size: 24px;">✓ Be aware of HIGH Temp/Pressure.</div>
+            <div class="list-item text-warning" style="font-size: 24px;">✓ Bleed pressure *slowly* & safely.</div>
+            <div class="list-item text-warning" style="font-size: 24px;">✓ LEAK CHECK all fittings (Snoop) after finishing.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 16: Dos & Don'ts -->
+    <div id="scene16" class="scene">
+        <div class="title text-warning">CRITICAL: Dos & Don'ts</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 26px;">DO: Calibrate the *sensor* to its linear range (e.g., 0-100% Level/Pressure).</div>
+            <div class="list-item text-success" style="font-size: 26px;">DO: Verify the *DCS* is using the correct, certified strapping table.</div>
+            <div class="list-item text-accent" style="font-size: 26px;">DON'T: Confuse the sensor's linear calibration with the final volume calculation.</div>
+            <div class="list-item text-accent" style="font-size: 26px;">DON'T: Apply a "Square Root" function to a level transmitter. EVER.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 17: Final OEM Specification -->
+    <div id="scene17" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 22px;">✓ Tank Type (Horizontal, Sphere, etc.)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Tank Dimensions (L, D)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Tapping Points (LRV/URV location)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Fluid Dielectric Constant (ε<sub>r</sub>)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Stilling Well Installed?</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Mass or Volume Output?</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Interface Measurement?</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Fluid (SG, Temp, Pressure)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ SIL / HazArea Rating</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 18: Final Message -->
+    <div id="scene18" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">LEVEL IS A NUMBER.</div>
+        <div class="title text-primary">VOLUME IS MONEY.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 28px;">Know what you are measuring.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 24px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        8000,  // Scene 1 (Hook)
+        8000,  // Scene 2 (The Tanks)
+        8000,  // Scene 3 (Problem Visualized)
+        9000,  // Scene 4 (MASS)
+        8000,  // Scene 5 ("Easy" Tank)
+        8000,  // Scene 6 (Characterization)
+        10000, // Scene 7 (DCS/PLC)
+        9000,  // Scene 8 ("Smart" TX)
+        10000, // Scene 9 (Tech Choice) - NEW
+        10000, // Scene 10 (Dielectric) - NEW
+        10000, // Scene 11 (Stilling Well) - NEW
+        10000, // Scene 12 (Vapor Comp) - NEW
+        10000, // Scene 13 (Interface GWR/DP) - UPDATED
+        8000,  // Scene 14 (Safety/PTW)
+        8000,  // Scene 15 (Safety/Work)
+        10000, // Scene 16 (Dos/Donts)
+        10000, // Scene 17 (Spec Sheet) - UPDATED
+        7000   // Scene 18 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        // Hide all scenes first
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        const sceneId = scenes[index];
+        const sceneElement = document.getElementById(`scene${sceneId}`);
+        
+        if(sceneElement) {
+            // Show the correct scene
+            sceneElement.classList.remove('hidden');
+            // Scroll to top in case user scrolled down
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 1 and schedule scene 2
+
+    // Add keyboard controls
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+
+    // Add touch controls for mobile
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    function handleGesture() {
+        if (touchendX < touchstartX - 50) { // Swiped left
+            nextScene();
+        }
+        if (touchendX > touchstartX + 50) { // Swiped right
+            prevScene();
+        }
+    }
+
+    const container = document.getElementById('container');
+    container.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleGesture();
+    }, { passive: true });
+
+</script>
+
+</body>
+</html>

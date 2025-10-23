@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow Transmitter Calibration Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">📟</div>
+        <div class="title text-primary">DP TRANSMITTER</div>
+        <div class="subtitle text-warning">Range & Calibration</div>
+        <div class="description text-dim">You've sized the orifice. Now, how do you read it?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">This is where errors happen.</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Goal -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Goal</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">Translate Physics to a Signal</div>
+        
+        <div class="card primary">
+            <div class="card-text text-white" style="font-size: 26px;">Physical DP (e.g., 0-250 mbar)</div>
+            <div class="card-value text-primary" style="font-size: 40px;">⬇</div>
+            <div class="card-text text-white" style="font-size: 26px;">Transmitter</div>
+            <div class="card-value text-success" style="font-size: 40px;">⬇</div>
+            <div class="card-text text-white" style="font-size: 26px;">4-20mA Signal</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The NON-LINEAR Problem -->
+    <div id="scene3" class="scene">
+        <div class="title text-accent">The Core Problem</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Flow is NON-LINEAR</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Flow ∝ √DP</div>
+            <div class="card-text text-white" style="font-size: 22px;">Flow is proportional to the SQUARE ROOT of the Differential Pressure (DP).</div>
+            <div class="card-value text-accent" style="font-size: 40px;">This is NOT 1-to-1.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: The #1 MISTAKE -->
+    <div id="scene4" class="scene">
+        <div class="icon">❌</div>
+        <div class="title text-white">THE #1 MISTAKE</div>
+        <div class="subtitle text-warning">Linear Calibration</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">WRONG:</div>
+            <div class="card-text text-white" style="font-size: 22px;">"50% Flow (12mA) = 50% DP"</div>
+            <div class="card-value text-accent" style="font-size: 40px;">THIS IS 100% WRONG.</div>
+            <div class="card-text text-dim" style="font-size: 20px;">This will cause massive errors at mid-range.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The MATH (The 25% Rule) -->
+    <div id="scene5" class="scene">
+        <div class="title text-success">The MATH (The 25% Rule)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Flow = √(DP %)</div>
+        
+        <div class="card success" style="text-align: left; padding: 15px 25px;">
+            <div class="card-text text-white" style="font-size: 22px;"><b>50% Flow</b> = (0.50)² DP = <b>25% DP</b></div>
+        </div>
+        
+        <div class="card primary" style="text-align: left; padding: 15px 25px;">
+            <div class="card-text text-white" style="font-size: 20px;"><b>Signal (Flow) = DP (Calib.)</b></div>
+            <div class="card-text text-white" style="font-size: 20px;">4mA (0%) = 0% DP</div>
+            <div class="card-text text-success" style="font-size: 20px;"><b>12mA (50%) = 25% DP</b></div>
+            <div class="card-text text-white" style="font-size: 20px;">20mA (100%) = 100% DP</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The FIX -->
+    <div id="scene6" class="scene">
+        <div class="icon">✅</div>
+        <div class="title text-success">The Fix</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Square Root Extraction"</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Enable SQRT Function</div>
+            <div class="card-text text-white" style="font-size: 22px;">In your "Smart" (HART/FF) transmitter, you must turn ON the Square Root Extraction function.</div>
+            <div class="card-text text-dim" style="font-size: 20px;">The transmitter then does the math for you.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Expert Level: Mass Flow -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">Expert Level</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Gas & Steam Compensation</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">DP is NOT enough.</div>
+            <div class="card-text text-white" style="font-size: 22px;">For gases, flow *also* depends on Density (which changes with P & T).</div>
+            <div class="card-text text-warning" style="font-size: 24px;">Mass Flow ∝ √(DP × P / T)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">You need P & T transmitters, too!</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: CRITICAL: Safety (PTW) -->
+    <div id="scene8" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Permit to Work (PTW)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">GET A PERMIT.</div>
+            <div class="card-text text-white" style="font-size: 22px;">This is NOT a bench job. You are touching a live, hazardous process.</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Inform Control Room.</div>
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Bypass logic / trips.</div>
+                <div class="list-item text-warning" style="font-size: 22px;">✓ Verify tag & line.</div>
+            </div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: CRITICAL: Safety (The Work) -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(The Work Itself)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Wear PPE (Eyes, Gloves).</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Be aware of HIGH Temp/Pressure.</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ Bleed pressure *slowly* & safely.</div>
+            <div class="list-item text-warning" style="font-size: 22px;">✓ LEAK CHECK all fittings (Snoop) after finishing.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: The 3-Valve Manifold -->
+    <div id="scene10" class="scene">
+        <div class="title text-warning">The 3-Valve Manifold</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Your Toolkit</div>
+        
+        <div class="card warning" style="text-align: left; padding: 15px 25px;">
+            <div class="card-text text-white" style="font-size: 22px;"><b>1. High Pressure (HP) Block Valve</b></div>
+            <div class="card-text text-white" style="font-size: 22px;"><b>2. Low Pressure (LP) Block Valve</b></div>
+            <div class="card-text text-success" style="font-size: 22px;"><b>3. Equalizing Valve</b></div>
+            <div class="card-text text-dim" style="font-size: 20px; margin-top: 10px;">(5-Valve also includes Bleed valves)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: How to "Zero" the DP -->
+    <div id="scene11" class="scene">
+        <div class="title text-success">How to "Zero" the DP</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(The #1 Task)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 22px;">1. CLOSE both Block Valves (HP & LP).</div>
+            <div class="list-item text-success" style="font-size: 22px;">2. OPEN the Equalizing Valve.</div>
+            <div class="card-text text-white" style="font-size: 20px;">(DP = 0).</div>
+            <div class="list-item text-success" style="font-size: 22px;">3. Perform "Zero" at transmitter.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">4. CLOSE Equalizer *firmly*.</div>
+            <div class="list-item text-accent" style="font-size: 22px;">5. SLOWLY open HP, then LP block.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Dos & Don'ts (Taps) -->
+    <div id="scene12" class="scene">
+        <div class="title text-warning">CRITICAL: Impulse Lines</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Wet Leg vs. Dry Leg)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-primary" style="font-size: 24px;">LIQUIDS / STEAM (Wet Leg):</div>
+            <div class="list-item text-white" style="font-size: 20px;">Mount transmitter BELOW. Slope lines down to TX. (No gas pockets).</div>
+            
+            <div class="spacing-small"></div>
+            
+            <div class="list-item text-success" style="font-size: 24px;">GASES (Dry Leg):</div>
+            <div class="list-item text-white" style="font-size: 20px;">Mount transmitter ABOVE. Slope lines down to *process*. (No liquid pockets).</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 13: Expert Cal: "Zero Suppression" -->
+    <div id="scene13" class="scene">
+        <div class="title text-primary">Expert Cal (Wet Leg)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Zero Suppression"</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Problem:</div>
+            <div class="card-text text-white" style="font-size: 22px;">The liquid weight in the vertical impulse line creates a *false head* (e.g., +50 mbar).</div>
+            <div class="card-title text-success" style="margin-top: 10px;">Solution:</div>
+            <div class="card-text text-white" style="font-size: 22px;">Set LRV = -50 mbar. This "suppresses" the zero to correct for the head.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 14: Final OEM Specification -->
+    <div id="scene14" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 20px;">✓ Calibrated Range (LRV/URV)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Wetted Materials (e.g., 316L, Hastelloy)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Protocol (HART, Foundation Fieldbus)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Safety Rating (SIL 2/3)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Hazardous Area (Ex d / Ex i)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Integral Display? 3/5 Valve Manifold?</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: Final Message -->
+    <div id="scene15" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">AN UNCALIBRATED</div>
+        <div class="title text-primary">METER IS A GUESS.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Trust, but verify... with calibration.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (Goal)
+        7000,  // Scene 3 (Non-Linear)
+        8000,  // Scene 4 (Mistake)
+        10000, // Scene 5 (Math)
+        8000,  // Scene 6 (Fix)
+        9000,  // Scene 7 (Mass Flow)
+        9000,  // Scene 8 (Safety/PTW)
+        9000,  // Scene 9 (Safety/Work)
+        9000,  // Scene 10 (Manifold)
+        10000, // Scene 11 (Zeroing)
+        10000, // Scene 12 (Taps - Wet/Dry)
+        10000, // Scene 13 (Zero Suppression)
+        10000, // Scene 14 (Spec Sheet)
+        7000   // Scene 15 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

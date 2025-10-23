@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Chiller Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .formula-sm { font-size: 24px; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        /* Helper for formula */
+        sub { font-size: 0.6em; }
+        sup { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">❄️</div>
+        <div class="title text-accent">Chiller Sizing</div>
+        <div class="subtitle text-primary">Your #1 Power Consumer</div>
+        <div class="description text-dim">Is your chiller a "money printer" or a "power hog"?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">A failed spec costs millions.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: What Is It? -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">What Is It?</div>
+        <div class="subtitle text-white">The Plant's "Heart"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-text text-white" style="font-size: 24px;">
+                A chiller is a machine that makes cold water (e.g., 6°C) for a process or HVAC.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-dim">It's a "heat pump": it moves heat from your process to the air/water.</div>
+        </div>
+
+        <div class="card accent">
+             <div class="card-title text-accent">Why It Matters:</div>
+             <div class="card-text text-white">This is almost ALWAYS the single largest electrical load and highest OpEx in your facility.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 3: Why Should YOU Care? -->
+    <div id="scene3" class="scene">
+        <div class="title text-warning">Why Should YOU Care?</div>
+        <div class="subtitle text-white">It's Not Just a Utility...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white"><b>Process:</b> Your product quality & cycle time depend on stable chilled water.</div>
+            <div class="list-item text-white"><b>Electrical:</b> This is your biggest motor load. It defines your breakers & transformers.</div>
+            <div class="list-item text-white"><b>Managers:</b> This IS your power bill. An efficient chiller is your #1 cost-saver.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 1 - The Load (TR) -->
+    <div id="scene4" class="scene">
+        <div class="title text-success">STEP 1: The Load (Q)</div>
+        <div class="subtitle text-white">"Tons of Refrigeration"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Q = ṁ × C<sub>p</sub> × ΔT</div>
+        </div>
+
+        <div class="list" style="text-align: center;">
+            <div class="list-item text-white"><b>Q</b> = Heat Load (kW)</div>
+            <div class="list-item text-white"><b>ṁ</b> = Water Flow Rate (kg/s)</div>
+            <div class="list-item text-white"><b>C<sub>p</sub></b> = Specific Heat (~4.18)</div>
+            <div class="list-item text-white"><b>ΔT</b> = (T<sub>Return</sub> - T<sub>Supply</sub>)</div>
+        </div>
+        
+        <div class="card-text text-primary" style="font-size: 22px;"><b>1 Ton (TR) = 3.517 kW</b></div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The #1 Secret -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">The #1 Secret</div>
+        <div class="subtitle text-white">COP / EER</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">This is your "Gas Mileage"!</div>
+            <div class="card-text text-white" style="font-size: 24px;">It measures EFFICIENCY.</div>
+        </div>
+        
+        <div class="card success" style="margin-top: 20px;">
+             <div class="card-title text-success">COP (Coefficient of Performance)</div>
+             <div class="card-text text-white" style="font-size: 24px;">Cooling (kW) / Input (kW)</div>
+             <div class="card-text text-dim">e.g., COP of 6 = 6kW Cooling for 1kW Power</div>
+        </div>
+        
+        <div class="card-text text-warning" style="font-size: 22px;">Higher COP = Lower Power Bill!</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The "Payback" Choice -->
+    <div id="scene6" class="scene">
+        <div class="title text-warning">The "Payback" Choice</div>
+        <div class="subtitle text-white">Air-Cooled vs. Water-Cooled</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Air-Cooled (VCC)</div>
+            <div class="card-text text-white">Rejects heat to air. Simple.</div>
+            <div class="card-text text-warning">Lower CapEx. MUCH Lower Efficiency.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">Water-Cooled (VCC)</div>
+            <div class="card-text text-white">Rejects heat to a Cooling Tower.</div>
+            <div class="card-text text-success">Higher CapEx. MASSIVELY Higher Efficiency.</div>
+        </div>
+        
+        <div class="description text-primary" style="font-size: 22px;">Payback for water-cooled is often < 3 years.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: The "Expert Trap" -->
+    <div id="scene7" class="scene">
+        <div class="title text-accent">The #1 Process Killer</div>
+        <div class="subtitle text-white">"Low Delta-T Syndrome"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">Your chiller is designed for a 5°C ΔT. But your process only gives 3°C ΔT.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">The Result</div>
+            <div class="card-text text-white">The chiller can't load up. You run out of flow. You only get ~60% of your total capacity.</div>
+            <div class="card-text text-dim">Your process starves, and your power bill soars.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: The "Wow" Tech -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">The "Wow" Tech</div>
+        <div class="subtitle text-white">Absorption Chiller</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">"Free" Cooling!</div>
+            <div class="card-text text-white">Uses WASTE HEAT (steam, exhaust) as the *primary energy source* instead of electricity.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">Where to use it?</div>
+            <div class="card-text text-white">Perfect for Co-Gen plants, refineries, or any site with waste steam.</div>
+            <div class="card-text text-dim">Turns a waste stream into a profit center.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Compressor Types -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">Compressor Types</div>
+        <div class="subtitle text-white">The "Engine" of the Chiller</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+             <div class="card-title text-primary" style="font-size: 24px;">Scroll</div>
+             <div class="card-text text-white">Small (< 100 TR). Good for staging.</div>
+        </div>
+        <div class="card">
+             <div class="card-title text-primary" style="font-size: 24px;">Screw</div>
+             <div class="card-text text-white">Medium (50-400 TR). Great part-load.</div>
+        </div>
+        <div class="card success">
+             <div class="card-title text-success" style="font-size: 24px;">Centrifugal</div>
+             <div class="card-text text-white">Large (300+ TR). HIGHEST efficiency. Use Magnetic Bearing (oil-free) for best OpEx.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: The #1 Energy Saver -->
+    <div id="scene10" class="scene">
+        <div class="title text-success">The #1 Energy Saver</div>
+        <div class="subtitle text-white">Part-Load Efficiency (IPLV)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Reality</div>
+            <div class="card-text text-white" style="font-size: 24px;">Your chiller runs at 100% load < 1% of the year.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">The Spec: IPLV</div>
+             <div class="card-text text-white">IPLV (Integrated Part Load Value) is the *real* efficiency number to demand.</div>
+             <div class="card-text text-dim">This is where VFDs on Screw/Centrifugal chillers dominate.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- NEW Scene 11: Redundancy -->
+    <div id="scene11" class="scene">
+        <div class="title text-accent">The #1 Plant-Design Trap</div>
+        <div class="subtitle text-white">Redundancy (N+1)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">You need 500 TR. You buy one 500 TR chiller. It fails.</div>
+            <div class="card-text text-warning" style="font-size: 24px;">Your ENTIRE PLANT is down.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">The Industrial Solution (N+1)</div>
+             <div class="card-text text-white">You buy 2 x 500 TR chillers. Or 3 x 250 TR chillers.</div>
+             <div class="card-text text-dim">This "N+1" design means one unit can fail and the plant keeps running.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 12: Pumping -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">Expert System Design</div>
+        <div class="subtitle text-white">Pumping Strategy</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+             <div class="card-title text-primary" style="font-size: 24px;">Primary-Secondary</div>
+             <div class="card-text text-white">A "decoupled" loop. Constant flow pumps for chillers, variable flow pumps for process. Robust & simple.</div>
+        </div>
+        <div class="card success">
+             <div class="card-title text-success" style="font-size: 24px;">Variable-Primary</div>
+             <div class="card-text text-white">A single VFD pump loop. More efficient, but requires bypassing to maintain minimum flow for chillers. Complex to control.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 13: Glycol Trap -->
+    <div id="scene13" class="scene">
+        <div class="title text-warning">The "Glycol" Trap</div>
+        <div class="subtitle text-white">The Capacity Killer</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">You need 5°C water for freeze protection, so you add 20% Glycol.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">The Cost</div>
+            <div class="card-text text-white">Glycol has a lower specific heat than water. Your 100 TR chiller now only gives ~90 TR of cooling.</div>
+            <div class="card-text text-dim">You MUST de-rate the chiller for glycol!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 14: GWP Trap -->
+    <div id="scene14" class="scene">
+        <div class="title text-accent">The "Future-Proof" Trap</div>
+        <div class="subtitle text-white">Refrigerant (GWP)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">GWP = Global Warming Potential</div>
+            <div class="card-text text-white">High-GWP refrigerants (like R-410A) are being phased out by law.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">The Solution</div>
+            <div class="card-text text-white">Demand new, low-GWP options (like R-1234ze or R-513A).</div>
+            <div class="card-text text-dim">This ensures your 20-year asset is compliant and serviceable.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 15: Final Specs -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">OEM Spec Sheet</div>
+        <div class="subtitle text-white">What to tell the vendor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Heat Load (Q) in TR / kW</div>
+            <div class="list-item text-white">✓ Redundancy (N+1, 2N, etc.)</div>
+            <div class="list-item text-white">✓ T<sub>Supply</sub> & T<sub>Return</sub> (°C)</div>
+            <div class="list-item text-white">✓ Water Flow Rate (m³/hr)</div>
+            <div class="list-item text-white">✓ Type (Air-Cooled / Water / Absorp.)</div>
+            <div class="list-item text-white">✓ Compressor (Screw, Centrifugal)</div>
+            <div class="list-item text-white">✓ Pumping (Pri-Sec / Variable)</div>
+            <div class="list-item text-white">✓ Efficiency: COP (Full) & IPLV (Part)</div>
+            <div class="list-item text-white">✓ Site WBT (for Water) / DBT (for Air)</div>
+            <div class="list-item text-white">✓ Glycol % (if any)</div>
+            <div class="list-item text-white">✓ Refrigerant Type (Low GWP)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Buy Cooling...</div>
+        <div class="title text-primary">Buy EFFICIENCY.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success">Control Your Process & Your OpEx</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations visit website</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const sceneConfig = [
+        { id: 1, duration: 7000 },  // Hook
+        { id: 2, duration: 10000 }, // What Is It
+        { id: 3, duration: 10000 }, // Why Care
+        { id: 4, duration: 10000 }, // Load (TR)
+        { id: 5, duration: 10000 }, // COP/EER
+        { id: 6, duration: 10000 }, // Payback
+        { id: 7, duration: 12000 }, // Low Delta-T
+        { id: 8, duration: 10000 }, // Absorption
+        { id: 9, duration: 10000 }, // Compressor
+        { id: 10, duration: 12000 }, // IPLV
+        { id: 11, duration: 12000 }, // NEW: Redundancy
+        { id: 12, duration: 12000 }, // NEW: Pumping
+        { id: 13, duration: 10000 }, // NEW: Glycol
+        { id: 14, duration: 12000 }, // NEW: GWP
+        { id: 15, duration: 14000 }, // Final Spec
+        { id: 16, duration: 10000 }  // Final
+    ];
+    
+    let currentSceneIndex = 0;
+    let sceneInterval;
+
+    function showScene(index) {
+        // Hide all scenes
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        // Find and show the correct scene
+        if (sceneConfig[index]) {
+            const sceneId = sceneConfig[index].id;
+            const sceneElement = document.getElementById(`scene${sceneId}`);
+            
+            if (sceneElement) {
+                sceneElement.classList.remove('hidden');
+                sceneElement.scrollTop = 0; // Scroll to top
+            } else {
+                console.error(`Scene with id "scene${sceneId}" not found.`);
+            }
+        } else {
+             console.error(`Invalid scene index: ${index}`);
+        }
+    }
+
+    function nextScene() {
+        currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function prevScene() {
+        currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function resetInterval() {
+        clearInterval(sceneInterval);
+        
+        // Get the duration for the new current scene
+        let duration = 7000; // Default duration
+        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
+            duration = sceneConfig[currentSceneIndex].duration;
+        } else {
+            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
+        }
+        
+        sceneInterval = setInterval(nextScene, duration);
+    }
+
+    // Initial setup
+    if (sceneConfig.length > 0) {
+        showScene(0);
+        resetInterval();
+    } else {
+        console.error("Scene configuration is empty.");
+    }
+
+    // Allow keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene();
+        }
+    });
+</script>
+
+</body>
+</html>

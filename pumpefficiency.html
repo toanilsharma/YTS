@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pump Efficiency Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💰</div>
+        <div class="title text-warning">THE #1 COST</div>
+        <div class="subtitle text-accent">Pump Efficiency</div>
+        <div class="description text-dim">Is your pump a tool... or just a heater?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">An expert guide to OPEX.</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Problem -->
+    <div id="scene2" class="scene">
+        <div class="title text-accent">Efficiency is NOT...</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">"Just a number"</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Low Efficiency = HIGH Cost</div>
+            <div class="card-value text-accent" style="font-size: 44px;">WASTED $$$</div>
+            <div class="card-text text-dim">Energy is lost to heat, vibration, and noise, reducing component life.</div>
+        </div>
+
+        <div class="description text-success" style="font-size: 30px; animation-delay: 0.4s;">Efficiency = Output / Input</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The 3 Core Efficiencies -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">The 3 Losses</div>
+        <div class="subtitle text-white" style="font-size: 30px;">Total Efficiency (η) is a product:</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-primary" style="font-size: 26px;">1. Hydraulic (η<sub>hyd</sub>)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Fluid friction in casing & impeller)</div>
+            
+            <div class="list-item text-primary" style="font-size: 26px;">2. Volumetric (η<sub>vol</sub>)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Internal leakage / recirculation)</div>
+
+            <div class="list-item text-primary" style="font-size: 26px;">3. Mechanical (η<sub>mech</sub>)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Friction in bearings & seals)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 1: Output Power -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">Step 1: Output Power</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Water Horsepower" (P<sub>w</sub>)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">P<sub>water</sub> (kW)</div>
+            <div class="formula text-white">(Q × H × ρ × g) / 3.6e6</div>
+        </div>
+        
+        <div class="list" style="font-size: 22px; text-align: center;">
+            <div class="list-item text-dim" style="font-size: 20px;">Q = Flow (m³/hr)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">H = Head (m)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">ρ = Density (kg/m³)</div>
+            <div class="list-item text-dim" style="font-size: 20px;">g = Gravity (9.81 m/s²)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Step 2: Input Power -->
+    <div id="scene5" class="scene">
+        <div class="title text-warning">Step 2: Input Power</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Brake Horsepower" (P<sub>b</sub>)</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">P<sub>brake</sub> (kW)</div>
+            <div class="card-text text-white">This is the actual power delivered to the pump SHAFT.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">How to Find It</div>
+            <div class="card-text text-white">P<sub>brake</sub> = P<sub>motor_elec</sub> × η<sub>motor</sub></div>
+            <div class="card-text text-dim">(Motor's electrical input × motor's efficiency)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: The Final Calculation -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">The Final Formula</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Pump Efficiency (η<sub>pump</sub>)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">η<sub>pump</sub> = P<sub>water</sub> / P<sub>brake</sub></div>
+            <div class="formula text-white" style="font-size: 28px;">(Output Power / Input Power)</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Example</div>
+            <div class="card-text text-white">P<sub>water</sub> = 75 kW</div>
+            <div class="card-text text-white">P<sub>brake</sub> = 100 kW</div>
+            <div class="card-value text-success" style="font-size: 44px;">η<sub>pump</sub> = 75%</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: The "Expert" Factor: BEP -->
+    <div id="scene7" class="scene">
+        <div class="title text-accent">The "Expert" Factor</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Best Efficiency Point (BEP)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">What is BEP?</div>
+            <div class="card-text text-white">The SINGLE point on the pump curve with the highest efficiency.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">WARNING</div>
+            <div class="card-text text-white">Operating away from BEP drastically increases wear, vibration, and cost.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The "Real World" Metric -->
+    <div id="scene8" class="scene">
+        <div class="title text-primary">The "Real" Metric</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"Wire-to-Water" Efficiency</div>
+        <div class="description text-dim" style="font-size: 24px;">This is your TRUE total cost.</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">η<sub>total</sub> =</div>
+            <div class="card-text text-white" style="font-size: 28px;">η<sub>pump</sub> × η<sub>motor</sub> × η<sub>vfd</sub></div>
+            <div class="card-text text-dim">(Accounts for ALL system losses)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Data Required (ISO 9906) -->
+    <div id="scene9" class="scene">
+        <div class="title text-warning">Field Test Data</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(As per ISO 9906 / ANSI)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Flow Rate (Q)</div>
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Suction Pressure (P<sub>s</sub>)</div>
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Discharge Pressure (P<sub>d</sub>)</div>
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Fluid Density (ρ) & Temp</div>
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Motor Power (kW<sub>e</sub>)</div>
+            <div class="list-item text-primary" style="font-size: 24px;">✓ Motor Efficiency (η<sub>motor</sub>)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: Final Message -->
+    <div id="scene10" class="scene">
+        <div class="icon" style="font-size: 80px;">🎯</div>
+        <div class="title text-accent">DON'T GUESS.</div>
+        <div class="title text-primary">OPERATE AT BEP.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Efficiency is not a single number, it's a curve. Know where you are on it.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (The Problem)
+        8000,  // Scene 3 (The 3 Losses)
+        9000,  // Scene 4 (Output Power)
+        8000,  // Scene 5 (Input Power)
+        8000,  // Scene 6 (The Formula)
+        8000,  // Scene 7 (BEP)
+        8000,  // Scene 8 (Wire-to-Water)
+        9000,  // Scene 9 (Field Test Data)
+        7000   // Scene 10 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

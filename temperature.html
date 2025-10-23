@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Conversion Guide (C/F/K)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --info: #00bcd4; /* Added info color */
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        .text-white { color: var(--text-main); }
+        .text-dim { color: var(--text-dim); }
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-info { color: var(--info); } /* Added info color */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+            color: var(--text-dim); 
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--info); /* Changed border color */
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 188, 212, 0.3); /* Changed shadow color */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards; 
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 58px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .description {
+            font-size: 30px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.primary { background: rgba(0, 102, 255, 0.1); border-color: var(--primary); }
+        .card.accent { background: rgba(255, 0, 102, 0.1); border-color: var(--accent); }
+        .card.success { background: rgba(0, 204, 68, 0.1); border-color: var(--success); }
+        .card.warning { background: rgba(255, 153, 0, 0.1); border-color: var(--warning); }
+        .card.info { background: rgba(0, 188, 212, 0.1); border-color: var(--info); } /* Added info card */
+
+        .card-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 30px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🌡️</div>
+        <div class="title text-info">TEMPERATURE</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Most Critical Process Variable</div>
+        <div class="description text-dim">It dictates process safety, efficiency, and product quality.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-warning" style="font-size: 32px; animation-delay: 0.4s;">Get the units wrong... get the process wrong.</div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The "Big Three" -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The "Big Three"</div>
+        <div class="card info">
+            <div class="card-title text-info">Kelvin (K)</div>
+            <div class="card-text text-white" style="font-size: 24px;">The "Absolute" scale. The SI unit for science and engineering.</div>
+        </div>
+        <div class="card primary">
+            <div class="card-title text-primary">Celsius (°C)</div>
+            <div class="card-text text-white" style="font-size: 24px;">The "Relative" metric scale. (0°C = Water Freezes)</div>
+        </div>
+        <div class="card accent">
+            <div class="card-title text-accent">Fahrenheit (°F)</div>
+            <div class="card-text text-white" style="font-size: 24px;">The "Relative" imperial scale. (32°F = Water Freezes)</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The "Absolute" Scale -->
+    <div id="scene3" class="scene">
+        <div class="title text-info">The "Absolute" Scale</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Kelvin (K)</div>
+        <div class="card info">
+            <div class="card-title text-info">Why Kelvin?</div>
+            <div class="card-text text-white" style="font-size: 24px;"><b>0 K = Absolute Zero.</b></div>
+            <div class="card-text text-dim" style="font-size: 22px;">(The point of zero molecular energy).</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;">No negative numbers. This makes gas laws and physics calculations possible.</div>
+            <div class="card-text text-warning" style="font-size: 22px; margin-top: 10px;">Note: It's "Kelvin", not "degrees Kelvin".</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Conversion 1: C -> K -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">Conversion 1: °C → K</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(The Easy Offset)</div>
+        <div class="card primary">
+            <div class="card-title text-primary">K = °C + 273.15</div>
+            <div class="card-text text-white" style="font-size: 24px;">A 1°C change = A 1 K change.</div>
+        </div>
+        <div class="card success" style="margin-top: 15px;">
+            <div class="card-title text-success">Example:</div>
+            <div class="card-text text-white" style="font-size: 24px;">Water Boils: 100 °C</div>
+            <div class="card-text text-white" style="font-size: 24px;">100 + 273.15 = <b>373.15 K</b></div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Conversion 2: K -> C -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">Conversion 2: K → °C</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(The Easy Offset)</div>
+        <div class="card primary">
+            <div class="card-title text-primary">°C = K - 273.15</div>
+        </div>
+        <div class="card success" style="margin-top: 15px;">
+            <div class="card-title text-success">Example:</div>
+            <div class="card-text text-white" style="font-size: 24px;">Absolute Zero: 0 K</div>
+            <div class="card-text text-white" style="font-size: 24px;">0 - 273.15 = <b>-273.15 °C</b></div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Conversion 3: C -> F -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">Conversion 3: °C → °F</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Ratio + Offset)</div>
+        <div class="card accent">
+            <div class="card-title text-accent">°F = (°C × 9/5) + 32</div>
+            <div class="card-text text-dim" style="font-size: 22px;">(9/5 is 1.8)</div>
+        </div>
+        <div class="card success" style="margin-top: 15px;">
+            <div class="card-title text-success">Example:</div>
+            <div class="card-text text-white" style="font-size: 24px;">Common PID Setpoint: 50 °C</div>
+            <div class="card-text text-white" style="font-size: 24px;">(50 × 1.8) + 32 = 90 + 32 = <b>122 °F</b></div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Conversion 4: F -> C -->
+    <div id="scene7" class="scene">
+        <div class="title text-accent">Conversion 4: °F → °C</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Offset + Ratio)</div>
+        <div class="card accent">
+            <div class="card-title text-accent">°C = (°F - 32) × 5/9</div>
+            <div class="card-text text-dim" style="font-size: 22px;">(5/9 is approx 0.555)</div>
+        </div>
+        <div class="card success" style="margin-top: 15px;">
+            <div class="card-title text-success">Example:</div>
+            <div class="card-text text-white" style="font-size: 24px;">Steam Temp: 300 °F</div>
+            <div class="card-text text-white" style="font-size: 24px;">(300 - 32) × 5/9 = 268 × 5/9 = <b>148.9 °C</b></div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The "Two-Step" Conversions -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">The "Two-Step"</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Fahrenheit ↔ Kelvin)</div>
+        <div class="card warning">
+            <div class="card-title text-warning">DON'T memorize complex formulas.</div>
+            <div class="card-text text-white" style="font-size: 24px;"><b>To get K from °F:</b></div>
+            <div class="card-text text-white" style="font-size: 24px;">Go °F → °C, then °C → K</div>
+            
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>To get °F from K:</b></div>
+            <div class="card-text text-white" style="font-size: 24px;">Go K → °C, then °C → °F</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 9: CRITICAL: The "Delta" (ΔT) -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">The #1 MISTAKE</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Confusing Value vs. Span</div>
+        <div class="card accent">
+            <div class="card-title text-accent">A 1°C CHANGE ≠ A 1°F CHANGE</div>
+            <div class="card-text text-white" style="font-size: 24px;">A change of <b>1 °C</b> = A change of <b>1 K</b></div>
+            <div class="card-text text-white" style="font-size: 24px;">A change of <b>1 °C</b> = A change of <b>1.8 °F</b></div>
+        </div>
+        <div class="card-text text-dim" style="font-size: 22px; margin-top: 10px;">(e.g., A 10°C rise in temp is an 18°F rise!)</div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: Why It Matters: SAFETY -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">Why It Matters: SAFETY</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Flash Points / Materials)</div>
+        <div class="card accent">
+            <div class="card-title text-accent">Flash Point / Auto-Ignition</div>
+            <div class="card-text text-white" style="font-size: 24px;">All safety data sheets (SDS) list temps in °C and °F. A mistake is catastrophic.</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>Brittle Fracture:</b> Carbon steel fails at low temps. 0°C is very different from 0°F (-17.8°C)!</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Why It Matters: PROCESS -->
+    <div id="scene11" class="scene">
+        <div class="title text-primary">Why It Matters: PROCESS</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Quality & Control)</div>
+        <div class="card primary">
+            <div class="card-title text-primary">Reaction Kinetics</div>
+            <div class="card-text text-white" style="font-size: 24px;">A 5°C error in a reactor can ruin a batch, cause a runaway reaction, or stop polymerization.</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>Distillation:</b> Cut points in a column are defined by precise temperatures.</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.f
+        </div>
+    </div>
+
+    <!-- Scene 12: Why It Matters: CUSTODY -->
+    <div id="scene12" class="scene">
+        <div class="title text-success">Why It Matters: CUSTODY</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">(Density & Mass)</div>
+        <div class="card success">
+            <div class="card-title text-success">Temp → Density → Volume</div>
+            <div class="card-text text-white" style="font-size: 24px;">LPG, Crude Oil, and Solvents are sold by *corrected* volume (e.g., at 15°C or 60°F).</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;">The temperature reading *directly* impacts the final financial calculation.</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: Sensor 1: RTD -->
+    <div id="scene13" class="scene">
+        <div class="title text-info">Sensor 1: RTD</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Resistance Temp. Detector)</div>
+        <div class="card info">
+            <div class="card-title text-info">Pt100 = 100 Ω at 0°C</div>
+            <div class="card-text text-white" style="font-size: 24px;"><b>PROS:</b> Extremely accurate, stable, and linear. The standard for process control.</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>CONS:</b> Slower response, more fragile, limited range (e.g., < 600°C).</div>
+            <div class="card-text text-warning" style="font-size: 22px; margin-top: 10px;">(Must use 3-wire or 4-wire to compensate for lead resistance!)</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: Sensor 2: Thermocouple -->
+    <div id="scene14" class="scene">
+        <div class="title text-warning">Sensor 2: Thermocouple</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(T/C, e.g., Type K)</div>
+        <div class="card warning">
+            <div class="card-title text-warning">Generates Millivolts (mV)</div>
+            <div class="card-text text-white" style="font-size: 24px;"><b>PROS:</b> Very wide range (-200 to 1250°C), fast response, rugged, cheap.</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>CONS:</b> Less accurate, can drift, non-linear.</div>
+            <div class="card-text text-accent" style="font-size: 22px; margin-top: 10px;">(CRITICAL: Requires Cold Junction Compensation (CJC) in the transmitter!)</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: Sensor 3: Non-Contact (IR) -->
+    <div id="scene15" class="scene">
+        <div class="title text-accent">Sensor 3: IR / Pyrometer</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Infrared)</div>
+        <div class="card accent">
+            <div class="card-title text-accent">Measures Emitted Energy</div>
+            <div class="card-text text-white" style="font-size: 24px;"><b>PROS:</b> Measures non-contact (furnaces, moving rollers, unsafe areas).</div>
+            <div class="card-text text-white" style="font-size: 24px; margin-top: 10px;"><b>CONS:</b> Needs a clean view (no dust/steam).</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;"><b>CRITICAL: EMISSIVITY (ε)</b> must be set correctly, or the reading is useless! (Shiny surface ε ≈ 0.1, Black surface ε ≈ 0.95)</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: CRITICAL: Safety (PTW) -->
+    <div id="scene16" class="scene">
+        <div class="title text-accent">CRITICAL: SAFETY</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Permit to Work (PTW)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">GET A PERMIT.</div>
+            <div class="card-text text-white" style="font-size: 24px;">LOTO the instrument. Inform the Control Room. Bypass trips.</div>
+            <div class="list" style="font-size: 22px;">
+                <div class="list-item text-warning" style="font-size: 24px;">✓ This is a PROCESS sensor.</div>
+                <div class="list-item text-warning" style="font-size: 24px;">✓ It may control heaters, trips, or interlocks.</div>
+                <div class="list-item text-warning" style="font-size: 24px;">✓ Pulling a sensor from a live process can be fatal.</div>
+            </div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 17: Dos & Don'ts -->
+    <div id="scene17" class="scene">
+        <div class="title text-warning">CRITICAL: Dos & Don'ts</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 24px;">DO: Use a Thermowell to protect the sensor and allow online removal.</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Ensure T/C extension wire matches the T/C type (e.g., KX wire for Type K).</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Use a 3 or 4-wire RTD for accuracy.</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Confuse 100°C with 100°F. (100°F is only 37.8°C!)</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Confuse a 10°C *change* with a 10°F *change*. (It's an 18°F change!)</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Use an IR gun on shiny metal and trust the reading.</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 18: Final Message -->
+    <div id="scene18" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-info">A SMALL NUMBER.</div>
+        <div class="title text-accent">A HUGE IMPACT.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 28px;">Get the units right. Get the process right. Stay safe.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">Save & Share This Guide</div>
+            <div class="cta-url text-success">Check Your Units!</div>
+        </div>
+
+        <!-- ADDED FOOTER -->
+        <div class="spacing-medium"></div>
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        8000,  // Scene 1: Hook
+        8000,  // Scene 2: Big Three
+        9000,  // Scene 3: Absolute (Kelvin)
+        8000,  // Scene 4: C -> K
+        8000,  // Scene 5: K -> C
+        9000,  // Scene 6: C -> F
+        9000,  // Scene 7: F -> C
+        9000,  // Scene 8: Two-Step
+        10000, // Scene 9: The Delta (#1 Mistake)
+        10000, // Scene 10: Why: Safety
+        10000, // Scene 11: Why: Process
+        10000, // Scene 12: Why: Custody
+        10000, // Scene 13: Sensor: RTD
+        10000, // Scene 14: Sensor: T/C
+        10000, // Scene 15: Sensor: IR
+        9000,  // Scene 16: Safety (PTW)
+        12000, // Scene 17: Dos & Don'ts
+        8000   // Scene 18: Final
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        // Hide all scenes first
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        const sceneId = scenes[index];
+        const sceneElement = document.getElementById(`scene${sceneId}`);
+        
+        if(sceneElement) {
+            // Show the correct scene
+            sceneElement.classList.remove('hidden');
+            // Scroll to top in case user scrolled down
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 1 and schedule scene 2
+
+    // Add keyboard controls
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+
+    // Add touch controls for mobile
+    let touchstartX = 0;
+    let touchendX = 0;
+
+    function handleGesture() {
+        if (touchendX < touchstartX - 50) { // Swiped left
+            nextScene();
+        }
+        if (touchendX > touchstartX + 50) { // Swiped right
+            prevScene();
+        }
+    }
+
+    const container = document.getElementById('container');
+    container.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        handleGesture();
+    }, { passive: true });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Control Valve Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🎛️</div>
+        <div class="title text-primary">THE FINAL CONTROL ELEMENT</div>
+        <div class="subtitle text-warning">Control Valve Sizing</div>
+        <div class="description text-dim">Get this wrong, and your plant is uncontrollable.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">(As per IEC 60534)</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Goal: Find Cv -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Goal</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">Find ONE key number:</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">C<sub>v</sub> (Flow Coefficient)</div>
+            <div class="card-text text-white" style="font-size: 22px;">A value that defines the valve's flow capacity. (GPM of water at 1 psi drop).</div>
+            <div class="card-value text-primary" style="font-size: 40px;">Bigger C<sub>v</sub> = Bigger Valve</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1: Process Data (Foundation) -->
+    <div id="scene3" class="scene">
+        <div class="title text-accent">Step 1: Process Data</div>
+        <div class="subtitle text-white" style="font-size: 30px;">This is 90% of the job.</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 24px;">1. Fluid (Liquid, Gas, Steam)</div>
+            <div class="list-item text-warning" style="font-size: 24px;">2. Flow (Min / Normal / Max)</div>
+            <div class="list-item text-warning" style="font-size: 24px;">3. Inlet Pressure (P<sub>1</sub>)</div>
+            <div class="list-item text-warning" style="font-size: 24px;">4. Outlet Pressure (P<sub>2</sub>)</div>
+            <div class="list-item text-warning" style="font-size: 24px;">5. Temperature (T)</div>
+            <div class="list-item text-warning" style="font-size: 24px;">6. Fluid Properties (Density, Viscosity, Vapor Pressure P<sub>v</sub>)</div>
+        </div>
+    
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2: Liquid Formula (Simple) -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">Step 2: Liquids (Simple)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Basic C<sub>v</sub> Formula</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Non-Choked Flow</div>
+            <div class="formula text-white" style="font-size: 30px;">C<sub>v</sub> = Q × √(SG / ΔP)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">Q = Flow (GPM)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">SG = Specific Gravity</div>
+            <div class="card-text text-dim" style="font-size: 20px;">ΔP = P<sub>1</sub> - P<sub>2</sub> (psi)</div>
+        </div>
+        <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">But... you CAN'T always use this!</div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The #1 MISTAKE (Liquids) -->
+    <div id="scene5" class="scene">
+        <div class="icon">❌</div>
+        <div class="title text-white">THE #1 MISTAKE</div>
+        <div class="subtitle text-warning">Ignoring Choked Flow</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">FLASHING</div>
+            <div class="card-text text-white" style="font-size: 22px;">If P<sub>2</sub> < P<sub>v</sub> (Vapor Pressure), liquid boils and STAYS vapor. Destroys trim.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">CAVITATION</div>
+            <div class="card-text text-white" style="font-size: 22px;">Liquid boils at the valve, then collapses back to liquid. Extreme damage.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The FIX (Liquids) -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">The Fix (Liquids)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Use the F<sub>L</sub> Factor</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">F<sub>L</sub> = Recovery Factor</div>
+            <div class="card-text text-white" style="font-size: 22px;">Get this from the valve OEM. It defines the choke point.</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Find ΔP<sub>choked</sub></div>
+            <div class="formula text-white" style="font-size: 26px;">ΔP<sub>choked</sub> = F<sub>L</sub>² × (P<sub>1</sub> - P<sub>v</sub>)</div>
+            <div class="card-text text-white" style="font-size: 22px;">If your actual ΔP is > ΔP<sub>choked</sub>, you MUST use ΔP<sub>choked</sub> in the C<sub>v</sub> formula!</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: The #1 MISTAKE (Gases) -->
+    <div id="scene7" class="scene">
+        <div class="icon">❌</div>
+        <div class="title text-white">THE #1 MISTAKE</div>
+        <div class="subtitle text-warning">Ignoring Choked Flow (Gases)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Sonic Velocity</div>
+            <div class="card-text text-white" style="font-size: 22px;">Gases also choke when the velocity reaches the speed of sound at the valve trim.</div>
+            <div class="card-text text-dim" style="font-size: 20px;">(This is NOT the same as cavitation)</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: The FIX (Gases) -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">The Fix (Gases)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Use the x<sub>T</sub> Factor</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">x<sub>T</sub> = Pressure Drop Factor</div>
+            <div class="card-text text-white" style="font-size: 22px;">Get this from the valve OEM.</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Find ΔP<sub>choked</sub></div>
+            <div class="formula text-white" style="font-size: 26px;">ΔP<sub>choked</sub> = x<sub>T</sub> × P<sub>1</sub></div>
+            <div class="card-text text-white" style="font-size: 22px;">Again: If your actual ΔP is > ΔP<sub>choked</sub>, you MUST use ΔP<sub>choked</sub> in the gas C<sub>v</sub> formula.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: Step 3: Valve Selection -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">Step 3: Selection</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"The 30-80% Rule"</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">The Goal</div>
+            <div class="card-text text-white" style="font-size: 22px;">Your *calculated* C<sub>v</sub> (at normal flow) should be 30% to 80% of the *valve's* rated C<sub>v</sub>.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Oversizing is BAD</div>
+            <div class="card-text text-white" style="font-size: 22px;">A valve running at < 10% open has poor control and high wear. The smallest valve that works is the BEST valve.</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: Valve Characteristic -->
+    <div id="scene10" class="scene">
+        <div class="title text-success">Expert Step</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Flow Characteristic</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Equal % (Default)</div>
+            <div class="card-text text-white" style="font-size: 22px;">Use for most processes (pressure, flow, temp) where ΔP across the valve changes.</div>
+        </div>
+
+        <div class="card primary">
+            <div class="card-title text-primary">Linear</div>
+            <div class="card-text text-white" style="font-size: 22px;">Use only when ΔP is constant (e.g., some level control or speed control).</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Dos and Don'ts (Safety/Installation) -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">Dos & Don'ts (Safety)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Installation & Safety</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 24px;">DO: Define Fail-Safe Mode (Fail Open or Fail Close).</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Install upstream strainer/filter.</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Install block & bypass valves.</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Allow 5-10 pipe diameters of straight run.</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Ignore noise (it's cavitation or high velocity).</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 12: Final OEM Specification -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 20px;">✓ Full Process Data (All Cases)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Calculated C<sub>v</sub> (Min/Norm/Max)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Valve Type (Globe, Ball, etc.)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Body & Trim Materials (e.g., SS316)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Characteristic (Equal % / Linear)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Actuator Type & Fail-Safe Mode</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Noise / Cavitation Limits</div>
+        </div>
+    <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: Final Message -->
+    <div id="scene13" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">DON'T GUESS.</div>
+        <div class="title text-primary">CALCULATE.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">A valve sized for control is the key to a stable plant.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (Goal Cv)
+        10000, // Scene 3 (Process Data)
+        9000,  // Scene 4 (Liquid Simple)
+        9000,  // Scene 5 (Mistake Liquid)
+        10000, // Scene 6 (Fix Liquid)
+        7000,  // Scene 7 (Mistake Gas)
+        9000,  // Scene 8 (Fix Gas)
+        9000,  // Scene 9 (Selection)
+        8000,  // Scene 10 (Characteristic)
+        10000, // Scene 11 (Dos/Donts)
+        10000, // Scene 12 (Spec Sheet)
+        7000   // Scene 13 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

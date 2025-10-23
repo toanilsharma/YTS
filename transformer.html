@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Transformer Rating Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        .highlight {
+            font-size: 26px;
+            font-weight: 600;
+            margin: 10px 0;
+            animation: slideUpIn 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 10px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula-row {
+            font-size: 28px;
+            font-weight: 600;
+            margin: 10px 0;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .divider {
+            border-top: 3px solid var(--accent);
+            margin: 12px 0;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .formula-row:nth-child(1) { animation-delay: 0.2s; }
+        .formula-row:nth-child(3) { animation-delay: 0.4s; }
+        .divider { animation-delay: 0.6s; }
+        .formula-row:last-child { animation-delay: 0.8s; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">⚡</div>
+        <div class="title text-accent">DO YOU KNOW?</div>
+        <div class="subtitle text-primary">How to Size a Transformer</div>
+        <div class="description text-dim">The Right Way • Every Time</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">Learn the formula used by professionals</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Problem -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The Cost of Guessing</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Small = UNDERSIZED</div>
+            <div class="card-value text-accent" style="font-size: 40px;">Overheating</div>
+            <div class="card-text text-dim">Equipment fails • Safety risk • Costly repairs</div>
+        </div>
+
+        <div class="spacing-small"></div>
+
+        <div class="card success">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Large = OVERSIZED</div>
+            <div class="card-value text-success" style="font-size: 40px;">Wasted Money</div>
+            <div class="card-text text-dim">High cost • Energy loss • Poor efficiency</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-primary" style="font-size: 22px;">✓ CALCULATE the exact size needed</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1 -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Base Load (kW)</div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 24px;">① List all connected loads (kW)</div>
+            <div class="list-item text-white" style="font-size: 24px;">   • Motors, Fans, Pumps</div>
+            <div class="list-item text-white" style="font-size: 24px;">   • Lighting, HVAC, Heaters</div>
+            <div class="list-item text-white" style="font-size: 24px;">   • Control panels, Equipment</div>
+            <div class="spacing-small"></div>
+            <div class="list-item text-white" style="font-size: 24px;">② Sum all kW values</div>
+            <div class="list-item text-success" style="font-size: 22px;">📊 Base Demand = Sum of all kW</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: NEW - Demand/Diversity -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 2</div>
+        <div class="subtitle text-white">Apply Factors</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Demand Factor</div>
+            <div class="card-text text-white">Not all loads run at 100% simultaneously.</div>
+            <div class="card-text text-dim">(Max Demand ÷ Total Load)</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Diversity Factor</div>
+            <div class="card-text text-white">Not all *groups* of loads peak at the same time.</div>
+        </div>
+        
+        <div class="description text-warning" style="font-size: 22px;">This refines your Base Load to a REALISTIC demand.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: NEW - K-Factor -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">STEP 3</div>
+        <div class="subtitle text-white">Harmonic Loads?</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">K-Factor Rating</div>
+            <div class="card-text text-white" style="font-size: 24px;">Are you feeding VFDs, UPS, or IT Servers?</div>
+            <div class="card-text text-warning" style="font-size: 26px; margin-top: 10px;">YES? You MUST specify a <b>K-Rated</b> transformer (e.g., K-13).</div>
+            <div class="card-text text-dim">Failure to do so = rapid overheating.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Step 4 - Losses -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">STEP 4</div>
+        <div class="subtitle text-white">Account for Losses</div>
+        
+        <div class="card">
+            <div class="card-title text-primary">Transformer Losses</div>
+            <div class="card-text text-white">Heat is generated during operation.</div>
+            <div class="spacing-small"></div>
+            <div class="card-value text-primary">+3% to 5%</div>
+            <div class="card-text text-dim">Add this to your total load.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Step 5 - Growth -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">STEP 5</div>
+        <div class="subtitle text-white">Plan for Future Growth</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Growth Allowance</div>
+            <div class="card-text text-white">Business needs increase over time.</div>
+            <div class="spacing-small"></div>
+            <div class="card-value text-success">+15% to 25%</div>
+            <div class="card-text text-dim">Recommended for 5-10 years.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: NEW - De-rating -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">STEP 6</div>
+        <div class="subtitle text-white">De-Rating Factors</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">High Ambient Temp?</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., > 40°C) You MUST de-rate kVA capacity.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">High Altitude?</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., > 1000m) You MUST de-rate kVA capacity (thinner air = less cooling).</div>
+        </div>
+        
+        <div class="description text-dim" style="font-size: 22px;">As per IEC 60076 & IEEE C57.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: The Formula -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">The Final Formula</div>
+        <div class="spacing-medium"></div>
+        
+        <div style="width: 100%;">
+            <div class="formula-row text-white">Calculated Load (kW)</div>
+            
+            <div class="formula-row text-accent" style="font-size: 32px;">+</div>
+            
+            <div class="formula-row text-primary">Losses & Growth</div>
+            
+            <div class="divider"></div>
+            
+            <div class="formula-row text-success" style="font-size: 38px; font-weight: 900;">= Total Design kW</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="card primary" style="border-color: var(--primary);">
+            <div class="card-text text-primary">Convert kW to kVA</div>
+            <div class="card-text text-white" style="font-size: 24px;">kVA = (Total Design kW ÷ PF)</div>
+            <div class="card-text text-dim" style="font-size: 20px;">(PF = Power Factor, 0.8-0.95)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: NEW - Safety -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">CRITICAL: Safety</div>
+        <div class="subtitle text-white" style="font-size: 36px;">(Install & Testing)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-warning">✓ Grounding is NOT optional. It is a critical safety path.</div>
+            <div class="list-item text-warning">✓ ALWAYS verify phasing (U,V,W) & voltage *before* energizing.</div>
+            <div class="list-item text-warning">✓ Check torque on ALL terminations.</div>
+            <div class="list-item text-warning">✓ Ensure ventilation/clearance matches the spec sheet.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Final Specs -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">Final Specification</div>
+        <div class="text-dim" style="font-size: 20px; margin-bottom: 15px;">Key Industrial Inputs</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 22px;">✓ Rated Power (kVA)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Primary / Secondary Voltage</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Frequency (Hz)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Cooling Method (ONAN/ONAF)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Winding Material (Cu/Al)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Vector Group (Dyn11)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Impedance %</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ Tap Settings (e.g., ±5%)</div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ <b>K-Factor Rating (K-13, etc.)</b></div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ <b>Ambient Temp / Altitude</b></div>
+            <div class="list-item text-white" style="font-size: 22px;">✓ <b>Enclosure (NEMA / IP Rating)</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Final Message -->
+    <div id="scene12" class="scene">
+        <div class="icon" style="font-size: 80px;">✓</div>
+        <div class="title text-accent">Don't Guess</div>
+        <div class="title text-primary">Calculate!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Ensure Safety, Reliability & Efficiency</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share This Guide With Your Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Updated scene list
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        6000,  // Scene 1 (Hook)
+        7000,  // Scene 2 (Problem)
+        8000,  // Scene 3 (Step 1: Base Load)
+        10000, // Scene 4 (NEW: Factors)
+        10000, // Scene 5 (NEW: K-Factor)
+        7000,  // Scene 6 (Step 4: Losses)
+        7000,  // Scene 7 (Step 5: Growth)
+        10000, // Scene 8 (NEW: De-rating)
+        9000,  // Scene 9 (Formula)
+        10000, // Scene 10 (NEW: Safety)
+        12000, // Scene 11 (Final Specs)
+        7000   // Scene 12 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

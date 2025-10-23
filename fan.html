@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Fan Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 28px; /* Reduced size to fit on one line */
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: nowrap; /* Ensures it stays on one line */
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-size: 34px;
+            font-weight: 700;
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            word-wrap: break-word;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💨</div>
+        <div class="title text-primary">THE LUNGS OF INDUSTRY</div>
+        <div class="subtitle text-warning">Fan & Blower Sizing</div>
+        <div class="description text-dim">Get this wrong, and your process stops.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">Energy. Performance. Safety.</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Two Key Metrics -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">The Goal</div>
+        <div class="subtitle text-dim" style="font-size: 30px;">Find these two values:</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">1. Flow Rate (Q)</div>
+            <div class="card-value text-primary" style="font-size: 40px;">CFM or m³/hr</div>
+            <div class="card-text text-white">The VOLUME of air/gas needed.</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">2. Static Pressure (P<sub>s</sub>)</div>
+            <div class="card-value text-accent" style="font-size: 40px;">in. wg or Pa</div>
+            <div class="card-text text-white">The RESISTANCE of your system.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1: Flow Rate (Q) -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">Step 1: Flow (Q)</div>
+        <div class="subtitle text-white" style="font-size: 30px;">"What does the process DEMAND?"</div>
+        
+        <div class="list" style="font-size: 22px; text-align: center;">
+            <div class="list-item text-primary" style="font-size: 28px;">Combustion Air</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(For burners, boilers)</div>
+            
+            <div class="list-item text-primary" style="font-size: 28px;">Conveying</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Pneumatic transport velocity)</div>
+
+            <div class="list-item text-primary" style="font-size: 28px;">Ventilation</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Air Changes Per Hour)</div>
+
+            <div class="list-item text-success" style="font-size: 26px; margin-top: 10px;">Always add a 10-15% safety factor.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2: Static Pressure (P_s) -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">Step 2: Pressure (P<sub>s</sub>)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">"What must the fan OVERCOME?"</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">System Resistance</div>
+            <div class="card-text text-white" style="font-size: 22px;">This is the SUM of all pressure drops in the system. You must calculate it.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">P<sub>Total</sub> = P<sub>Static</sub> + P<sub>Velocity</sub></div>
+            <div class="card-text text-white" style="font-size: 22px;">The fan must supply BOTH, but is rated by Static Pressure.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: Pressure Loss Breakdown -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">Pressure Loss</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(Calculate & Add Everything!)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning" style="font-size: 24px;">1. Friction Loss</div>
+            <div class="list-item text-dim" style="font-size: 18px;">(In all straight ducts)</div>
+            
+            <div class="list-item text-warning" style="font-size: 24px;">2. Dynamic Loss</div>
+            <div class="list-item text-dim" style="font-size: 18px;">(Bends, elbows, tees)</div>
+            
+            <div class="list-item text-warning" style="font-size: 24px;">3. Equipment Loss</div>
+            <div class="list-item text-dim" style="font-size: 18px;">(Filters, dampers, scrubbers, louvers, heaters, silencers)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: The #1 MISTAKE -->
+    <div id="scene6" class="scene">
+        <div class="icon">❌</div>
+        <div class="title text-white">THE #1 MISTAKE</div>
+        <div class="subtitle text-warning">Ignoring Air Density (ρ)</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Fans move MASS, not volume.</div>
+            <div class="card-text text-white" style="font-size: 22px;">Fan curves are rated at Standard Air Density (1.225 kg/m³ or 0.075 lb/ft³).</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Your air is NOT standard!</div>
+            <div class="card-text text-white" style="font-size: 22px;">It's hot. It's at altitude. It's flue gas. You MUST correct for it.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: Density Correction -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">Density Correction</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(As per AMCA 210)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Pressure Correction</div>
+            <div class="formula text-white" style="font-size: 28px;">P<sub>actual</sub> = P<sub>std</sub> × (ρ<sub>actual</sub> / ρ<sub>std</sub>)</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Power Correction</div>
+            <div class="formula text-white" style="font-size: 28px;">BHP<sub>actual</sub> = BHP<sub>std</sub> × (ρ<sub>actual</sub> / ρ<sub>std</sub>)</div>
+        </div>
+
+        <div class="card-text text-warning" style="font-size: 20px; margin-top: 10px;">Hot air is less dense. It requires LESS power but the fan produces LESS pressure.</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The Fan Laws -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">The Fan Laws</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(How Speed (N) Changes Performance)</div>
+        
+        <div class="list" style="text-align: center; font-size: 24px;">
+            <div class="list-item text-primary" style="font-size: 28px;">Flow (Q) ∝ N</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Speed 2x = Flow 2x)</div>
+            
+            <div class="list-item text-accent" style="font-size: 28px;">Pressure (P) ∝ N²</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Speed 2x = Pressure 4x)</div>
+
+            <div class="list-item text-warning" style="font-size: 28px;">Power (BHP) ∝ N³</div>
+            <div class="list-item text-dim" style="font-size: 20px;">(Speed 2x = Power 8x!)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: The Expert Factor: The Fan Curve -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">The Expert Step</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Fan & System Curve</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Your Duty Point</div>
+            <div class="card-text text-white" style="font-size: 22px;">This is where your calculated System Curve (Q vs P<sub>s</sub>) intersects the OEM's Fan Curve.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">AVOID STALL / SURGE</div>
+            <div class="card-text text-white" style="font-size: 22px;">Your duty point MUST be in the "Stable Operating Range," (to the right of the curve's peak).</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: Dos and Don'ts (Safety/Installation) -->
+    <div id="scene10" class="scene">
+        <div class="title text-warning">Dos & Don'ts (AMCA 201)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Installation is KEY</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-success" style="font-size: 24px;">DO: Use VFDs for control (not dampers).</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Install 5-10 diameters of straight duct at the INLET.</div>
+            <div class="list-item text-success" style="font-size: 24px;">DO: Use vibration isolators.</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Block the inlet (causes swirl).</div>
+            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Run in "Stall" (unstable flow).</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: Final OEM Specification -->
+    <div id="scene11" class="scene">
+        <div class="title text-primary">OEM Spec Sheet</div>
+        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-white" style="font-size: 20px;">✓ Flow (Q) at Actual Conditions</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Static Pressure (P<sub>s</sub>) at Actual</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Gas Properties (Temp, Density, Mol. Wt)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Fan Type (Centrifugal/Axial)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Duty (Continuous/Intermittent)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ AMCA Spark Resistance (A, B, C?)</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Noise Level (dB) at 1m</div>
+            <div class="list-item text-white" style="font-size: 20px;">✓ Motor Specs (IE Class, Ex, VFD?)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Final Message -->
+    <div id="scene12" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">DON'T GUESS.</div>
+        <div class="title text-primary">CALCULATE.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">A fan is a system, not just a product. Size it correctly.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1 (Hook)
+        8000,  // Scene 2 (Metrics)
+        8000,  // Scene 3 (Flow)
+        9000,  // Scene 4 (Pressure)
+        9000,  // Scene 5 (Pressure Breakdown)
+        9000,  // Scene 6 (#1 Mistake)
+        10000, // Scene 7 (Density Correction)
+        8000,  // Scene 8 (Fan Laws)
+        9000,  // Scene 9 (Fan Curve)
+        10000, // Scene 10 (Dos/Donts)
+        11000, // Scene 11 (Spec Sheet)
+        7000   // Scene 12 (Final Message)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

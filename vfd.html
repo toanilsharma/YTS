@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial VFD Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px; /* Slightly smaller for long lists */
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.3s; }
+        .list-item:nth-child(3) { animation-delay: 0.4s; }
+        .list-item:nth-child(4) { animation-delay: 0.5s; }
+        .list-item:nth-child(5) { animation-delay: 0.6s; }
+        .list-item:nth-child(6) { animation-delay: 0.7s; }
+        .list-item:nth-child(7) { animation-delay: 0.8s; }
+        .list-item:nth-child(8) { animation-delay: 0.9s; }
+        .list-item:nth-child(9) { animation-delay: 1.0s; }
+        .list-item:nth-child(10) { animation-delay: 1.1s; }
+        .list-item:nth-child(11) { animation-delay: 1.2s; }
+        .list-item:nth-child(12) { animation-delay: 1.3s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">⚡</div>
+        <div class="title text-accent">VFD SIZING</div>
+        <div class="subtitle text-primary">The "Viral" Guide</div>
+        <div class="description text-dim">The #1 Myth: "Motor kW = VFD kW"</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">This is wrong. And dangerous.</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 2: NEW "Payback" Scene -->
+    <div id="scene2" class="scene">
+        <div class="title text-success">STEP 1: The Payback</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Why Bother? (For VT Loads)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">The "Cube Law" = Insane Savings</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Power ∝ (Speed)³</div>
+            <div class="card-text text-white">Run a Fan/Pump at <b>80% Speed</b>...</div>
+            <div class="card-value text-success" style="font-size: 40px;">(0.8)³ = 0.512</div>
+            <div class="card-text text-white">...you use <b>51% Power</b>. <br>That's a <b>49% SAVING!</b></div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Throttling (valves) just wastes this energy as heat & noise.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: (was 2) The REAL First Step -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 2: Load Type</div>
+        <div class="subtitle text-white">What is the *Load Torque*?</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Variable Torque (VT)</div>
+            <div class="card-text text-white">Pumps & Fans. The "Cube Law." (Power ∝ Speed³). Massive energy savings.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Constant Torque (CT)</div>
+            <div class="card-text text-white">Conveyors, Mixers, Hoists. Needs full torque at all speeds. No cube law.</div>
+        </div>
+
+        <div class="card warning" style="animation-delay: 0.3s;">
+            <div class="card-title text-warning">Constant Power (CP)</div>
+            <div class="card-text text-white">Winders, Spindles. High torque at low speed, low torque at high speed.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 4: NEW "Control Method" Scene -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 3: Control Method</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Simple vs. Precision</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">V/Hz (Scalar)</div>
+            <div class="card-text text-white">Simple, cheap. Perfect for <b>VT loads</b> (Pumps/Fans) where precision isn't key.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Vector Control (SVC/FOC)</div>
+            <div class="card-text text-white">High performance. Needs 100% torque at 0 speed. <b>MUST USE for CT loads</b> (Hoists, Mixers).</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">This is a fundamental choice. Don't use V/Hz on a crane!</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: (was 3) The "WOW" Sizing Trap -->
+    <div id="scene5" class="scene">
+        <div class="title text-warning">STEP 4: The "WOW" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Normal vs. Heavy Duty</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Size by Overload, NOT just kW!</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Normal Duty (ND)</div>
+            <div class="card-text text-white">110-120% overload for 60s. <br><b>Use for VT loads (Pumps/Fans).</b></div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Heavy Duty (HD)</div>
+            <div class="card-text text-white">150-180% overload for 60s. <br><b>MUST USE for CT loads (Conveyors).</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: (was 4) The "Duty" Secret -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">The "Duty" Secret</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Why It's A "Trap"</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">An OEM's 110kW VFD...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent" style="font-size: 26px;">110kW Normal Duty</div>
+            <div class="card-text text-white">(For a 110kW Fan)</div>
+        </div>
+
+        <div class="card-text text-white" style="font-size: 30px; margin: 10px 0;">IS THE *EXACT SAME* VFD AS</div>
+
+        <div class="card warning">
+            <div class="card-title text-warning" style="font-size: 26px;">90kW Heavy Duty</div>
+            <div class="card-text text-white">(For a 90kW Conveyor)</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">If you put the 110kW fan VFD on a 110kW conveyor, it will trip on overload.</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: (was 5) De-rating -->
+    <div id="scene7" class="scene">
+        <div class="title text-primary">STEP 5: De-rating</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Non-Negotiables</div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Altitude & Temp</div>
+            <div class="card-text text-white">Hot & high = thin air. VFDs need air to cool. De-rate per OEM data.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">Enclosure (IP / NEMA)</div>
+            <div class="card-text text-white">An IP55 (NEMA 12) VFD has <b>no fan</b>. It must be oversized to shed heat.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.3s;">
+            <div class="card-title text-accent">Carrier Frequency</div>
+            <div class="card-text text-white">Higher freq. = quiet motor, but MASSIVE VFD heat. De-rate heavily.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: (was 6) The "Harmonic" Trap -->
+    <div id="scene8" class="scene">
+        <div class="title text-accent">STEP 6: The "Harmonic" Trap</div>
+        <div class="subtitle text-warning" style="font-size: 32px;">IEEE 519 Compliance</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Standard VFDs (6-Pulse) are "dirty" and cause...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">High THD (Noise)</div>
+            <div class="card-text text-white">This overheats transformers, trips breakers, and violates your utility contract.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">The Fixes</div>
+            <div class="card-text text-white"><b>Good:</b> 5% AC Line Reactor. <br><b>Better:</b> 12/18-Pulse VFD. <br><b>Best:</b> AFE (Active Front End).</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: (was 7) Payback: DFE vs AFE -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">STEP 7: Payback (AFE)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">DFE vs. AFE</div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">DFE (Standard 6-Pulse)</div>
+            <div class="card-text text-white"><b>Pro:</b> Low CapEx (cheap). <br><b>Con:</b> High Harmonics. One-way power (needs braking resistors).</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">AFE (Active Front End)</div>
+            <div class="card-text text-white"><b>Pro:</b> <5% THD (Compliant). Regenerative (saves energy). <br><b>Con:</b> High CapEx (costly).</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">Payback: AFE is for cranes, hoists, & strict utility contracts.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: (was 8) "Mega-VFD" Scene -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary">STEP 8: The "Mega-VFD"</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Above 2MW (2000kW)</div>
+
+        <div class="description text-dim" style="font-size: 24px;">Welcome to the next level...</div>
+        <div class="spacing-small"></div>
+
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">VSI (Voltage Source)</div>
+            <div class="card-text text-white">This is 99% of VFDs. Uses IGBTs. Great for general purpose.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">LCI (Load Commutated)</div>
+            <div class="card-text text-white">The "Big Gun" for 2-100MW. <br>Uses Thyristors. Simple, robust... but has a "wow" catch...</div>
+        </div>
+
+        <div class="card warning" style="animation-delay: 0.3s;">
+            <div class="card-title text-warning">The LCI Catch</div>
+            <div class="card-text text-white"><b>It requires a Synchronous Motor.</b> It cannot run on a standard induction motor.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: (was 9) Braking -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">STEP 9: The "Braking" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">How Does It Stop?</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Stopping a heavy load (conveyor) creates energy. Where does it go?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">DC Injection</div>
+            <div class="card-text text-white">VFD shorts the motor. Harsh. OK for small loads.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Dynamic Braking (DBR)</div>
+            <div class="card-text text-white">Dumps energy into a giant resistor (a heater). This is the CT standard.</div>
+        </div>
+
+        <div class="card success" style_animation-delay: 0.3s;>
+            <div class="card-title text-success">Regenerative (AFE/LCI)</div>
+            <div class="card-text text-white">Puts 100% of the energy back on the grid. Saves money.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 12: NEW "Safety Spec" Scene -->
+    <div id="scene12" class="scene">
+        <div class="title text-success">STEP 10: The "Safety" Spec</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Safe Torque Off (STO)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">How do you E-Stop a VFD?</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">The Old Way (Bad)</div>
+            <div class="card-text text-white">Use a contactor. Slow to open, high-wear, expensive, large panel.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">The New Way (STO)</div>
+            <div class="card-text text-white">A built-in, SIL-Rated safety input. Instantly disables motor torque. No contactor needed.</div>
+        </div>
+        
+        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">This is a non-negotiable for modern machine safety.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: (was 10) Motor & Cable -->
+    <div id="scene13" class="scene">
+        <div class="title text-accent">STEP 11: The "Motor" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The VFD *Will* Kill Your Motor</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">VFDs create voltage spikes that kill motors.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">Reflected Waves</div>
+            <div class="card-text text-white">With long cables (>30m), spikes reflect and can <b>double</b>, killing insulation.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">The Pro Solution</div>
+            <div class="card-text text-white"><b>1.</b> MUST use Inverter-Duty Motor. <br><b>2.</b> MUST use Shielded VFD Cable. <br><b>3.</b> MUST use dV/dt or Sine Filter for long runs.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 14: NEW "EMC/RFI" Scene -->
+    <div id="scene14" class="scene">
+        <div class="title text-warning">STEP 12: The "Noise" Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">EMC/RFI Compliance</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your VFD will interfere with your PLCs and instrumentation.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">The Problem</div>
+            <div class="card-text text-white">VFDs are "noisy" transmitters. This noise (RFI) couples into signal wires, causing bad readings.</div>
+        </div>
+        
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">The Pro Solution</div>
+            <div class="card-text text-white"><b>1.</b> MUST use Shielded VFD Cable. <br><b>2.</b> Physically separate VFD power and instrument cables. <br><b>3.</b> Use an RFI Filter.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: (was 11) Final Spec Sheet -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">STEP 13</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Full Industrial Spec</div>
+        
+        <div class="list" style="font-size: 22px; line-height: 1.3;">
+            <div class="list-item text-white">✓ VFD Type (VSI / LCI)</div>
+            <div class="list-item text-white">✓ Load Type (VT / CT)</div>
+            <div class="list-item text-warning">✓ <b>Control (V/Hz / Vector)</b></div>
+            <div class="list-item text-white">✓ Motor FLA & kW</div>
+            <div class="list-item text-accent">✓ <b>Duty Rating (ND / HD)</b></div>
+            <div class="list-item text-warning">✓ <b>De-rating (Alt / Temp / IP)</b></div>
+            <div class="list-item text-accent">✓ <b>Harmonic Mitigation (AFE / DFE)</b></div>
+            <div class="list-item text-accent">✓ <b>Braking (Regen / DBR)</b></div>
+            <div class="list-item text-success">✓ <b>Safety (STO / SIL Rating)</b></div>
+            <div class="list-item text-warning">✓ <b>Motor Cable Length (m)</b></div>
+            <div class="list-item text-white">✓ dV/dt or Sine Filter?</div>
+            <div class="list-item text-warning">✓ <b>EMC/RFI Filter?</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: (was 12) Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Buy a VFD</div>
+        <div class="title text-primary">Buy a *System*</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">The VFD, motor, and cable are one system.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    // Updated scenes array with the new scenes
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Updated durations in ms, with new durations for new scenes
+    const sceneDurations = [
+        7000,  // Scene 1: Hook
+        10000, // Scene 2: NEW Payback (Cube Law)
+        10000, // Scene 3: (was 2) Load Type
+        12000, // Scene 4: NEW Control Method
+        10000, // Scene 5: (was 3) ND vs HD
+        12000, // Scene 6: (was 4) The "Duty" Secret
+        10000, // Scene 7: (was 5) De-rating
+        12000, // Scene 8: (was 6) Harmonic Trap
+        12000, // Scene 9: (was 7) Payback DFE vs AFE
+        12000, // Scene 10: (was 8) "Mega-VFD" (LCI)
+        12000, // Scene 11: (was 9) Braking
+        12000, // Scene 12: NEW Safety (STO)
+        12000, // Scene 13: (was 10) Motor & Cable Trap
+        12000, // Scene 14: NEW EMC/RFI Trap
+        12000, // Scene 15: (was 11) Final Spec
+        7000   // Scene 16: (was 12) Final Message
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

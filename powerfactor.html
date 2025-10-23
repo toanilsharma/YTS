@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial PFC Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 10px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💸</div>
+        <div class="title text-accent">UTILITY PENALTY?</div>
+        <div class="subtitle text-primary">Power Factor Correction</div>
+        <div class="description text-dim">Stop paying for wasted energy!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">The #1 ROI project for any plant</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Problem (Beer Analogy) -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">The "Beer Mug"</div>
+        <div class="icon" style="font-size: 80px;">🍺</div>
+        
+        <div class="card warning">
+            <div class="card-title text-success">Real Power (kW)</div>
+            <div class="card-text text-white">The Beer: This does the useful work.</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">Reactive Power (kVAR)</div>
+            <div class="card-text text-white">The Foam: Useless, but fills the mug. (Motors need it)</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Apparent Power (kVA)</div>
+            <div class="card-text text-white">The Whole Mug: What you pay for!</div>
+        </div>
+        
+        <div class="description text-accent" style="font-size: 24px;">Low PF (e.g., 0.7) = Too much foam!</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: The Consequences -->
+    <div id="scene3" class="scene">
+        <div class="title text-accent">Why Low PF is Costly</div>
+        
+        <div class="card accent" style="animation-delay: 0.1s;">
+            <div class="card-title text-accent">1. Utility Penalties</div>
+            <div class="card-text text-white">You pay for Apparent Power (kVA), not just Real Power (kW).</div>
+        </div>
+
+        <div class="card warning" style="animation-delay: 0.2s;">
+            <div class="card-title text-warning">2. Wasted Capacity</div>
+            <div class="card-text text-white">Your transformers & cables are "full" of useless kVAR, limiting real kW.</div>
+        </div>
+        
+        <div class="card primary" style="animation-delay: 0.3s;">
+            <div class="card-title text-primary">3. Higher I²R Losses</div>
+            <div class="card-text text-white">More current = more heat & voltage drop in your system.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: NEW - Placement Strategy -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Where to Install?</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Central</div>
+            <div class="card-text text-white">One large bank at the Main Transformer. Easiest to install, but doesn't reduce plant I²R losses.</div>
+        </div>
+
+        <div class="card success" style="animation-delay: 0.2s;">
+            <div class="card-title text-success">Decentralized</div>
+            <div class="card-text text-white">Smaller banks at each MCC. Better efficiency. More costly.</div>
+        </div>
+        
+        <div class="card warning" style="animation-delay: 0.3s;">
+            <div class="card-title text-warning">Individual</div>
+            <div class="card-text text-white">Capacitor at each motor. Best efficiency, but highest cost & complexity.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: (was 4) The Solution -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">STEP 2</div>
+        <div class="subtitle text-white">Add Capacitors (kVAR)</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Motors create inductive kVAR (foam). Capacitors create "anti-foam" (capacitive kVAR) to cancel it out.</div>
+        <div class="spacing-medium"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">The Goal</div>
+            <div class="card-value text-success">Target PF = 0.99</div>
+            <div class="card-text text-warning" style="font-size: 24px;">Never target 1.0 (Unity)!</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: (was 5) The #1 Trap: Over-Correction -->
+    <div id="scene6" class="scene">
+        <div class="title text-accent">STEP 3: The Trap</div>
+        <div class="subtitle text-warning">Over-Correction</div>
+        
+        <div class="icon" style="font-size: 80px;">❌</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Leading Power Factor</div>
+            <div class="card-text text-white">Adding *too many* capacitors (or leaving them on at low load) is just as bad.</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">This causes high voltage, damages electronics, and gets you penalized.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 7: (was 6) The Smart Solution: APFC -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">STEP 4: The Solution</div>
+        <div class="subtitle text-white">APFC Relay</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your plant load changes. Your kVAR bank should too.</div>
+        <div class="spacing-medium"></div>
+
+        <div class="card success">
+            <div class="card-title text-success">APFC Relay</div>
+            <div class="card-text text-white">An "Automatic Power Factor Controller" is a brain. It switches capacitor "stages" on/off to perfectly match the load.</div>
+            <div class="card-text text-primary" style="font-size: 24px; margin-top: 10px;">It always maintains your 0.99 target and prevents over-correction.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: NEW - Switching Technology -->
+    <div id="scene8" class="scene">
+        <div class="title text-primary">STEP 5</div>
+        <div class="subtitle text-white">Expert Choice: Switching</div>
+        
+        <div class="card primary" style="animation-delay: 0.1s;">
+            <div class="card-title text-primary">Contactor Switching</div>
+            <div class="card-text text-white">Slower (5-30s), mechanical, audible "clunk".</div>
+            <div class="card-text text-success" style="font-size: 22px; margin-top: 10px;">Perfect for stable loads (fans, pumps) or main incomers.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Thyristor (Static)</div>
+            <div class="card-text text-white">Instant (<20ms), silent, electronic. No moving parts.</div>
+            <div class="card-text text-warning" style="font-size: 22px; margin-top: 10px;">MANDATORY for dynamic loads like welders, cranes, or lifts.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: (was 7) The DEADLY Trap: Harmonics -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">STEP 6: The *DEADLY* Trap</div>
+        <div class="subtitle text-warning">Harmonics (VFDs)</div>
+        <div class="icon" style="font-size: 80px;">🔥</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">VFDs + Capacitors = 💥</div>
+            <div class="card-text text-white">VFDs create harmonic "noise." Standard capacitors act like an "antenna" for this noise.</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">This creates PARALLEL RESONANCE, amplifying currents, overheating, and destroying the bank.</div>
+        </div>
+        
+        <div class="description text-white" style="font-size: 22px;">This is the #1 cause of bank failure.</div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: (was 8) The PRO Solution: Detuned Reactors -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary">STEP 7: The Pro Solution</div>
+        <div class="subtitle text-white">Detuned Reactors</div>
+        
+        <div class="description text-dim" style="font-size: 24px;">If you have VFDs (>15% of total load), you MUST use detuned banks.</div>
+        <div class="spacing-medium"></div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Detuned Reactor</div>
+            <div class="card-text text-white">A "reactor" (inductor) is added in series with each capacitor stage.</div>
+            <div class="card-text text-success" style="font-size: 24px; margin-top: 10px;">This blocks the harmonic currents, protecting the capacitor and preventing resonance.</div>
+            <div class="card-text text-dim">(Standard: 7% Detuned, p=7%)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 11: NEW - De-rating -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">STEP 8: Pro Check</div>
+        <div class="subtitle text-white">De-Rating Factors</div>
+        
+        <div class="card warning" style="animation-delay: 0.1s;">
+            <div class="card-title text-warning">Ambient Temperature</div>
+            <div class="card-text text-white">Capacitors hate heat. Standard caps are rated for 40°C. De-rate heavily for hotter panel rooms.</div>
+        </div>
+        
+        <div class="card accent" style="animation-delay: 0.2s;">
+            <div class="card-title text-accent">Voltage Rise</div>
+            <div class="card-text text-white">Detuned reactors (p=7%) *increase* the voltage at the capacitor terminal by ~7.5%.</div>
+            <div class="card-text text-dim" style="font-size: 20px;">Ensure your caps are rated for this higher voltage (e.g., 525V caps on 480V system).</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 12: (was 9) The Core Calculation -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">STEP 9: The Formula</div>
+        <div class="subtitle text-white" style="font-size: 30px;">kVAR = kW &times; (tan(&phi;<sub>1</sub>) - tan(&phi;<sub>2</sub>))</div>
+        
+        <div class="card primary" style="animation-delay: 0.2s;">
+            <div class="card-title text-primary">&phi;<sub>1</sub> (Current)</div>
+            <div class="card-text text-white">arccos(Current PF)</div>
+            <div class="card-text text-dim">e.g., arccos(0.75) = 41.4°</div>
+            <div class="card-text text-white">tan(41.4°) = <b>0.88</b></div>
+        </div>
+
+        <div class="card success" style="animation-delay: 0.4s;">
+            <div class="card-title text-success">&phi;<sub>2</sub> (Target)</div>
+            <div class="card-text text-white">arccos(Target PF)</div>
+            <div class="card-text text-dim">e.g., arccos(0.99) = 8.1°</div>
+            <div class="card-text text-white">tan(8.1°) = <b>0.14</b></div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: (was 10) Consolidated Example -->
+    <div id="scene13" class="scene">
+        <div class="title text-primary">STEP 10</div>
+        <div class="subtitle text-white">Sizing Example</div>
+
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Given Data</div>
+            <div class="card-text text-white" style="text-align: left; font-size: 20px; line-height: 1.5;">
+                • Real Power Load (kW): <b>500 kW</b><br>
+                • Current Power Factor: <b>0.75</b><br>
+                • Target Power Factor: <b>0.99</b>
+            </div>
+        </div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent" style="font-size: 26px;">Calculation</div>
+            <div class="card-text text-white" style="text-align: left; font-size: 20px; line-height: 1.5;">
+                • tan(&phi;<sub>1</sub>) (from 0.75 PF) = <b>0.88</b><br>
+                • tan(&phi;<sub>2</sub>) (from 0.99 PF) = <b>0.14</b><br>
+                • kVAR = 500 kW &times; (0.88 - 0.14)<br>
+                • kVAR = 500 kW &times; 0.74<br>
+                <b class="text-success" style="font-size: 24px;">= 370 kVAR Required</b>
+            </div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Final Selection</div>
+            <div class="card-text text-white" style="font-size: 22px;">✓ Select <b>400 kVAR</b> APFC Bank</div>
+            <div class="card-text text-dim">(e.g., 8 stages &times; 50 kVAR)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 14: NEW - Safety -->
+    <div id="scene14" class="scene">
+        <div class="title text-accent">STEP 11: The *LETHAL* Trap</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Safety & Installation</div>
+        <div class="icon" style="font-size: 80px;">⚡️</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Stored Lethal Charge!</div>
+            <div class="card-text text-white">Capacitors are batteries. They hold a fatal charge even when OFF.</div>
+        </div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-warning">✓ Wait 5-10 minutes AFTER power off.</div>
+            <div class="list-item text-warning">✓ Allow internal discharge resistors to work.</div>
+            <div class="list-item text-warning">✓ ALWAYS verify zero volts with a meter.</div>
+            <div class="list-item text-warning">✓ Ensure bank has forced-air cooling.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: (was 11) Final Specs -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">STEP 12</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Full Industrial Spec</div>
+        
+        <div class="list" style="font-size: 22px; line-height: 1.4;">
+            <div class="list-item text-white">✓ Total kVAR & System Voltage</div>
+            <div class="list-item text-white">✓ Type: APFC (Automatic)</div>
+            <div class="list-item text-white">✓ Number of Stages (e.g., 8 x 50)</div>
+            <div class="list-item text-white">✓ Placement: Central / Decentralized</div>
+            <div class="list-item text-primary">✓ <b>Switching: Thyristor / Contactor</b></div>
+            <div class="list-item text-warning">✓ <b>Detuned Reactors? (YES/NO)</b></div>
+            <div class="list-item text-warning">✓ <b>Tuning Factor (p=7%?)</b></div>
+            <div class="list-item text-warning">✓ <b>Ambient Temp Rating (e.g., 50°C)</b></div>
+            <div class="list-item text-warning">✓ <b>Capacitor Voltage (e.g., 525V)</b></div>
+            <div class="list-item text-white">✓ IP Rating / Cooling Type</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: (was 12) Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Stop Wasting Money</div>
+        <div class="title text-primary">Start Saving Energy!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">This is the highest ROI project!</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        7000,  // Scene 1: Hook
+        9000,  // Scene 2: Beer Analogy
+        9000,  // Scene 3: Consequences
+        10000, // Scene 4: NEW Placement
+        8000,  // Scene 5: Solution (was 4)
+        8000,  // Scene 6: Trap 1 (was 5)
+        9000,  // Scene 7: APFC (was 6)
+        10000, // Scene 8: NEW Switching
+        10000, // Scene 9: Harmonics (was 7)
+        10000, // Scene 10: Detuned (was 8)
+        10000, // Scene 11: NEW De-rating
+        10000, // Scene 12: Formula (was 9)
+        12000, // Scene 13: Example (was 10)
+        10000, // Scene 14: NEW Safety
+        12000, // Scene 15: Final Specs (was 11)
+        7000   // Scene 16: Final Message (was 12)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial LMTD Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .formula-sm { font-size: 26px; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        /* Helper for formula */
+        sub { font-size: 0.6em; }
+        sup { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🌡️</div>
+        <div class="title text-accent">LMTD</div>
+        <div class="subtitle text-primary">The #1 Secret of Heat Transfer</div>
+        <div class="description text-dim">Sizing an Exchanger?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">Get this wrong, and your process FAILS.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 2: What Is It? -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">What Is It?</div>
+        <div class="subtitle text-white">The "Plant's Radiator"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-text text-white" style="font-size: 24px;">
+                A Heat Exchanger just moves heat (energy) from one fluid to another.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-dim">e.g., Hot Oil heats up Cold Water</div>
+        </div>
+
+        <div class="card accent">
+             <div class="card-title text-accent">LMTD</div>
+             <div class="card-text text-white">Is how we calculate the "driving force" (average temperature difference) that moves the heat.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 3: Why Should You Care? -->
+    <div id="scene3" class="scene">
+        <div class="title text-warning">Why Should YOU Care?</div>
+        <div class="subtitle text-white">It's Not Just a P&ID Symbol...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white"><b>Managers:</b> This calculation sets the CapEx (cost) and OpEx (energy use) of your plant.</div>
+            <div class="list-item text-white"><b>Process:</b> Get this wrong, and you *never* hit your target temperature.</div>
+            <div class="list-item text-white"><b>Electrical:</b> This determines the load for pump & fan motors.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: The #1 Secret -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">The #1 Secret</div>
+        <div class="subtitle text-white">Counter-Current Flow</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">❌ Co-Current (Parallel)</div>
+            <div class="card-text text-white">Fluids flow in the same direction. This is INEFFICIENT.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">✅ Counter-Current</div>
+            <div class="card-text text-white">Fluids flow in opposite directions. This is the MOST EFFICIENT method and gives the highest LMTD.</div>
+        </div>
+
+        <div class="description text-primary" style="font-size: 22px;">Always design for Counter-Current!</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The LMTD Formula -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">The LMTD Formula</div>
+        <div class="subtitle text-white">Logarithmic Mean</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">Calculate Temp Drops</div>
+            <div class="card-text text-white" style="font-size: 26px;">ΔT<sub>1</sub> = T<sub>Hot,in</sub> - T<sub>Cold,out</sub></div>
+            <div class="card-text text-white" style="font-size: 26px;">ΔT<sub>2</sub> = T<sub>Hot,out</sub> - T<sub>Cold,in</sub></div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">The LMTD</div>
+            <div class="formula">LMTD = (ΔT<sub>1</sub> - ΔT<sub>2</sub>) / ln(ΔT<sub>1</sub> / ΔT<sub>2</sub>)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: The Duty Equation -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">The Duty Equation</div>
+        <div class="subtitle text-white">The Master Formula</div>
+        <div class="spacing-small"></div>
+
+        <div class="card success">
+            <div class="card-title text-success">Q = U × A × LMTD</div>
+        </div>
+
+        <div class="list" style="text-align: center;">
+            <div class="list-item text-white"><b>Q</b> = Heat Duty (W)</div>
+            <div class="list-item text-white"><b>U</b> = Heat Transfer Coeff.</div>
+            <div class="list-item text-white"><b>A</b> = Surface Area (m²)</div>
+            <div class="list-item text-white"><b>LMTD</b> = Your calculated value</div>
+        </div>
+        
+        <div class="description text-warning" style="font-size: 22px;">This formula is ONLY for true counter-current flow (e.g., Plate Exchangers).</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: The "Expert Trap" -->
+    <div id="scene7" class="scene">
+        <div class="title text-warning">The Expert Trap!</div>
+        <div class="subtitle text-white">The 'F' Correction Factor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Cross-Flow</div>
+            <div class="card-text text-white">Shell & Tube Exchangers are NOT true counter-current. They are "Cross-Flow."</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">Q = U × A × (F × LMTD)</div>
+            <div class="card-text text-white">You MUST apply a Correction Factor 'F' (from charts, 0.8-0.95) to the LMTD, or your design will fail.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: The OpEx Killer -->
+    <div id="scene8" class="scene">
+        <div class="title text-accent">The OpEx Killer</div>
+        <div class="subtitle text-white">Fouling Factor (R<sub>f</sub>)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">What is it?</div>
+            <div class="card-text text-white">Over time, "crud" builds up on the tubes, insulating them and stopping heat transfer.</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">What it means:</div>
+            <div class="card-text text-white">You MUST add a "Fouling Factor" to your calculation. This makes your exchanger LARGER (more 'A') on Day 1, so it still works on Day 1000.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: TEMA Types -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">Pro Tip: TEMA Types</div>
+        <div class="subtitle text-white">The Industrial Standard</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-text text-white" style="font-size: 24px;">
+                TEMA (Tubular Exchanger Manufacturers Association) defines the physical design.
+            </div>
+            <div class="spacing-small"></div>
+            <div class="card-text text-dim">e.g., "BEM" or "AES"</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">What it defines:</div>
+             <div class="card-text text-white">The Front Head, Shell, and Rear Head. This choice impacts cost, maintenance, and thermal expansion.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: Final Specs -->
+    <div id="scene10" class="scene">
+        <div class="title text-warning">OEM Spec Sheet</div>
+        <div class="subtitle text-white">What to tell the vendor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Process (Hot/Cold Fluids)</div>
+            <div class="list-item text-white">✓ Flow Rates (kg/s)</div>
+            <div class="list-item text-white">✓ INLET Temperatures</div>
+            <div class="list-item text-white">✓ OUTLET Temperatures</div>
+            <div class="list-item text-white">✓ Max Pressure Drop</div>
+            <div class="list-item text-white">✓ Fouling Factor (R<sub>f</sub>)</div>
+            <div class="list-item text-white">✓ TEMA Type (e.g., BEM)</div>
+            <div class="list-item text-white">✓ Materials of Construction</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: Final Message -->
+    <div id="scene11" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Guess</div>
+        <div class="title text-primary">Calculate!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success">Ensure Process Safety & Efficiency</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations visit website</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const sceneConfig = [
+        { id: 1, duration: 7000 },
+        { id: 2, duration: 8000 },
+        { id: 3, duration: 9000 },
+        { id: 4, duration: 8000 },
+        { id: 5, duration: 8000 },
+        { id: 6, duration: 9000 },
+        { id: 7, duration: 10000 },
+        { id: 8, duration: 9000 },
+        { id: 9, duration: 9000 },
+        { id: 10, duration: 12000 },
+        { id: 11, duration: 10000 }
+    ];
+    
+    let currentSceneIndex = 0;
+    let sceneInterval;
+
+    function showScene(index) {
+        // Hide all scenes
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        // Find and show the correct scene
+        const sceneId = sceneConfig[index].id;
+        const sceneElement = document.getElementById(`scene${sceneId}`);
+        
+        if (sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0; // Scroll to top
+        } else {
+            console.error(`Scene with id "scene${sceneId}" not found.`);
+        }
+    }
+
+    function nextScene() {
+        currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function prevScene() {
+        currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function resetInterval() {
+        clearInterval(sceneInterval);
+        
+        // Get the duration for the new current scene
+        let duration = 7000; // Default duration
+        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
+            duration = sceneConfig[currentSceneIndex].duration;
+        } else {
+            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
+        }
+        
+        sceneInterval = setInterval(nextScene, duration);
+    }
+
+    // Initial setup
+    if (sceneConfig.length > 0) {
+        showScene(0);
+        resetInterval();
+    } else {
+        console.error("Scene configuration is empty.");
+    }
+
+    // Allow keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene();
+        }
+    });
+</script>
+
+</body>
+</html>

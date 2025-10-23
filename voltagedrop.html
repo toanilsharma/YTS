@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Voltage Drop Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.15;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 50px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 32px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">📉</div>
+        <div class="title text-accent">THE SILENT KILLER</div>
+        <div class="subtitle text-primary">Industrial Voltage Drop</div>
+        <div class="description text-dim">Why 5% isn't always the rule...</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">An Engineer's Guide</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+ 
+
+    <!-- Scene 2: NEW - Part 1 Title -->
+    <div id="scene2" class="scene" style="justify-content: center;">
+        <div class="title text-primary">PART 1</div>
+        <div class="subtitle text-white">Power Systems (AC)</div>
+        <div class="description text-dim" style="font-size: 24px;">(Motors, Feeders, Lighting)</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+
+    <!-- Scene 3: The Power Problem (Was Scene 2) -->
+    <div id="scene3" class="scene">
+        <div class="title text-warning">The Power Problem</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Why It's Critical</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Motors (Running)</div>
+            <div class="card-value text-warning" style="font-size: 44px;">> 5% Drop</div>
+            <div class="card-text text-dim">Overheating, torque loss, reduced life, inefficiency. (Ref: IEC 60364-5-52)</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">Motors (Starting)</div>
+            <div class="card-value text-accent" style="font-size: 44px;">> 15% Drop</div>
+            <div class="card-text text-dim">Motor STALLS, fails to start, trips breaker. (Ref: IEEE Std 3004.8)</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+  
+
+    <!-- Scene 4: Power Formula (AC 3-Phase) (Was Scene 4) -->
+    <div id="scene4" class="scene">
+        <div class="title text-primary">Power Formula (3Ø)</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Full Formula</div>
+        <div class="description text-dim" style="font-size: 24px;">It's NOT just resistance.</div>
+        
+        <div class="card primary">
+            <div class="card-text text-white" style="font-size: 22px; line-height: 1.4; font-weight: 600;">
+                VD = (√3 × I × L) × (R·cos(φ) + X·sin(φ))
+            </div>
+        </div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-white" style="font-size: 22px;">I = Load Current (Amps)</div>
+            <div class="list-item text-white" style="font-size: 22px;">L = Cable Length (km)</div>
+            <div class="list-item text-white" style="font-size: 22px;">R = Cable Resistance (Ω/km)</div>
+            <div class="list-item text-white" style="font-size: 22px;">X = Cable Reactance (Ω/km)</div>
+            <div class="list-item text-white" style="font-size: 22px;">cos(φ) = Power Factor</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    
+    <!-- Scene 5: Key Factor: Reactance (X) (Was Scene 5) -->
+    <div id="scene5" class="scene">
+        <div class="title text-accent">The 'X' Factor</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Why Reactance Matters</div>
+        <div class="description text-dim" style="font-size: 24px;">For large cables, X can be > R!</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Large Feeders</div>
+            <div class="card-value text-accent" style="font-size: 44px;">X >> R</div>
+            <div class="card-text text-dim">Ignoring reactance (X) gives a dangerously optimistic (low) %VD calculation.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">VFD Cables</div>
+            <div class="card-text text-white">Check for harmonic voltage drop & cable capacitance. Standard formula may not apply.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 6: Advanced Power Checks (Was Scene 7, EDITED) -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">Advanced Power Checks</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Beyond the Basics</div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 24px;">✓ Conductor Temperature</div>
+            <div class="list-item text-dim" style="font-size: 20px;">Use R at 90°C (XLPE), not 20°C.</div>
+            
+            <div class="list-item text-white" style="font-size: 24px;">✓ Skin & Proximity Effect</div>
+            <div class="list-item text-dim" style="font-size: 20px;">Increases AC resistance (R_ac > R_dc).</div>
+            
+            <div class="list-item text-white" style="font-size: 24px;">✓ Transformer %Z</div>
+            <div class="list-item text-dim" style="font-size: 20px;">Include drop inside the transformer.</div>
+            
+            <div class="list-item text-white" style="font-size: 24px;">✓ Mfg. Datasheets</div>
+            <div class="list-item text-dim" style="font-size: 20px;">Use exact R & X values from vendor.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>    
+
+    <!-- Scene 7: NEW - Part 2 Title -->
+    <div id="scene7" class="scene" style="justify-content: center;">
+        <div class="title text-warning">PART 2</div>
+        <div class="subtitle text-white">I&C Systems (DC/LV)</div>
+        <div class="description text-dim" style="font-size: 24px;">(Analog Loops, Fieldbus, Controls)</div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: The Control Problem (Was Scene 3) -->
+    <div id="scene8" class="scene">
+        <div class="title text-warning">The Control Problem</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Signal Integrity Failure</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">Analog (4-20mA)</div>
+            <div class="card-value text-warning" style="font-size: 44px;">"Ghost" Readings</div>
+            <div class="card-text text-dim">Insufficient voltage for transmitter. Loop fails, shows 0mA or false reading.</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">Digital / Fieldbus</div>
+            <div class="card-value text-accent" style="font-size: 44px;">Data Corruption</div>
+            <div class="card-text text-dim">Signal degrades, packets lost, intermittent control failure.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 9: I&C Loop Check (Was Scene 6) -->
+    <div id="scene9" class="scene">
+        <div class="title text-primary">I&C Loop Check</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The DC Loop Formula</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Available Voltage Check</div>
+            <div class="card-text text-white" style="font-size: 22px;">V_supply > V_drop + V_min_instr</div>
+            <div class="card-text text-dim" style="font-size: 20px;">(e.g. 24V > (V_cable + V_barrier) + 12V)</div>
+        </div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 22px;">V_supply = Power Supply VDC</div>
+            <div class="list-item text-white" style="font-size: 22px;">V_drop = (I_loop × R_loop) + V_barrier</div>
+            <div class="list-item text-white" style="font-size: 22px;">R_loop = Total loop resistance (2 cores)</div>
+            <div class="list-item text-white" style="font-size: 22px;">V_min_instr = Transmitter min. voltage</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 10: NEW - Fieldbus Networks -->
+    <div id="scene10" class="scene">
+        <div class="title text-accent">Fieldbus Networks</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The "Wow" Factor</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">It's NOT a DC Loop!</div>
+            <div class="card-text text-white">Foundation Fieldbus, Profibus PA, etc. have *strict* rules.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Vendor is KING</div>
+            <div class="card-text text-white">✓ Check max segment length.</div>
+            <div class="card-text text-white">✓ Check specific cable type (e.g. Type A).</div>
+            <div class="card-text text-white">✓ Check terminator requirements.</div>
+            <div class="card-text text-dim">Standard VD% rules do NOT apply.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>    
+
+    <!-- Scene 11: The Standards - IEC/IEEE (Was Scene 8) -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">The Standards</div>
+        <div class="subtitle text-white" style="font-size: 32px;">The Final Authority</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">IEC 60364-5-52</div>
+            <div class="card-text text-white">Recommends 3% (Lighting), 5% (Other). This is a *recommendation*, not a hard rule.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">IEEE Std 3004.8</div>
+            <div class="card-text text-white">Recommends max 15% drop at motor terminals during START-UP.</div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success">Vendor Specs</div>
+            <div class="card-text text-white">ALWAYS follow the manufacturer's specific voltage/length limits for VFDs & Fieldbus.</div>
+        </div>
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>    
+
+    <!-- Scene 12: Final Message (Was Scene 9) -->
+    <div id="scene12" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">VD is an...</div>
+        <div class="title text-primary">Engineering Decision.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Balance Performance, Safety, and Cost.</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        5000,  // Scene 1 (Hook)
+        4000,  // Scene 2 (NEW: Part 1 Title)
+        8000,  // Scene 3 (Power Problem)
+        9000,  // Scene 4 (Power Formula)
+        8000,  // Scene 5 (Reactance)
+        9000,  // Scene 6 (Advanced Power Checks)
+        4000,  // Scene 7 (NEW: Part 2 Title)
+        8000,  // Scene 8 (I&C Problem)
+        9000,  // Scene 9 (I&C Formula)
+        9000,  // Scene 10 (NEW: Fieldbus)
+        9000,  // Scene 11 (Standards)
+        7000   // Scene 12 (Final)
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>

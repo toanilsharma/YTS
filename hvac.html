@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial HVAC Duct Sizing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles */
+        .title {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 26px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+        
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+        
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 48px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+        }
+
+        /* List */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 8px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+        .list-item:nth-child(9) { animation-delay: 1.4s; }
+        .list-item:nth-child(10) { animation-delay: 1.55s; }
+        .list-item:nth-child(11) { animation-delay: 1.7s; }
+        .list-item:nth-child(12) { animation-delay: 1.85s; }
+        .list-item:nth-child(13) { animation-delay: 2.0s; }
+        .list-item:nth-child(14) { animation-delay: 2.15s; }
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .formula {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            animation: scaleUpIn 0.7s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+        .formula-sm { font-size: 20px; }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+
+        /* Helper for formula */
+        sub { font-size: 0.6em; }
+        sup { font-size: 0.6em; }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">💨</div>
+        <div class="title text-accent">Duct Sizing</div>
+        <div class="subtitle text-primary">Your #1 Hidden Utility</div>
+        <div class="description text-dim">Is your FAN just a "power hog" in disguise?</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">A failed spec costs thousands 24/7.</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: What Is It? -->
+    <div id="scene2" class="scene">
+        <div class="title text-primary">What Is "Industrial" HVAC?</div>
+        <div class="subtitle text-white">It's NOT just "Comfort"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list" style="text-align: center;">
+            <div class="list-item text-white"><b>1. Process Safety</b><br><span class="text-dim" style="font-size: 20px;">(HazArea Dilution)</span></div>
+            <div class="list-item text-white"><b>2. Electrical Reliability</b><br><span class="text-dim" style="font-size: 20px;">(Cooling VFD/MCC Rooms)</span></div>
+            <div class="list-item text-white"><b>3. Compliance</b><br><span class="text-dim" style="font-size: 20px;">(Cleanrooms, Fume Hoods)</span></div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 3: Why Should YOU Care? -->
+    <div id="scene3" class="scene">
+        <div class="title text-warning">Why Should YOU Care?</div>
+        <div class="subtitle text-white">It's Not Just "Air"...</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white"><b>Process:</b> Room temp = equipment life. Room pressure = safety.</div>
+            <div class="list-item text-white"><b>Electrical:</b> The Fan (AHU) is a MASSIVE motor load.</div>
+            <div class="list-item text-white"><b>Managers:</b> This IS your 24/7 power bill. Sizing is your #1 OpEx control.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 1 - The Load (CFM) -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">The #1 Sizing Trap!</div>
+        <div class="subtitle text-white">"Air Changes (ACH)" is a GUESS.</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Amateur Move</div>
+            <div class="card-text text-white">Using "10 ACH" for a VFD room. What if the heat load is huge?</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">The Professional Spec</div>
+             <div class="card-text text-white">You size based on HEAT LOAD (kW).</div>
+             <div class="formula-sm text-dim">CFM = (kW × 3412) / (1.08 × ΔT)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 5: The Physics -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">The Physics</div>
+        <div class="subtitle text-white">A Fan is a Pump for Air</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">Fan Static Pressure (SP)</div>
+            <div class="card-text text-white" style="font-size: 24px;">This is the "Head" the fan must overcome.</div>
+        </div>
+        
+        <div class="card success" style="margin-top: 20px;">
+             <div class="card-title text-success">SP = Friction Loss + Fitting Loss</div>
+             <div class="card-text text-dim">Your duct sizing goal is to MINIMIZE this number.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: The "OpEx Killer" -->
+    <div id="scene6" class="scene">
+        <div class="title text-warning">The "OpEx Killer"</div>
+        <div class="subtitle text-white">CapEx vs. OpEx</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">Small Duct (Low CapEx)</div>
+            <div class="card-text text-white">High Air Velocity (Bad!)</div>
+            <div class="card-text text-warning">High Friction (Loss ∝ V²)</div>
+            <div class="card-text text-accent" style="font-size: 24px;">= HUGE Fan & Power Bill</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success">Large Duct (High CapEx)</div>
+            <div class="card-text text-white">Low Air Velocity (Good!)</div>
+            <div class="card-text text-dim">Low Friction</div>
+            <div class="card-text text-success" style="font-size: 24px;">= Small Fan & Low Power Bill</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: Step 2 - Sizing Method -->
+    <div id="scene7" class="scene">
+        <div class="title text-success">STEP 2: Sizing Method</div>
+        <div class="subtitle text-white">"Equal Friction"</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+            <div class="card-title text-success">The Goal</div>
+            <div class="card-text text-white">Size ALL duct runs for the *same* friction loss per meter (e.g., 0.8 Pa/m).</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title text-primary">The Tool</div>
+            <div class="card-text text-white">A "Ductulator" (Duct Sizing Calculator).</div>
+            <div class="card-text text-dim">You input your CFM and target friction, it gives you the duct diameter.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 8: The "Real World" Trap -->
+    <div id="scene8" class="scene">
+        <div class="title text-accent">The "Real World" Trap</div>
+        <div class="subtitle text-white">Fittings = 90% of Loss!</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">You only calculate friction for the straight pipe.</div>
+        </div>
+
+        <div class="card warning">
+            <div class="card-title text-warning">The Reality</div>
+            <div class="card-text text-white">Elbows, T-junctions, and FILTERS are the *real* problem.</div>
+            <div class="card-text text-dim">Each fitting = "Equivalent Length" (e.g., 1 elbow = 10m of pipe).</div>
+        </div>
+        
+        <div class="description text-success" style="font-size: 22px;">You MUST sum these to find the "Index Run" (worst-case path).</div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 9: Air Density -->
+    <div id="scene9" class="scene">
+        <div class="title text-warning">The #1 Physics Trap</div>
+        <div class="subtitle text-white">Air Density Correction</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning">The Trap</div>
+            <div class="card-text text-white">All formulas assume "Standard Air" (sea level, 20°C).</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">The Reality</div>
+            <div class="card-text text-white">Hot air or air at high altitude is LESS DENSE.</div>
+            <div class="card-text text-dim">The fan produces less pressure, and the motor works *less*. You must correct for this!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 10: Filtration -->
+    <div id="scene10" class="scene">
+        <div class="title text-primary">The #1 Maintenance Trap</div>
+        <div class="subtitle text-white">Filtration (MERV/HEPA)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">The Trap</div>
+            <div class="card-text text-white">You size the fan for a CLEAN filter.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">The Pro Spec</div>
+             <div class="card-text text-white">You MUST size the fan for the "Final" or DIRTY filter pressure drop.</div>
+             <div class="card-text text-dim">A dirty HEPA filter can add 250 Pa (1 "wg) of loss!</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 11: Noise -->
+    <div id="scene11" class="scene">
+        <div class="title text-success">The "Control Room" Trap</div>
+        <div class="subtitle text-white">Noise Criteria (NC)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card">
+            <div class="card-title text-primary">High Velocity = NOISE</div>
+            <div class="card-text text-white">Sizing for friction alone can result in a "jet engine" sound.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">The Pro Spec</div>
+             <div class="card-text text-white">For occupied spaces, you must also limit velocity to meet a Noise Criteria (e.g., NC-35).</div>
+             <div class="card-text text-dim">This often means using larger ducts than friction alone requires.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: Pressurization (was 9) -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">The "Expert" App</div>
+        <div class="subtitle text-white">Room Pressurization</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card success">
+             <div class="card-title text-success" style="font-size: 24px;">Positive Pressure</div>
+             <div class="card-text text-white">Supply > Exhaust.</div>
+             <div class="card-text text-dim">Keeps dust/gas OUT. (Control Rooms, MCCs, Cleanrooms)</div>
+        </div>
+        <div class="card accent">
+             <div class="card-title text-accent" style="font-size: 24px;">Negative Pressure</div>
+             <div class="card-text text-white">Exhaust > Supply.</div>
+             <div class="card-text text-dim">Keeps fumes/gas IN. (Battery Rooms, Fume Hoods)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- NEW Scene 13: Fire & Safety -->
+    <div id="scene13" class="scene">
+        <div class="title text-accent">The #1 Legal Trap</div>
+        <div class="subtitle text-white">Fire & Smoke (NFPA)</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">This is NON-NEGOTIABLE.</div>
+            <div class="card-text text-white">Ducts that cross a fire-rated wall MUST have a Fire Damper.</div>
+        </div>
+
+        <div class="card warning">
+             <div class="card-title text-warning">The "Gotcha"</div>
+             <div class="card-text text-white">These dampers create a large pressure drop!</div>
+             <div class="card-text text-dim">You MUST include them in your "Index Run" calculation.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 14: VAV (was 10) -->
+    <div id="scene14" class="scene">
+        <div class="title text-success">The "Wow" Tech</div>
+        <div class="subtitle text-white">VAV vs. CAV</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent">CAV (Constant Volume)</div>
+            <div class="card-text text-white" style="font-size: 24px;">Fan at 100%. Simple. Wastes massive energy.</div>
+        </div>
+
+        <div class="card success">
+             <div class="card-title text-success">VAV (Variable Volume)</div>
+             <div class="card-text text-white">Uses a VFD on the fan to match the *actual* load.</div>
+             <div class="card-text text-dim">Uses the Fan Affinity Law (P ∝ V³) to save HUGE money.</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 15: Final Specs (was 11) -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">OEM Spec Sheet</div>
+        <div class="subtitle text-white">What to tell the vendor</div>
+        <div class="spacing-small"></div>
+        
+        <div class="list">
+            <div class="list-item text-white">✓ Total Air Flow (CFM) @ Density</div>
+            <div class="list-item text-white">✓ Application (Heat, Safety, etc.)</div>
+            <div class="list-item text-white">✓ Total Static Pressure (Pa / "wg)</div>
+            <div class="list-item text-white">✓ ... for CLEAN and DIRTY filters</div>
+            <div class="list-item text-white">✓ "Index Run" Length (w/ fittings)</div>
+            <div class="list-item text-white">✓ Site Altitude & Max Temp</div>
+            <div class="list-item text-white">✓ Noise Criteria (e.g., NC-35)</div>
+            <div class="list-item text-white">✓ Room Pressurization (Pos/Neg)</div>
+            <div class="list-item text-white">✓ Fire/Smoke Damper requirements</div>
+            <div class="list-item text-white">✓ VAV or CAV System?</div>
+            <div class="list-item text-white">✓ Duct Material & Class (SMACNA)</div>
+        </div>
+        
+        <!-- ADDED FOOTER -->
+        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: Final Message (was 12) -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">✅</div>
+        <div class="title text-accent">Don't Just Move Air...</div>
+        <div class="title text-primary">Move Air SMART.</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success">Control Your Air, Control Your OpEx</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations visit website</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const sceneConfig = [
+        { id: 1, duration: 7000 },  // Hook
+        { id: 2, duration: 9000 },  // What is Industrial
+        { id: 3, duration: 10000 }, // Why Care
+        { id: 4, duration: 12000 }, // Heat Load Trap
+        { id: 5, duration: 9000 },  // Physics
+        { id: 6, duration: 12000 }, // OpEx Killer
+        { id: 7, duration: 10000 }, // Equal Friction
+        { id: 8, duration: 12000 }, // Fittings Trap
+        { id: 9, duration: 12000 }, // NEW: Air Density
+        { id: 10, duration: 12000 },// NEW: Filtration
+        { id: 11, duration: 12000 },// NEW: Noise
+        { id: 12, duration: 10000 },// Pressurization
+        { id: 13, duration: 12000 },// NEW: Fire & Safety
+        { id: 14, duration: 10000 },// VAV
+        { id: 15, duration: 14000 },// Final Spec
+        { id: 16, duration: 10000 } // Final
+    ];
+    
+    let currentSceneIndex = 0;
+    let sceneInterval;
+
+    function showScene(index) {
+        // Hide all scenes
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        
+        // Find and show the correct scene
+        if (sceneConfig[index]) {
+            const sceneId = sceneConfig[index].id;
+            const sceneElement = document.getElementById(`scene${sceneId}`);
+            
+            if (sceneElement) {
+                sceneElement.classList.remove('hidden');
+                sceneElement.scrollTop = 0; // Scroll to top
+            } else {
+                console.error(`Scene with id "scene${sceneId}" not found.`);
+            }
+        } else {
+             console.error(`Invalid scene index: ${index}`);
+        }
+    }
+
+    function nextScene() {
+        currentSceneIndex = (currentSceneIndex + 1) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function prevScene() {
+        currentSceneIndex = (currentSceneIndex - 1 + sceneConfig.length) % sceneConfig.length;
+        showScene(currentSceneIndex);
+        resetInterval(); // Reset interval with new duration
+    }
+    
+    function resetInterval() {
+        clearInterval(sceneInterval);
+        
+        // Get the duration for the new current scene
+        let duration = 7000; // Default duration
+        if (sceneConfig[currentSceneIndex] && typeof sceneConfig[currentSceneIndex].duration === 'number') {
+            duration = sceneConfig[currentSceneIndex].duration;
+        } else {
+            console.error(`Invalid duration for scene index ${currentSceneIndex}`);
+        }
+        
+        sceneInterval = setInterval(nextScene, duration);
+    }
+
+    // Initial setup
+    if (sceneConfig.length > 0) {
+        showScene(0);
+        resetInterval();
+    } else {
+        console.error("Scene configuration is empty.");
+    }
+
+    // Allow keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene();
+        }
+    });
+</script>
+
+</body>
+</html>

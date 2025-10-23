@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial UPS Sizing Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066ff;
+            --accent: #ff0066;
+            --success: #00cc44;
+            --warning: #ff9900;
+            --dark-bg: #0d0f1a;
+            --card-bg: #1a1f3a;
+            --text-main: #ffffff;
+            --text-dim: #b0b8c8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            padding: 10px;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 540px;
+            aspect-ratio: 9/16;
+            background: var(--dark-bg);
+            border: 3px solid var(--primary);
+            border-radius: 30px;
+            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 30px 25px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInScene 1s ease-out forwards;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+
+        .scene::-webkit-scrollbar { display: none; }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+        .hidden { display: none !important; }
+
+        /* Text Styles - LARGER */
+        .title {
+            font-size: 60px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            animation: slideDownIn 0.8s ease-out;
+        }
+
+        .subtitle {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.15;
+            animation: slideUpIn 0.8s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+
+        .text-primary { color: var(--primary); }
+        .text-accent { color: var(--accent); }
+        .text-success { color: var(--success); }
+        .text-warning { color: var(--warning); }
+        .text-white { color: white; }
+        .text-dim { color: var(--text-dim); }
+
+        .description {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 12px 0;
+            line-height: 1.3;
+            animation: slideUpIn 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        /* Cards - LARGER */
+        .card {
+            background: rgba(0, 102, 255, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 8px 0;
+            animation: scaleUpIn 0.7s ease-out;
+            width: 100%;
+        }
+
+        .card.accent {
+            background: rgba(255, 0, 102, 0.1);
+            border-color: var(--accent);
+        }
+
+        .card.success {
+            background: rgba(0, 204, 68, 0.1);
+            border-color: var(--success);
+        }
+
+        .card.warning {
+            background: rgba(255, 153, 0, 0.1);
+            border-color: var(--warning);
+        }
+        
+        .card-title {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 52px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .card-text {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 8px 0;
+            line-height: 1.3;
+        }
+
+        /* List - LARGER */
+        .list {
+            text-align: left;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .list-item {
+            font-size: 28px;
+            font-weight: 500;
+            margin: 10px 0;
+            padding-left: 15px;
+            animation: slideUpIn 0.6s ease-out forwards;
+            opacity: 0;
+            line-height: 1.3;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.2s; }
+        .list-item:nth-child(2) { animation-delay: 0.35s; }
+        .list-item:nth-child(3) { animation-delay: 0.5s; }
+        .list-item:nth-child(4) { animation-delay: 0.65s; }
+        .list-item:nth-child(5) { animation-delay: 0.8s; }
+        .list-item:nth-child(6) { animation-delay: 0.95s; }
+        .list-item:nth-child(7) { animation-delay: 1.1s; }
+        .list-item:nth-child(8) { animation-delay: 1.25s; }
+
+
+        /* CTA Box */
+        .cta-box {
+            background: rgba(0, 204, 68, 0.15);
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 15px;
+            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
+            opacity: 0;
+            width: 100%;
+        }
+
+        .cta-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cta-url {
+            font-size: 24px;
+            font-weight: 800;
+            animation: pulse 2s ease-in-out infinite;
+            word-break: break-all;
+        }
+
+        .icon {
+            font-size: 60px;
+            margin: 12px 0;
+            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .spacing-small { height: 8px; }
+        .spacing-medium { height: 12px; }
+        
+        .footer-credit {
+            font-size: 20px;
+            margin-top: auto;
+            padding-top: 15px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <!-- Scene 1: Hook -->
+    <div id="scene1" class="scene">
+        <div class="icon">🏭</div>
+        <div class="title text-accent">PROCESS TRIP?</div>
+        <div class="subtitle text-primary">Industrial UPS Sizing</div>
+        <div class="description text-dim">For Critical Control Systems</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">IEC 62040 compliant methods</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 2: The Problem -->
+    <div id="scene2" class="scene">
+        <div class="title text-warning">High Stakes of Failure</div>
+        <div class="spacing-small"></div>
+        
+        <div class="card accent">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Small = System Failure</div>
+            <div class="card-value text-accent" style="font-size: 40px;">Production Loss</div>
+            <div class="card-text text-dim">Unsafe conditions • Plant downtime</div>
+        </div>
+
+        <div class="spacing-small"></div>
+
+        <div class="card success">
+            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
+            <div class="card-title text-white">Too Large = Wasted CapEx</div>
+            <div class="card-value text-success" style="font-size: 40px;">Higher OpEx</div>
+            <div class="card-text text-dim">Increased footprint & cooling costs</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 3: Step 1 -->
+    <div id="scene3" class="scene">
+        <div class="title text-primary">STEP 1</div>
+        <div class="subtitle text-white">Industrial Load List</div>
+        
+        <div class="list">
+            <div class="list-item text-white" style="font-size: 24px;">✓ DCS / ESD Systems</div>
+            <div class="list-item text-white" style="font-size: 24px;">✓ PLC & I/O Panels</div>
+            <div class="list-item text-white" style="font-size: 24px;">✓ Fire & Gas (F&G) Systems</div>
+            <div class="list-item text-white" style="font-size: 24px;">✓ Control Valves & Actuators</div>
+            <div class="list-item text-white" style="font-size: 24px;">✓ HMIs & Operator Stations</div>
+            <div class="list-item text-white" style="font-size: 24px;">✓ Critical Instrumentation</div>
+            <div class="spacing-small"></div>
+            <div class="list-item text-success" style="font-size: 22px;">📊 Sum all nameplate Watts (W)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 4: Step 2 - Critical Factors -->
+    <div id="scene4" class="scene">
+        <div class="title text-accent">STEP 2</div>
+        <div class="subtitle text-white">Dynamic Load Factors</div>
+        
+        <div class="card">
+            <div class="card-title text-primary" style="font-size: 26px;">Crest Factor</div>
+            <div class="card-text text-white">Handles non-linear loads (PLCs/DCS). Aim for > 3:1</div>
+        </div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent" style="font-size: 26px;">Inrush Current</div>
+            <div class="card-text text-white">UPS must handle power surges without going to bypass.</div>
+        </div>
+
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Harmonics (THD)</div>
+            <div class="card-text text-white">UPS needs robust input filters for distorted currents.</div>
+        </div>
+        
+        <!-- NEWLY ADDED CARD -->
+        <div class="card warning">
+            <div class="card-title text-warning" style="font-size: 26px;">Diversity Factor</div>
+            <div class="card-text text-white">Not all loads will peak simultaneously. (e.g., 0.8-0.9)</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 5: NEW - Topology (RE-INSERTED) -->
+    <div id="scene5" class="scene">
+        <div class="title text-primary">STEP 3</div>
+        <div class="subtitle text-white">Topology (IEC 62040)</div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary">Online (VFI)</div>
+            <div class="card-value text-success" style="font-size: 40px;">0ms Transfer</div>
+            <div class="card-text text-white">This is the ONLY choice for critical loads.</div>
+            <div class="card-text text-dim">Load is *always* fed from the inverter, protecting from all grid faults.</div>
+        </div>
+
+        <div class="card accent">
+            <div class="card-title text-accent">Line-Interactive</div>
+            <div class="card-value text-warning" style="font-size: 40px;">4-10ms Transfer</div>
+            <div class="card-text text-white">NOT suitable for DCS/PLC. The transfer "break" can cause a process trip.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 6: NEW - Redundancy -->
+    <div id="scene6" class="scene">
+        <div class="title text-success">STEP 4</div>
+        <div class="subtitle text-white">Redundancy (N+1)</div>
+        
+        <div class="card success">
+            <div class="card-title text-success">N+1 Parallel</div>
+            <div class="card-text text-white" style="font-size: 24px;">For a 60 kVA load, use two 60 kVA units in parallel.</div>
+            <div class="card-text text-warning" style="font-size: 26px; margin-top: 10px;">If one UPS fails, the other takes 100% load.</div>
+            <div class="card-text text-dim">A single UPS is a single point of failure. N+1 is the industrial standard.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 7: NEW - Bypass -->
+    <div id="scene7" class="scene">
+        <div class="title text-warning">STEP 5</div>
+        <div class="subtitle text-white">Bypass Systems</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning" style="font-size: 26px;">Static Bypass (SBS)</div>
+            <div class="card-text text-white">Internal, automatic. Transfers load to grid if inverter fails or overloads (0-4ms).</div>
+        </div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Maintenance Bypass</div>
+            <div class="card-text text-white">External, manual switch. Isolates the *entire* UPS for service while keeping the load live on grid.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 8: Step 6 - Battery Sizing -->
+    <div id="scene8" class="scene">
+        <div class="title text-success">STEP 6</div>
+        <div class="subtitle text-white">Battery Sizing</div>
+    
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Backup Time (Autonomy)</div>
+            <div class="card-text text-white">Define time for safe shutdown or generator start (e.g., 30-60 min).</div>
+        </div>
+    
+        <div class="card">
+            <div class="card-title text-primary" style="font-size: 26px;">Battery Type</div>
+            <div class="card-text text-white">VRLA (10yr) or Vented Lead-Acid (LA 2V cells, 20yr life) or Ni-Cd.</div>
+        </div>
+    
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 9: NEW - Rectifier/Charger Sizing -->
+    <div id="scene9" class="scene">
+        <div class="title text-accent">STEP 7</div>
+        <div class="subtitle text-white">Rectifier/Charger Sizing</div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent" style="font-size: 26px;">The #1 Sizing Trap!</div>
+            <div class="card-text text-white">Rectifier must power the Inverter (AC load) + Recharge the Battery... AT THE SAME TIME.</div>
+        </div>
+        
+        <!-- REMOVED OLD EXAMPLES -->
+        <div class="description text-success" style="font-size: 24px;">See full calculation in Step 10</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 10: (was 9) NEW - De-rating -->
+    <div id="scene10" class="scene">
+        <div class="title text-warning">STEP 8</div>
+        <div class="subtitle text-white">De-Rating Factors</div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning" style="font-size: 26px;">High Ambient Temp?</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., > 25°C) Battery life is HALVED for every 10°C rise.</div>
+            <div class="card-text text-dim">(e.g., > 40°C) UPS kVA rating must be de-rated.</div>
+        </div>
+        
+        <div class="card warning">
+            <div class="card-title text-warning" style="font-size: 26px;">High Altitude?</div>
+            <div class="card-text text-white" style="font-size: 24px;">(e.g., > 1000m) You MUST de-rate kVA capacity (thinner air = less cooling).</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 11: (was 10) Step 8 - Inverter Sizing -->
+    <div id="scene11" class="scene">
+        <div class="title text-warning">STEP 9</div>
+        <div class="subtitle text-white">Inverter Sizing (kVA) + Margin</div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Total kVA Calculation</div>
+            <div class="card-text text-white" style="font-size: 24px;">(Total Watts / PF) x Margin</div>
+            <div class="card-text text-dim">Apply Diversity Factor to Watts *first*. Then add Margin & divide by PF.</div>
+        </div>
+        
+        <!-- REMOVED OLD EXAMPLES -->
+        <div class="description text-success" style="font-size: 24px;">See full calculation in Step 10</div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 12: (was 11) NEW CONSOLIDATED EXAMPLE -->
+    <div id="scene12" class="scene">
+        <div class="title text-primary">STEP 10</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Consolidated Sizing Example</div>
+
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Given Data</div>
+            <div class="card-text text-white" style="text-align: left; font-size: 20px; line-height: 1.5;">
+                • Total Load: <b>40,000 W</b><br>
+                • Diversity Factor: <b>0.9</b><br>
+                • Future Margin: <b>25% (1.25)</b><br>
+                • Power Factor (PF): <b>0.9</b><br>
+                • Battery: <b>100Ah VRLA (C/10)</b>
+            </div>
+        </div>
+        
+        <div class="card accent">
+            <div class="card-title text-accent" style="font-size: 26px;">Inverter kVA Sizing</div>
+            <div class="card-text text-white" style="text-align: left; font-size: 20px; line-height: 1.5;">
+                1. Design Load: 40,000W * 0.9 = <b>36,000 W</b><br>
+                2. Add Margin: 36,000W * 1.25 = <b>45,000 W</b><br>
+                3. Find kVA: 45,000W / 0.9 PF = <b>50,000 VA</b><br>
+                <b class="text-success" style="font-size: 24px;">= 50 kVA Inverter</b>
+            </div>
+        </div>
+        
+        <div class="card success">
+            <div class="card-title text-success" style="font-size: 26px;">Rectifier kW Sizing</div>
+            <div class="card-text text-white" style="text-align: left; font-size: 20px; line-height: 1.5;">
+                1. Inverter Load: 36,000W / 0.98 eff = <b>36.74 kW</b><br>
+                2. Recharge Load: (100Ah*120V)/10hr = <b>1.20 kW</b><br>
+                <b class="text-success" style="font-size: 24px;">= 37.94 kW Rectifier</b>
+            </div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 13: (was 12) The Result -->
+    <div id="scene13" class="scene">
+        <div class="title text-primary">STEP 11</div>
+        <div class="subtitle text-white">Final Selection</div>
+        <div class="spacing-medium"></div>
+        
+        <div class="description text-dim" style="font-size: 24px;">Your calculated need is:</div>
+        <div class="card-value text-accent" style="font-size: 64px;">50 kVA</div>
+        <div class="spacing-medium"></div>
+        
+        <div class="card primary">
+            <div class="card-title text-primary" style="font-size: 26px;">Standard Industrial Sizes</div>
+            <div class="card-text text-white">Always select the next standard size UP.</div>
+            <div class="spacing-small"></div>
+            <div class="card-value text-success" style="font-size: 40px;">✓ Select a 60 kVA UPS</div>
+            <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">For N+1, you buy TWO 60 kVA units.</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+    
+    <!-- Scene 14: (was 13) NEW - Safety -->
+    <div id="scene14" class="scene">
+        <div class="title text-accent">STEP 12</div>
+        <div class="subtitle text-white" style="font-size: 36px;">(Install & Testing)</div>
+        
+        <div class="list" style="font-size: 24px;">
+            <div class="list-item text-warning">✓ LOTO the Maintenance Bypass *before* service.</div>
+            <div class="list-item text-warning">✓ Battery bank is a LIVE DC source. High ARC FLASH risk.</div>
+            <div class="list-item text-warning">✓ Wear Arc-Rated PPE for battery work.</div>
+            <div class="list-item text-warning">✓ Inform Control Room & bypass all trips before testing.</div>
+        </div>
+
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 15: (was 14) Final Specs -->
+    <div id="scene15" class="scene">
+        <div class="title text-warning">STEP 13</div>
+        <div class="subtitle text-white" style="font-size: 32px;">Full Industrial Spec (IEC 62040)</div>
+        
+        <div class="list" style="font-size: 22px;">
+            <div class="list-item text-white">✓ Inverter kVA/kW Rating @ PF</div>
+            <div class="list-item text-white">✓ <b>Rectifier kW (Load + Recharge)</b></div>
+            <div class="list-item text-white">✓ Topology: Online Double Conversion</div>
+            <div class="list-item text-white">✓ Redundancy (N+1, 2N)</div>
+            <div class="list-item text-white">✓ Bypass (Static & Maintenance)</div>
+            <div class="list-item text-white">✓ Battery Type, Ah & Runtime</div>
+            <div class="list-item text-white">✓ <b>Diversity & Crest Factor</b></div>
+            <div class="list-item text-white">✓ Overload Capacity (e.g., 150%)</div>
+            <div class="list-item text-white">✓ Ambient Temp / Altitude</div>
+            <div class="list-item text-white">✓ IP Rating (e.g., IP42)</div>
+            <div class="list-item text-white">✓ Comms: Modbus / SNMP</div>
+        </div>
+        
+        <div class="text-dim footer-credit">
+            prepared by https://designcalculators.co.in
+        </div>
+    </div>
+
+    <!-- Scene 16: (was 15) Final Message -->
+    <div id="scene16" class="scene">
+        <div class="icon" style="font-size: 80px;">🛡️</div>
+        <div class="title text-accent">Don't Risk Downtime</div>
+        <div class="title text-primary">Protect Your Process!</div>
+        <div class="spacing-medium"></div>
+        <div class="description text-success" style="font-size: 26px;">Ensure Plant Uptime & Safety</div>
+        
+        <div class="spacing-medium"></div>
+
+        <div class="cta-box">
+            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
+            <div class="cta-url text-success">https://designcalculators.co.in</div>
+        </div>
+
+        <div class="spacing-medium"></div>
+        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
+    </div>
+</div>
+
+<script>
+    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]; 
+    // Durations in ms, matched to each scene by index
+    const sceneDurations = [
+        6000,  // Scene 1: Hook
+        7000,  // Scene 2: Problem
+        8000,  // Scene 3: Load List
+        10000, // Scene 4: Dynamic Factors
+        10000, // Scene 5: Topology
+        10000, // Scene 6: Redundancy
+        10000, // Scene 7: Bypass
+        10000, // Scene 8: Battery
+        10000, // Scene 9: Rectifier Sizing (Concept)
+        10000, // Scene 10: De-Rating
+        9000,  // Scene 11: Inverter Sizing (Concept)
+        14000, // Scene 12: NEW Consolidated Example
+        9000,  // Scene 13: Final Selection
+        10000, // Scene 14: Safety
+        12000, // Scene 15: Final Specs
+        7000   // Scene 16: Final Message
+    ];
+    let currentScene = 0;
+    let sceneTimeout; // Use setTimeout instead of setInterval
+
+    function showScene(index) {
+        // Clear any existing timer
+        clearTimeout(sceneTimeout);
+
+        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
+        const sceneElement = document.getElementById(`scene${scenes[index]}`);
+        if(sceneElement) {
+            sceneElement.classList.remove('hidden');
+            sceneElement.scrollTop = 0;
+        }
+        
+        // Ensure index is valid for durations array
+        const durationIndex = index % sceneDurations.length;
+        const duration = sceneDurations[durationIndex];
+        
+        // Schedule the next scene based on the current scene's duration
+        sceneTimeout = setTimeout(nextScene, duration);
+    }
+
+    function nextScene() {
+        currentScene = (currentScene + 1) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    function prevScene() {
+        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        showScene(currentScene);
+    }
+    
+    // Initial load
+    showScene(0); // This will show scene 0 and schedule scene 1
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            nextScene(); // This will show the next scene and reset the timer
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevScene(); // This will show the previous scene and reset the timer
+        }
+    });
+</script>
+
+</body>
+</html>
