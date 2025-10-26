@@ -2,498 +2,862 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industrial Motor Sizing Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Title changed to new topic -->
+    <title>⚙️ 3-Phase Motor Sizing MASTERY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        /* All CSS is identical to the provided file for theme consistency */
         :root {
-            --primary: #0066ff;
-            --accent: #ff0066;
-            --success: #00cc44;
-            --warning: #ff9900;
-            --dark-bg: #0d0f1a;
-            --card-bg: #1a1f3a;
-            --text-main: #ffffff;
-            --text-dim: #b0b8c8;
+            --electric-cyan: #00ffff;
+            --neon-pink: #ff0080;
+            --volt-yellow: #ffff00;
+            --plasma-purple: #bf00ff;
+            --danger-red: #ff1744;
+            --success-green: #00ff41;
+            --dark: #0a0a0f;
+            --darker: #050508;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: var(--darker);
+        }
+
         body {
-            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Inter', sans-serif; color: #fff;
         }
 
         #container {
-            width: 100%;
-            max-width: 540px;
-            aspect-ratio: 9/16;
-            background: var(--dark-bg);
-            border: 3px solid var(--primary);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            width: 100%; max-width: 450px; height: 100vh; max-height: 800px;
+            aspect-ratio: 9/16; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 100%);
+            position: relative; overflow: hidden; cursor: pointer;
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Animated Background Grid */
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        /* Enhanced Particle Effect */
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--electric-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 4s linear infinite;
+            box-shadow: 0 0 12px var(--electric-cyan);
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) translateX(50px) scale(1); opacity: 0; }
+        }
+
+        /* Lightning Effect */
+        .lightning {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--electric-cyan), transparent);
+            box-shadow: 0 0 20px var(--electric-cyan);
+            animation: lightning 8s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightning {
+            0%, 100% { opacity: 0; transform: translateY(-100px); }
+            5% { opacity: 1; transform: translateY(0); }
+            10% { opacity: 0; transform: translateY(100vh); }
         }
 
         .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 30px 25px;
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 8vh 6vw 14vh 6vw; /* Added bottom padding for footer */
             text-align: center;
-            opacity: 0;
-            animation: fadeInScene 1s ease-out forwards;
-            overflow-y: auto;
-            scrollbar-width: none;
+            z-index: 10;
         }
 
-        .scene::-webkit-scrollbar { display: none; }
+        /* Typography with WOW factor */
+        .mega-title {
+            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite, titlePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 1.5vh;
+            filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+        }
 
-        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-        .hidden { display: none !important; }
-
-        /* Text Styles */
-        .title {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            line-height: 1.15;
-            animation: slideDownIn 0.8s ease-out;
+        @keyframes titlePop {
+            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .subtitle {
-            font-size: 44px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            animation: slideUpIn 0.8s ease-out 0.15s forwards;
-            opacity: 0;
-        }
-
-        .text-primary { color: var(--primary); }
-        .text-accent { color: var(--accent); }
-        .text-success { color: var(--success); }
-        .text-warning { color: var(--warning); }
-        .text-white { color: white; }
-        .text-dim { color: var(--text-dim); }
-
-        .description {
-            font-size: 28px;
-            font-weight: 500;
-            margin: 12px 0;
-            line-height: 1.3;
-            animation: slideUpIn 0.8s ease-out 0.3s forwards;
-            opacity: 0;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
-            animation: scaleUpIn 0.7s ease-out;
-            width: 100%;
-        }
-
-        .card.accent {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: var(--accent);
-        }
-
-        .card.success {
-            background: rgba(0, 204, 68, 0.1);
-            border-color: var(--success);
-        }
-        
-        .card.warning {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--warning);
-        }
-
-        .card-title {
-            font-size: 30px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .card-value {
-            font-size: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.6rem);
             font-weight: 800;
-            margin: 10px 0;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 50px rgba(255, 255, 0, 0.3);
+            animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            margin-bottom: 2vh;
         }
 
-        .card-text {
-            font-size: 24px;
-            font-weight: 500;
-            margin: 8px 0;
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* List */
-        .list {
+        .mega-icon {
+            font-size: clamp(4rem, 18vw, 8rem);
+            animation: iconEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards,
+                         iconFloat 3s ease-in-out infinite 1s;
+            margin: 2vh 0;
+            filter: drop-shadow(0 0 35px currentColor);
+        }
+
+        @keyframes iconEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .step-number {
+            font-size: clamp(3rem, 13vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: numberZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1;
+            margin-bottom: 1vh;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.6));
+        }
+
+        @keyframes numberZoom {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .content-box {
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 2.5vh 4vw;
+            margin: 2vh 0;
+            width: 90%;
+            max-width: 380px;
+            backdrop-filter: blur(10px);
+            animation: boxGlow 2s ease-in-out infinite alternate;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+        }
+
+        @keyframes boxGlow {
+            0% { 
+                box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+                border-color: rgba(0, 255, 255, 0.4);
+            }
+            100% { 
+                box-shadow: 0 8px 40px rgba(0, 255, 255, 0.35), inset 0 0 40px rgba(0, 255, 255, 0.15);
+                border-color: rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        .bullet-item {
+            display: flex; align-items: center; justify-content: flex-start;
+            margin: 1.2vh 0;
+            font-size: clamp(0.9rem, 3.8vw, 1.2rem);
+            font-weight: 700;
             text-align: left;
-            margin: 10px 0;
+            animation: bulletSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            color: #fff;
+        }
+
+        .bullet-item:nth-child(1) { animation-delay: 0.1s; }
+        .bullet-item:nth-child(2) { animation-delay: 0.2s; }
+        .bullet-item:nth-child(3) { animation-delay: 0.3s; }
+        .bullet-item:nth-child(4) { animation-delay: 0.4s; }
+        .bullet-item:nth-child(5) { animation-delay: 0.5s; }
+        .bullet-item:nth-child(6) { animation-delay: 0.6s; }
+        .bullet-item:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes bulletSlide {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .bullet-icon {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            margin-right: 2vw;
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .highlight {
+            color: var(--volt-yellow);
+            font-weight: 900;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 0.6);
+        }
+
+        .critical {
+            color: var(--danger-red);
+            font-weight: 900;
+            text-transform: uppercase;
+            animation: criticalPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 23, 68, 0.8); }
+            50% { text-shadow: 0 0 30px rgba(255, 23, 68, 1); }
+        }
+
+        .split-box {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 380px;
+            gap: 3vw;
+        }
+
+        .split-item {
+            flex: 1;
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 15px;
+            padding: 2vh 2vw;
+            animation: splitPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            transition: all 0.3s ease;
+        }
+
+        .split-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .split-item:nth-child(1) { animation-delay: 0.2s; }
+        .split-item:nth-child(2) { animation-delay: 0.35s; }
+
+        @keyframes splitPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .split-icon {
+            font-size: clamp(2rem, 8vw, 3rem);
+            margin-bottom: 1vh;
+        }
+
+        .emphasis {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            font-weight: 900;
+            color: var(--success-green);
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.7), 0 0 50px rgba(0, 255, 65, 0.3);
+            animation: emphasize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+            margin: 2vh 0;
+        }
+
+        @keyframes emphasize {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            padding: 2vh 5vw;
+            border-radius: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 2vh 0;
+            animation: ctaPulse 2s ease-in-out infinite, ctaEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
+            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6);
+            max-width: 85%;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 70px rgba(255, 0, 128, 0.9); }
+        }
+
+        @keyframes ctaEntrance {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .website-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.1rem, 4.8vw, 1.6rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-decoration: none;
+            background: rgba(255, 255, 0, 0.12);
+            padding: 1.5vh 4vw;
+            border-radius: 15px;
+            border: 2px solid var(--volt-yellow);
+            display: inline-block;
+            margin-top: 2vh;
+            animation: linkGlow 2s ease-in-out infinite, linkEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s backwards;
+            transition: all 0.3s ease;
+        }
+
+        .website-link:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 0, 0.2);
+        }
+
+        @keyframes linkGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(255, 255, 0, 0.7); }
+        }
+
+        @keyframes linkEntrance {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* FOOTER - Fixed at bottom with branding */
+        .footer-brand {
+            position: absolute;
+            bottom: 6vh;
+            left: 0;
             width: 100%;
+            text-align: center;
+            z-index: 100;
+            padding: 1.5vh 4vw;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9));
+            backdrop-filter: blur(10px);
         }
 
-        .list-item {
-            font-size: 26px;
-            font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
-            animation: slideUpIn 0.6s ease-out forwards;
-            opacity: 0;
-            line-height: 1.3;
-        }
-
-        .list-item:nth-child(1) { animation-delay: 0.2s; }
-        .list-item:nth-child(2) { animation-delay: 0.35s; }
-        .list-item:nth-child(3) { animation-delay: 0.5s; }
-        .list-item:nth-child(4) { animation-delay: 0.65s; }
-        .list-item:nth-child(5) { animation-delay: 0.8s; }
-        .list-item:nth-child(6) { animation-delay: 0.95s; }
-        .list-item:nth-child(7) { animation-delay: 1.1s; }
-        .list-item:nth-child(8) { animation-delay: 1.25s; }
-        .list-item:nth-child(9) { animation-delay: 1.4s; }
-        .list-item:nth-child(10) { animation-delay: 1.55s; }
-        .list-item:nth-child(11) { animation-delay: 1.7s; }
-        .list-item:nth-child(12) { animation-delay: 1.85s; }
-
-        /* CTA Box */
-        .cta-box {
-            background: rgba(0, 204, 68, 0.15);
-            border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
-            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
-            opacity: 0;
-            width: 100%;
-        }
-
-        .cta-text {
-            font-size: 24px;
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.7rem, 3.2vw, 0.95rem);
             font-weight: 600;
-            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5vh;
+            letter-spacing: 0.5px;
         }
 
-        .cta-url {
-            font-size: 26px;
-            font-weight: 800;
-            animation: pulse 2s ease-in-out infinite;
-            word-break: break-all;
+        .footer-website {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.85rem, 3.8vw, 1.15rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            animation: footerPulse 3s ease-in-out infinite;
+            letter-spacing: 0.3px;
         }
 
-        .icon {
-            font-size: 60px;
-            margin: 12px 0;
-            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
-            opacity: 0;
+        @keyframes footerPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
         }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
+        /* Progress Bar - Above footer */
+        .progress-bar {
+            position: absolute;
+            bottom: 4vh;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow), var(--plasma-purple));
+            background-size: 200% 100%;
+            animation: progressGradient 3s linear infinite;
+            transition: width 0.1s linear;
+            z-index: 101;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 128, 0.5);
+            border-radius: 0 5px 5px 0;
+        }
+
+        @keyframes progressGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .scene-counter {
+            position: absolute;
+            top: 2vh; right: 4vw;
+            font-size: clamp(0.85rem, 3.8vw, 1.1rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8vh 2vw;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Corner Accent Glow */
+        .corner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-glow.top-left {
+            top: -75px;
+            left: -75px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        .corner-glow.bottom-right {
+            bottom: -75px;
+            right: -75px;
+            background: radial-gradient(circle, rgba(255, 0, 128, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        /* Hide scenes by default */
+        .scene { display: none; }
+        .scene.active { display: flex; }
+
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <!-- Scene 1: Hook -->
-    <div id="scene1" class="scene">
-        <div class="icon">⚙️</div>
-        <div class="title text-accent">THE WORKHORSE</div>
-        <div class="subtitle text-primary">Industrial Motor Sizing</div>
-        <div class="description text-dim">It's More Than Just kW...</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">The OEM-level spec guide</div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 2: The Problem -->
-    <div id="scene2" class="scene">
-        <div class="title text-warning">The Cost of 'Close Enough'</div>
-        <div class="spacing-small"></div>
-        
-        <div class="card accent">
-            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
-            <div class="card-title text-white">Too Small = UNDERSIZED</div>
-            <div class="card-value text-accent" style="font-size: 44px;">Constant Overload</div>
-            <div class="card-text text-dim">Trips, overheating, winding failure, production loss.</div>
-        </div>
-
-        <div class="spacing-small"></div>
-
-        <div class="card success">
-            <div style="font-size: 40px; margin-bottom: 8px;">❌</div>
-            <div class="card-title text-white">Too Large = OVERSIZED</div>
-            <div class="card-value text-success" style="font-size: 44px;">Wasted Energy (OpEx)</div>
-            <div class="card-text text-dim">Poor PF, high inrush, massive energy bills.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 3: Step 1 -->
-    <div id="scene3" class="scene">
-        <div class="title text-primary">STEP 1</div>
-        <div class="subtitle text-white">Define the Driven Load</div>
-        
-        <div class="list">
-            <div class="list-item text-white">✓ Pump (Centrifugal/PD)</div>
-            <div class="list-item text-white">✓ Fan / Blower</div>
-            <div class="list-item text-white">✓ Compressor (Recip/Screw)</div>
-            <div class="list-item text-white">✓ Conveyor / Crusher</div>
-            <div class="list-item text-white">✓ Agitator / Mixer</div>
-            <div class="list-item text-white">✓ Torque Curve (Const/Var)</div>
-            <div class="spacing-small"></div>
-            <div class="list-item text-success" style="font-size: 26px;">Each has a unique Torque-Speed curve!</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 4: Step 2 - Core Specs -->
-    <div id="scene4" class="scene">
-        <div class="title text-primary">STEP 2</div>
-        <div class="subtitle text-white">Core Power Specs</div>
-        
-        <div class="list">
-            <div class="list-item text-white">✓ Required Power (kW / HP)</div>
-            <div class="list-item text-white">✓ System Voltage (e.g., 415V)</div>
-            <div class="list-item text-white">✓ Frequency (50Hz / 60Hz)</div>
-            <div class="list-item text-white">✓ Poles & Sync. Speed</div>
-            <div class="list-item text-white">   (e.g., 4-Pole, 1500 RPM)</div>
-            <div class="list-item text-white">✓ Duty Cycle (S1 Continuous)</div>
-            <div class="list-item text-white">✓ Service Factor (e.g., 1.15)</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
+    <div class="grid-bg"></div>
+    <div class="corner-glow top-left"></div>
+    <div class="corner-glow bottom-right"></div>
     
-    <!-- Scene 5: Step 3 - Environment -->
-    <div id="scene5" class="scene">
-        <div class="title text-warning">STEP 3</div>
-        <div class="subtitle text-white">The Environment</div>
+    <!-- Total scene count is 19 -->
+    <div class="scene-counter"><span id="current">1</span>/<span id="total">19</span></div>
     
-        <div class="card">
-            <div class="card-title text-primary">Enclosure (IP Rating)</div>
-            <div class="card-text text-white">IP55 (Dust/Water) = Standard</div>
-            <div class="card-value text-primary" style="font-size: 44px;">TEFC</div>
-            <div class="card-text text-dim">(Totally Enclosed Fan Cooled)</div>
+    <!-- 
+    ====================================================================
+    NEW SCENE CONTENT FOR MOTOR SIZING (91.0s Total)
+    ====================================================================
+    -->
+
+    <!-- Scene 1: HOOK (4.0s) -->
+    <div class="scene active" data-duration="4000">
+        <div class="mega-title">MOTOR SIZING</div>
+        <div class="subtitle">Get It Wrong? 💥 <span class="critical">MELTDOWN!</span></div>
+        <div class="mega-icon">⚙️</div>
+        <div class="emphasis">Master It in 90 Seconds!</div>
+    </div>
+
+    <!-- Scene 2: Why Size Right? (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle">WHY SIZE RIGHT?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">📉</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">UNDERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Trip / Overheat / <span class="critical">FAIL!</span></div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">💸</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">OVERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Wasted Energy / Low PF!</div>
+            </div>
         </div>
-    
-        <div class="card warning">
-            <div class="card-title text-warning">Hazardous Area</div>
-            <div class="card-text text-white">Is it Zone 1, 2, 21, or 22?</div>
-            <div class="card-value text-warning" style="font-size: 44px;">Ex d / Ex e</div>
-            <div class="card-text text-dim">This is a NON-NEGOTIABLE safety spec.</div>
-        </div>
-        
-        <div class="card accent" style="animation-delay: 0.2s;">
-            <div class="card-title text-accent">Ambient & Altitude</div>
-            <div class="card-text text-white">Std = 40°C & 1000m</div>
-            <div class="card-text text-dim">Higher? You MUST de-rate the motor.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="emphasis" style="margin-top: 2vh;">Balance is KEY!</div>
+    </div>
+
+    <!-- Scene 3: STEP 1 - Load Type (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">1</div>
+        <div class="subtitle">WHAT ARE YOU MOVING?</div>
+        <div class="mega-icon">❓</div>
+        <div class="emphasis" style="color: var(--volt-yellow);">LOAD TYPE IS #1!</div>
+        <div class="subtitle" style="margin-top: 1vh;">Torque is what matters!</div>
+    </div>
+
+    <!-- Scene 4: Load: VT vs CT (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">LOAD TYPE?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">🌬️</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">Variable Torque (VT)</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Fans / Pumps</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">🏋️‍♂️</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">Constant Torque (CT)</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">Conveyors / Mixers</span></div>
+            </div>
         </div>
     </div>
 
-    <!-- Scene 6: Step 4 - Performance DNA -->
-    <div id="scene6" class="scene">
-        <div class="title text-success">STEP 4</div>
-        <div class="subtitle text-white">Performance DNA</div>
-        
-        <div class="card success">
-            <div class="card-title text-success">Efficiency (IEC 60034-30)</div>
-            <div class="card-value text-success" style="font-size: 44px;">IE3 Premium</div>
-            <div class="card-text text-dim">The modern standard for OpEx.</div>
-            <div class="card-value text-success" style="font-size: 44px; margin-top: 10px;">IE4 Super Premium</div>
-            <div class="card-text text-dim">Lowest Total Cost of Ownership.</div>
+    <!-- Scene 5: Load: HP / Shock (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">ADVANCED LOADS</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">⚙️</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">Constant HP</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Winders / Lathes</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">💥</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">Shock Load</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">Crushers / Saws</span></div>
+            </div>
         </div>
-    
-        <div class="card">
-            <div class="card-title text-primary">Insulation Class</div>
-            <div class="card-value text-primary" style="font-size: 44px;">Class F (155°C)</div>
-            <div class="card-text text-white">...with Class B (130°C) Rise.</div>
-            <div class="card-text text-dim">This "thermal margin" is the key to motor longevity.</div>
-        </div>
-        
-        <div class="card warning" style="animation-delay: 0.2s;">
-            <div class="card-title text-warning">NEMA Design</div>
-            <div class="card-text text-white">Defines Torque Curve</div>
-            <div class="card-value text-warning" style="font-size: 44px;">B (Std) or C (High Start)</div>
-            <div class="card-text text-dim">Crucial for hard-to-start loads.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="emphasis" style="margin-top: 2vh;">Match motor torque to load!</div>
+    </div>
+
+    <!-- Scene 6: STEP 2 - Key Data (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">2</div>
+        <div class="subtitle">GET KEY DATA</div>
+        <div class="mega-icon">🏷️</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">HP / kW</span> (From Load)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Voltage / Phase (3-Ph)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Speed (RPM)</div>
         </div>
     </div>
 
-    <!-- Scene 7: Step 5 - Starting Method -->
-    <div id="scene7" class="scene">
-        <div class="title text-accent">STEP 5</div>
-        <div class="subtitle text-white">The Start-Up</div>
-        
-        <div class="card accent">
-            <div class="card-title text-accent">Starting Method</div>
-            <div class="card-text text-white">DOL? Star-Delta? Soft Starter?</div>
-            <div class="card-value text-accent" style="font-size: 44px;">VFD / Inverter Duty?</div>
-            <div class="card-text text-dim">A VFD-Rated motor is NOT optional.</div>
-        </div>
+    <!-- Scene 7: STEP 3 - Service Factor (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">3</div>
+        <div class="subtitle">SERVICE FACTOR (SF)</div>
+        <div class="mega-icon">🛡️</div>
+        <div class="emphasis" style="color: #fff;">The <span class="critical">SAFETY MARGIN!</span></div>
+        <div class="subtitle" style="margin-top: 1vh;">(Overload Capacity)</div>
+    </div>
 
-        <div class="card">
-            <div class="card-title text-primary">Key Torque Data</div>
-            <div class="card-text text-white">Locked Rotor Torque (LRT)</div>
-            <div class="card-text text-white">Breakdown Torque (BDT)</div>
-            <div class="card-text text-dim" style="font-size: 20px;">Motor torque MUST exceed load torque at all speeds.</div>
+    <!-- Scene 8: What is SF? (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">SERVICE FACTOR</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon" style="font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 900;">1.0</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">SF 1.0</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">NO Overload!</span></div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon" style="font-size: clamp(2.5rem, 10vw, 4rem); font-weight: 900;">1.15</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="highlight">SF 1.15</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">15% Overload OK!</span></div>
+            </div>
         </div>
-        
-        <div class="card success" style="animation-delay: 0.2s;">
-            <div class="card-title text-success">Starts per Hour</div>
-            <div class="card-text text-white">How often will it start?</div>
-            <div class="card-text text-dim">Too many starts will overheat and destroy the motor.</div>
+        <div class="emphasis" style="margin-top: 2vh;">Higher SF = More Robust!</div>
+    </div>
+
+    <!-- Scene 9: STEP 4 - Duty Cycle (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">4</div>
+        <div class="subtitle">DUTY CYCLE</div>
+        <div class="mega-icon">⏱️</div>
+        <div class="emphasis" style="color: #fff;">Run 24/7 or Stop/Start?</div>
+    </div>
+
+    <!-- Scene 10: DANGER: S1 vs S3 (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">DUTY CYCLE</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">S1</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">S1 = <span class="highlight">CONTINUOUS</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Runs 24/7</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">S3</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">S3 = <span class="critical">INTERMITTENT</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Stop / Start</div>
+            </div>
         </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="emphasis" style="margin-top: 2vh; color: var(--danger-red);">S3 Motor on S1 Duty? 🔥 <span class="critical">FRY!</span></div>
+    </div>
+
+    <!-- Scene 11: STEP 5 - Enclosure (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">5</div>
+        <div class="subtitle">ENCLOSURE (IP)</div>
+        <div class="mega-icon">🛡️</div>
+        <div class="emphasis" style="color: #fff;"><span class="highlight">TEFC (IP55)</span> = Standard</div>
+        <div class="subtitle" style="margin-top: 1vh;">(Totally Enclosed Fan Cooled)</div>
+    </div>
+
+    <!-- Scene 12: STEP 6 - Efficiency (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">6</div>
+        <div class="subtitle">EFFICIENCY CLASS</div>
+        <div class="mega-icon" style="color: var(--success-green);">💸</div>
+        <div class="emphasis" style="color: var(--success-green);">IE3 / IE4 / IE5</div>
+        <div class="subtitle" style="margin-top: 1vh;">Higher IE = <span class="highlight">BIG</span> Energy Savings!</div>
+    </div>
+
+    <!-- Scene 13: STEP 7 - Hidden Killers (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">7</div>
+        <div class="mega-icon" style="color: var(--danger-red);">👻</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLERS!</div>
+        <div class="subtitle">Check for Derating!</div>
+    </div>
+
+    <!-- Scene 14: Derating Explained (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">DERATING?</div>
+        <div class="mega-icon">📉</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">🔥</span> Too Hot (>40°C)?</div>
+            <div class="bullet-item"><span class="bullet-icon">🏔️</span> Too High (>1000m)?</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> = Poor Cooling!</div>
+        </div>
+        <div class="emphasis" style="color: var(--danger-red);">MUST <span class="critical">DERATE! (SIZE UP!)</span></div>
+    </div>
+
+    <!-- Scene 15: STEP 8 - Starting (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">8</div>
+        <div class="subtitle">STARTING METHOD?</div>
+        <div class="mega-icon">⚡</div>
+        <div class="emphasis" style="color: #fff;">DOL? Star-Delta? VFD?</div>
+    </div>
+
+    <!-- Scene 16: Why Start Matters (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">STARTING METHOD</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">💥</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">DOL</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">6-8x</span> Current!</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">📈</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="highlight">VFD/Soft Start</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">Smooth</span> Start!</div>
+            </div>
+        </div>
+        <div class="emphasis" style="margin-top: 2vh;">Check motor starting torque!</div>
+    </div>
+
+    <!-- Scene 17: Quick Checklist (6.0s) -->
+    <div class="scene" data-duration="6000">
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">FINAL CHECKLIST!</div>
+        <div class="content-box" style="width: 85%; padding: 2vh 4vw; font-size: clamp(0.8rem, 3.5vw, 1.1rem);">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Load Type? (CT/VT/HP)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> HP/kW?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Service Factor? (1.0/1.15)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Duty Cycle? (S1/S3)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Enclosure? (IP55/TEFC)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Derated? (Temp/Alt)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Starting Method?</div>
         </div>
     </div>
 
-    <!-- Scene 8: Final Specs -->
-    <div id="scene8" class="scene">
-        <div class="title text-warning">Full Spec Sheet</div>
-        <div class="text-dim" style="font-size: 22px; margin-bottom: 15px;">The OEM Checklist</div>
-        
-        <div class="list">
-            <div class="list-item text-white">✓ Power (kW) & Frame Size (IEC)</div>
-            <div class="list-item text-white">✓ Voltage, Frequency & Poles</div>
-            <div class="list-item text-white">✓ Enclosure (IP) & Cooling (IC)</div>
-            <div class="list-item text-white">✓ Duty Cycle (S1) & S.F. (1.15)</div>
-            <div class="list-item text-white">✓ Efficiency (IE4) & NEMA Design (B)</div>
-            <div class="list-item text-white">✓ Insulation (F/B Rise)</div>
-            <div class="list-item text-white">✓ Ambient Temp (50°C) & Altitude</div>
-            <div class="list-item text-white">✓ Hazardous Area (ATEX/IECEx)</div>
-            <div class="list-item text-white">✓ VFD-Rated & Speed Range</div>
-            <div class="list-item text-white">✓ Torque Data (LRT/BDT)</div>
-            <div class="list-item text-white">✓ Bearing Type & Lube</div>
-            <div classs="list-item text-white">✓ Vibration & Noise Levels</div>
-            <div class="list-item text-white">✓ Paint Spec (e.g., C4 High)</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
+    <!-- Scene 18: The Result (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="mega-icon">🎯</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THESE =</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">MAXIMUM LIFE!</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">MINIMUM COST!</div>
     </div>
 
-    <!-- Scene 9: Final Message -->
-    <div id="scene9" class="scene">
-        <div class="icon" style="font-size: 80px;">✅</div>
-        <div class="title text-accent">Spec it Right.</div>
-        <div class="title text-primary">Run it Forever.</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-success" style="font-size: 26px;">The right motor is an asset, not just a component.</div>
-        
-        <div class="spacing-medium"></div>
-
-        <div class="cta-box">
-            <div class="cta-text text-white">Get More Tools & Guides</div>
-            <div class="cta-url text-success">https://designcalculators.co.in</div>
-        </div>
-
-        <div class="spacing-medium"></div>
-        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    <!-- Scene 19: FINAL CTA (7.0s) -->
+    <div class="scene" data-duration="7000">
+        <div class="mega-icon">👍</div>
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.4rem);">WANT PRECISION TOOLS?</div>
+        <div class="final-cta">EXACT CALCULATIONS</div>
+        <div class="subtitle" style="margin-top: 2vh;">Visit Website:</div>
+        <a href="https://designcalculators.co.in" class="website-link" target="_blank">
+            https://designcalculators.co.in
+        </a>
     </div>
+
+    <!-- Footer Brand - Shows on ALL pages (Same as original) -->
+    <div class="footer-brand">
+        <div class="footer-text">PREPARED BY:</div>
+        <div class="footer-website">designcalculators.co.in</div>
+    </div>
+
+    <!-- Progress Bar - Above footer (Same as original) -->
+    <div class="progress-bar" id="progress"></div>
+
 </div>
 
 <script>
-    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9]; 
-    // Durations in ms, matched to each scene by index
-    const sceneDurations = [
-        5000,  // Scene 1 (Hook)
-        8000,  // Scene 2 (Problem)
-        7000,  // Scene 3 (Load)
-        7000,  // Scene 4 (Core Specs)
-        8000,  // Scene 5 (Environment)
-        8000,  // Scene 6 (Performance)
-        8000,  // Scene 7 (Start-up)
-        12000, // Scene 8 (Full Spec Sheet) - More time to read
-        7000   // Scene 9 (Final)
-    ];
+    // All JavaScript is identical to the provided file for functionality
+    const container = document.getElementById('container');
+    const scenes = document.querySelectorAll('.scene');
+    const progressBar = document.getElementById('progress');
+    const currentCounter = document.getElementById('current');
+    const totalCounter = document.getElementById('total');
+    
     let currentScene = 0;
-    let sceneTimeout; // Use setTimeout instead of setInterval
-
-    function showScene(index) {
-        // Clear any existing timer
-        clearTimeout(sceneTimeout);
-
-        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
-        const sceneElement = document.getElementById(`scene${scenes[index]}`);
-        if(sceneElement) {
-            sceneElement.classList.remove('hidden');
-            sceneElement.scrollTop = 0;
+    let sceneTimer;
+    let progressInterval;
+    let progressValue = 0;
+    
+    // Set total scene count dynamically
+    totalCounter.textContent = scenes.length;
+    
+    // Create enhanced particles
+    function createParticles() {
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            container.appendChild(particle);
         }
-        
-        // Ensure index is valid for durations array
-        const durationIndex = index % sceneDurations.length;
-        const duration = sceneDurations[durationIndex];
-        
-        // Schedule the next scene based on the current scene's duration
-        sceneTimeout = setTimeout(nextScene, duration);
     }
-
+    
+    // Create lightning effects
+    function createLightning() {
+        for (let i = 0; i < 5; i++) {
+            const lightning = document.createElement('div');
+            lightning.className = 'lightning';
+            lightning.style.left = Math.random() * 100 + '%';
+            lightning.style.animationDelay = Math.random() * 8 + 's';
+            container.appendChild(lightning);
+        }
+    }
+    
+    createParticles();
+    createLightning();
+    
+    function showScene(index) {
+        // Hide all scenes
+        scenes.forEach(s => s.classList.remove('active'));
+        
+        // Show current scene
+        if (scenes[index]) {
+            scenes[index].classList.add('active');
+            scenes[index].classList.add('fade-in');
+            currentCounter.textContent = index + 1;
+            
+            // Reset and start progress bar
+            progressValue = 0;
+            const duration = parseInt(scenes[index].dataset.duration);
+            const updateInterval = 50; // Update every 50ms
+            const increment = (100 / duration) * updateInterval;
+            
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                progressValue += increment;
+                if (progressValue >= 100) {
+                    progressValue = 100;
+                    clearInterval(progressInterval);
+                }
+                progressBar.style.width = progressValue + '%';
+            }, updateInterval);
+        }
+    }
+    
     function nextScene() {
         currentScene = (currentScene + 1) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
     function prevScene() {
         currentScene = (currentScene - 1 + scenes.length) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
-    // Initial load
-    showScene(0); // This will show scene 0 and schedule scene 1
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            nextScene(); // This will show the next scene and reset the timer
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevScene(); // This will show the previous scene and reset the timer
-        }
+    function scheduleNextScene() {
+        clearTimeout(sceneTimer);
+        const duration = parseInt(scenes[currentScene].dataset.duration);
+        sceneTimer = setTimeout(nextScene, duration);
+    }
+    
+    // Start the show
+    showScene(0);
+    scheduleNextScene();
+    
+    // Click to advance
+    let clickDisabled = false;
+    container.addEventListener('click', (e) => {
+        // Do not advance if clicking a link
+        if (clickDisabled || e.target.tagName === 'A' || e.target.closest('A')) return;
+        clickDisabled = true;
+        nextScene();
+        setTimeout(() => clickDisabled = false, 300);
     });
+    
+    // Swipe support
+    let touchStartX = 0;
+    container.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'A' || e.target.closest('A')) return;
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    container.addEventListener('touchend', (e) => {
+        if (!touchStartX || e.target.tagName === 'A' || e.target.closest('A')) {
+            touchStartX = 0;
+            return;
+        }
+        const touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        touchStartX = 0;
+        
+        if (Math.abs(diff) > 50) {
+            if (!clickDisabled) {
+                clickDisabled = true;
+                if (diff < 0) nextScene(); // Swipe left
+                else prevScene(); // Swipe right
+                setTimeout(() => clickDisabled = false, 300);
+            }
+        }
+    }, { passive: true });
 </script>
 
 </body>
