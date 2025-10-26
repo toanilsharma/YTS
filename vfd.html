@@ -203,6 +203,28 @@
             }
         }
 
+        /* Animation: Pulsing Border for emphasis */
+        .pulse-border-anim {
+            animation: pulseBorder 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulseBorder {
+            0%, 100% { border-color: rgba(0, 255, 255, 0.4); }
+            50% { border-color: var(--volt-yellow); box-shadow: 0 0 30px var(--volt-yellow); }
+        }
+
+        /* Animation: Screen Shake */
+        .shake-danger {
+            animation: screenShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes screenShake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
         .bullet-item {
             display: flex; align-items: center; justify-content: flex-start;
             margin: 1.2vh 0;
@@ -479,200 +501,230 @@
     <div class="corner-glow top-left"></div>
     <div class="corner-glow bottom-right"></div>
     
-    <!-- Total scene count is 18 -->
-    <div class="scene-counter"><span id="current">1</span>/<span id="total">18</span></div>
+    <!-- Total scene count is 20 -->
+    <div class="scene-counter"><span id="current">1</span>/<span id="total">20</span></div>
     
     <!-- 
     ====================================================================
-    NEW SCENE CONTENT FOR VFD SIZING
+    NEW SCENE CONTENT FOR VFD SIZING (96.5s Total)
     ====================================================================
     -->
 
-    <!-- Scene 1: HOOK (4s) -->
+    <!-- Scene 1: HOOK (4.0s) -->
     <div class="scene active" data-duration="4000">
         <div class="mega-title">VFD SIZING</div>
-        <div class="subtitle">Get It Wrong? 💥 <span class="critical">SMOKED MOTOR!</span></div>
-        <div class="mega-icon">⚡</div>
+        <div class="subtitle">Get It Wrong? 💥 <span class="critical">TRIP CITY!</span></div>
+        <div class="mega-icon shake-danger">⚙️</div>
         <div class="emphasis">Master It in 90 Seconds!</div>
     </div>
 
-    <!-- Scene 2: What is a VFD? (4.5s) -->
+    <!-- Scene 2: Why Size Right? (4.5s) -->
     <div class="scene" data-duration="4500">
-        <div class="step-number">?</div>
-        <div class="subtitle">WHAT'S A VFD?</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">⚙️</span> Not just Speed Control!</div>
-            <div class="bullet-item"><span class="bullet-icon">💪</span> It's <span class="highlight">TORQUE</span> Control!</div>
-            <div class="bullet-item"><span class="bullet-icon">🛡️</span> Total Motor <span class="highlight">PROTECTION</span>!</div>
+        <div class="subtitle">WHY SIZE RIGHT?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">📉</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">UNDERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Nuisance Trips! / <span class="critical">FAIL!</span></div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">💸</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">OVERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">Wasted Money!</span> / Poor Control!</div>
+            </div>
         </div>
-        <div class="emphasis" style="color: var(--volt-yellow);">= ENERGY SAVINGS!</div>
     </div>
 
-    <!-- Scene 3: STEP 1 - Motor Data (5s) -->
-    <div class="scene" data-duration="5000">
+    <!-- Scene 3: STEP 1 - Motor Data (4.5s) -->
+    <div class="scene" data-duration="4500">
         <div class="step-number">1</div>
-        <div class="subtitle">GET MOTOR DATA</div>
+        <div class="subtitle">GET MOTOR DATA!</div>
         <div class="mega-icon">🏷️</div>
+        <div class="emphasis" style="color: #fff;">Check the <span class="highlight">Nameplate!</span></div>
+        <div class="subtitle" style="margin-top: 1vh;">This is your <span class="critical">STARTING POINT!</span></div>
+    </div>
+
+    <!-- Scene 4: Motor Data Deep Dive (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">MOTOR NAMEPLATE</div>
         <div class="content-box" style="padding: 1.5vh 3vw;">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> kW / HP</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Voltage</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">FLA (Full Load Amps)</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">HP / kW</span> (Power)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">FLA</span> (Full Load Amps)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Voltage / Phase</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Power Factor (PF)</div>
         </div>
     </div>
 
-    <!-- Scene 4: FLA is KING (5s) -->
-    <div class="scene" data-duration="5000">
-        <div class="mega-icon" style="color: var(--danger-red);">🅰️</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);"><span class="critical">FLA IS KING!</span></div>
-        <div class="subtitle"><span class="critical">ALWAYS</span> size on FLA, not HP/kW!</div>
-        <div class="emphasis" style="color: #fff;">FLA = <span class="highlight">REAL</span> work current!</div>
-    </div>
-
-    <!-- Scene 5: STEP 2 - Application (5s) -->
-    <div class="scene" data-duration="5000">
+    <!-- Scene 5: STEP 2 - Load Type (4.0s) -->
+    <div class="scene" data-duration="4000">
         <div class="step-number">2</div>
-        <div class="subtitle">CRITICAL STEP: LOAD TYPE</div>
-        <div class="mega-icon">❓</div>
-        <div class="emphasis" style="color: var(--danger-red);">Is your load...</div>
-        <div class="subtitle" style="margin-top: 1vh;">Easy? Or <span class="critical">HARD?</span></div>
+        <div class="subtitle">LOAD TYPE?</div>
+        <div class="mega-icon shake-danger">❓</div>
+        <div class="emphasis" style="color: var(--danger-red);"><span class="critical">THIS IS #1!</span></div>
     </div>
 
-    <!-- Scene 6: CT vs VT (5s) -->
+    <!-- Scene 6: Load Type: VT vs CT (5.0s) -->
     <div class="scene" data-duration="5000">
         <div class="subtitle">LOAD TYPE?</div>
         <div class="split-box">
             <div class="split-item">
                 <div class="split-icon">🌬️</div>
                 <div style="font-weight: 800; margin-bottom: 1vh;">Variable Torque (VT)</div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">"Normal Duty"</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Fans / Pumps<br>(Easy Start)</div>
             </div>
             <div class="split-item">
                 <div class="split-icon">🏋️‍♂️</div>
                 <div style="font-weight: 800; margin-bottom: 1vh;">Constant Torque (CT)</div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">"Heavy Duty"</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">Conveyors / Mixers</span><br>(Hard Start)</div>
             </div>
         </div>
     </div>
 
-    <!-- Scene 7: Variable Torque (VT) (5s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle">VARIABLE TORQUE (VT)</div>
-        <div class="mega-icon">🌬️</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Fans, Centrifugal Pumps</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> "Normal Duty" (ND)</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> Needs <span class="highlight">110-120%</span> Overload</div>
-        </div>
-    </div>
-
-    <!-- Scene 8: Constant Torque (CT) (5s) -->
+    <!-- Scene 7: CT Deep Dive (5.0s) -->
     <div class="scene" data-duration="5000">
         <div class="subtitle">CONSTANT TORQUE (CT)</div>
-        <div class="mega-icon">🏋️‍♂️</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Conveyors, Mixers, Hoists</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">"Heavy Duty" (HD)</span></div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> Needs <span class="critical">150%+</span> Overload!</div>
-        </div>
+        <div class="mega-icon" style="color: var(--danger-red);">🏋️‍♂️</div>
+        <div class="emphasis" style="color: #fff;">Needs <span class="critical">HIGH</span> starting torque!</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--danger-red);">= <span class="critical">150% Overload!</span></div>
     </div>
 
-    <!-- Scene 9: DANGER - Mismatch (5s) -->
-    <div class="scene" data-duration="5000">
-        <div class="mega-icon" style="color: var(--danger-red);">⚠️</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">DANGER!</div>
-        <div class="subtitle">VT Drive on CT Load?</div>
-        <div class="emphasis" style="color: var(--danger-red); font-size: clamp(1.5rem, 6.5vw, 2.2rem);">INSTANT TRIP OR FRY! 🔥</div>
-    </div>
-
-    <!-- Scene 10: STEP 3 - Environment (4.5s) -->
+    <!-- Scene 8: STEP 3 - Amps vs HP (4.5s) -->
     <div class="scene" data-duration="4500">
         <div class="step-number">3</div>
-        <div class="mega-icon" style="color: var(--danger-red);">👻</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLERS!</div>
-        <div class="subtitle">Check for Derating!</div>
+        <div class="subtitle">AMPS vs. HP?</div>
+        <div class="mega-icon">⚖️</div>
+        <div class="emphasis" style="color: var(--danger-red);">Don't trust HP...</div>
     </div>
 
-    <!-- Scene 11: Killer 1 - Heat (5s) -->
+    <!-- Scene 9: Golden Rule: AMPS! (5.0s) -->
     <div class="scene" data-duration="5000">
-        <div class="subtitle">KILLER 1: HEAT</div>
-        <div class="mega-icon" style="color: var(--danger-red);">🔥</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">🌡️</span> > 40°C (104°F)?</div>
-            <div class="bullet-item"><span class="bullet-icon">📉</span> VFD loses Amps!</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> <span class="critical">MUST DERATE!</span> (Size Up!)</div>
+        <div class="subtitle">GOLDEN RULE</div>
+        <div class="mega-icon">🎯</div>
+        <!-- Applying new pulse animation here -->
+        <div class="content-box pulse-border-anim" style="padding: 2vh 3vw;">
+            <div class="emphasis" style="color: #fff; margin: 0;">SIZE BY <span class="critical">MOTOR FLA!</span></div>
+            <div class="emphasis" style="color: var(--volt-yellow); margin: 0;">(Full Load Amps)</div>
         </div>
+        <div class="emphasis" style="margin-top: 1vh;"><span class="highlight">AMPS ARE TRUTH!</span></div>
     </div>
 
-    <!-- Scene 12: Killer 2 - Altitude (5s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle">KILLER 2: ALTITUDE</div>
-        <div class="mega-icon">🏔️</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">☁️</span> > 1000m (3300ft)?</div>
-            <div class="bullet-item"><span class="bullet-icon">📉</span> Thin air = Poor cooling!</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> <span class="critical">MUST DERATE!</span> (Size Up!)</div>
-        </div>
-    </div>
-
-    <!-- Scene 13: STEP 4 - Power Quality (5s) -->
-    <div class="scene" data-duration="5000">
+    <!-- Scene 10: STEP 4 - Speed Range (4.5s) -->
+    <div class="scene" data-duration="4500">
         <div class="step-number">4</div>
-        <div class="subtitle">POWER QUALITY</div>
-        <div class="mega-icon">🌊</div>
-        <div class="emphasis" style="color: #fff;">VFDs create <span class="critical">HARMONICS</span></div>
-        <div class="subtitle" style="margin-top: 2vh;">(Dirty Power!)</div>
-    </div>
-
-    <!-- Scene 14: Solution: Reactors (5s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle">THE FIX: REACTORS</div>
-        <div class="mega-icon">🛡️</div>
-        <div class="split-box">
-            <div class="split-item">
-                <div style="font-weight: 800; margin-bottom: 1vh;">LINE (Input)</div>
-                <div style="font-size: clamp(0.8rem, 3.2vw, 1rem);">Protects VFD</div>
-            </div>
-            <div class="split-item">
-                <div style="font-weight: 800; margin-bottom: 1vh;">LOAD (Output)</div>
-                <div style="font-size: clamp(0.8rem, 3.2vw, 1rem);">Protects Motor</div>
-            </div>
+        <div class="subtitle">SPEED RANGE?</div>
+        <div class="mega-icon">🏃‍♂️</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">📉</span> Running <span class="critical">TOO SLOW?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">🔥</span> Motor fan stops... <span class="critical">OVERHEATS!</span></div>
         </div>
-        <div class="emphasis" style="margin-top: 2vh;">Clean your power!</div>
     </div>
 
-    <!-- Scene 15: STEP 5 - Braking (5s) -->
+    <!-- Scene 11: STEP 5 - Stopping (5.0s) -->
     <div class="scene" data-duration="5000">
         <div class="step-number">5</div>
-        <div class="subtitle">NEED TO STOP FAST?</div>
-        <div class="mega-icon" style="color: var(--danger-red);">🛑</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Hoists, Cranes, Fast Stops</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> Need <span class="critical">BRAKING RESISTOR</span>!</div>
+        <div class="subtitle">STOPPING METHOD?</div>
+        <div class="mega-icon">🛑</div>
+        <div class="split-box">
+            <div class="split-item" style="padding: 1.5vh 2vw;">
+                <div style="font-weight: 800;">Coast to Stop?</div>
+            </div>
+            <div class="split-item" style="padding: 1.5vh 2vw;">
+                <div style="font-weight: 800;"><span class="critical">Fast Stop?</span></div>
+            </div>
         </div>
-        <div class="emphasis" style="color: #fff;">To burn off energy!</div>
     </div>
 
-    <!-- Scene 16: Quick Checklist (6s) -->
+    <!-- Scene 12: Braking Resistor? (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">NEED BRAKING?</div>
+        <div class="mega-icon" style="color: var(--danger-red);">⚡</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> High Inertia Loads (Fans)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Cranes / Hoists</span></div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> Needs <span class="highlight">BRAKE RESISTOR!</span></div>
+        </div>
+    </div>
+
+    <!-- Scene 13: STEP 6 - Derating (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="step-number">6</div>
+        <div class="mega-icon" style="color: var(--danger-red);">👻</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLER!</div>
+        <div class="subtitle"><span class="critical">DERATING!</span></div>
+    </div>
+
+    <!-- Scene 14: Derating: Alt & Temp (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">DERATING?</div>
+        <div class="mega-icon">📉</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">🔥</span> Too Hot (>40°C)?</div>
+            <div class="bullet-item"><span class="bullet-icon">🏔️</span> Too High (>1000m)?</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> = Poor Cooling!</div>
+        </div>
+        <div class="emphasis" style="color: var(--danger-red);">MUST <span class="critical">DERATE! (SIZE UP!)</span></div>
+    </div>
+
+    <!-- Scene 15: STEP 7 - Harmonics (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">7</div>
+        <div class="subtitle">HARMONICS?</div>
+        <div class="mega-icon" style="color: var(--plasma-purple);">🌊</div>
+        <div class="emphasis" style="color: #fff;">VFDs create <span class="critical">"DIRTY"</span> power!</div>
+        <div class="subtitle" style="margin-top: 1vh;">Can affect other gear!</div>
+    </div>
+
+    <!-- Scene 16: Harmonics Solution (5.5s) -->
+    <div class="scene" data-duration="5500">
+        <div class="subtitle">SOLUTION: FILTERS!</div>
+        <div class="mega-icon">🛡️</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">Line Reactor</span> (Good)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Built-in DC Choke (Better)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> AFE Drive (Best)</div>
+        </div>
+    </div>
+
+    <!-- Scene 17: STEP 8 - Enclosure (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">8</div>
+        <div class="subtitle">ENCLOSURE (IP)</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">📦</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">IP20</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">Inside Panel</span></div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">🛡️</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">IP66</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">On the Wall</span> (Dust/Water)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 18: Quick Checklist (6.0s) -->
     <div class="scene" data-duration="6000">
         <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">FINAL CHECKLIST!</div>
-        <div class="content-box" style="width: 85%; padding: 2vh 4vw;">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Motor <span class="critical">FLA</span> Matched?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">CT (HD)</span> or <span class="highlight">VT (ND)</span>?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Derated for <span class="critical">Temp/Alt</span>?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Reactors Needed?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Braking Resistor?</div>
+        <div class="content-box" style="width: 85%; padding: 2vh 4vw; font-size: clamp(0.8rem, 3.5vw, 1.1rem);">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Motor FLA?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Load Type (VT/CT)?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Speed Range?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Braking Needed?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Derated (Temp/Alt)?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Harmonics Filter?</div>
         </div>
     </div>
 
-    <!-- Scene 17: The Result (4.5s) -->
-    <div class="scene" data-duration="4500">
+    <!-- Scene 19: The Result (4.0s) -->
+    <div class="scene" data-duration="4000">
         <div class="mega-icon">🎯</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THESE =</div>
-        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">PERFECT SPEED!</div>
-        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">MAX ENERGY SAVINGS!</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THIS =</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">PERFECT CONTROL!</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);"><span class="highlight" style="color: var(--success-green);">MAX SAVINGS!</span></div>
     </div>
 
-    <!-- Scene 18: FINAL CTA (7s) -->
+    <!-- Scene 20: FINAL CTA (7.0s) -->
     <div class="scene" data-duration="7000">
         <div class="mega-icon">👍</div>
         <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.4rem);">WANT PRECISION TOOLS?</div>
