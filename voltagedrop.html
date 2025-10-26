@@ -2,523 +2,838 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industrial Voltage Drop Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Title changed to new topic -->
+    <title>📉 Voltage Drop MASTERY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        /* All CSS is identical to the provided file for theme consistency */
         :root {
-            --primary: #0066ff;
-            --accent: #ff0066;
-            --success: #00cc44;
-            --warning: #ff9900;
-            --dark-bg: #0d0f1a;
-            --card-bg: #1a1f3a;
-            --text-main: #ffffff;
-            --text-dim: #b0b8c8;
+            --electric-cyan: #00ffff;
+            --neon-pink: #ff0080;
+            --volt-yellow: #ffff00;
+            --plasma-purple: #bf00ff;
+            --danger-red: #ff1744;
+            --success-green: #00ff41;
+            --dark: #0a0a0f;
+            --darker: #050508;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: var(--darker);
+        }
+
         body {
-            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Inter', sans-serif; color: #fff;
         }
 
         #container {
-            width: 100%;
-            max-width: 540px;
-            aspect-ratio: 9/16;
-            background: var(--dark-bg);
-            border: 3px solid var(--primary);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            width: 100%; max-width: 450px; height: 100vh; max-height: 800px;
+            aspect-ratio: 9/16; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 100%);
+            position: relative; overflow: hidden; cursor: pointer;
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Animated Background Grid */
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        /* Enhanced Particle Effect */
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--electric-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 4s linear infinite;
+            box-shadow: 0 0 12px var(--electric-cyan);
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) translateX(50px) scale(1); opacity: 0; }
+        }
+
+        /* Lightning Effect */
+        .lightning {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--electric-cyan), transparent);
+            box-shadow: 0 0 20px var(--electric-cyan);
+            animation: lightning 8s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightning {
+            0%, 100% { opacity: 0; transform: translateY(-100px); }
+            5% { opacity: 1; transform: translateY(0); }
+            10% { opacity: 0; transform: translateY(100vh); }
         }
 
         .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 30px 25px;
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 8vh 6vw 14vh 6vw; /* Added bottom padding for footer */
             text-align: center;
-            opacity: 0;
-            animation: fadeInScene 1s ease-out forwards;
-            overflow-y: auto;
-            scrollbar-width: none;
+            z-index: 10;
         }
 
-        .scene::-webkit-scrollbar { display: none; }
+        /* Typography with WOW factor */
+        .mega-title {
+            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite, titlePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 1.5vh;
+            filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+        }
 
-        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-        .hidden { display: none !important; }
-
-        /* Text Styles */
-        .title {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            line-height: 1.15;
-            animation: slideDownIn 0.8s ease-out;
+        @keyframes titlePop {
+            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .subtitle {
-            font-size: 44px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            animation: slideUpIn 0.8s ease-out 0.15s forwards;
-            opacity: 0;
-        }
-
-        .text-primary { color: var(--primary); }
-        .text-accent { color: var(--accent); }
-        .text-success { color: var(--success); }
-        .text-warning { color: var(--warning); }
-        .text-white { color: white; }
-        .text-dim { color: var(--text-dim); }
-
-        .description {
-            font-size: 28px;
-            font-weight: 500;
-            margin: 12px 0;
-            line-height: 1.3;
-            animation: slideUpIn 0.8s ease-out 0.3s forwards;
-            opacity: 0;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
-            animation: scaleUpIn 0.7s ease-out;
-            width: 100%;
-        }
-
-        .card.accent {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: var(--accent);
-        }
-
-        .card.success {
-            background: rgba(0, 204, 68, 0.1);
-            border-color: var(--success);
-        }
-        
-        .card.warning {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--warning);
-        }
-
-        .card-title {
-            font-size: 30px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .card-value {
-            font-size: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.6rem);
             font-weight: 800;
-            margin: 10px 0;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 50px rgba(255, 255, 0, 0.3);
+            animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            margin-bottom: 2vh;
         }
 
-        .card-text {
-            font-size: 24px;
-            font-weight: 500;
-            margin: 8px 0;
-            line-height: 1.3;
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* List */
-        .list {
+        .mega-icon {
+            font-size: clamp(4rem, 18vw, 8rem);
+            animation: iconEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards,
+                         iconFloat 3s ease-in-out infinite 1s;
+            margin: 2vh 0;
+            filter: drop-shadow(0 0 35px currentColor);
+        }
+
+        @keyframes iconEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .step-number {
+            font-size: clamp(3rem, 13vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: numberZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1;
+            margin-bottom: 1vh;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.6));
+        }
+
+        @keyframes numberZoom {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .content-box {
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 2.5vh 4vw;
+            margin: 2vh 0;
+            width: 90%;
+            max-width: 380px;
+            backdrop-filter: blur(10px);
+            animation: boxGlow 2s ease-in-out infinite alternate;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+        }
+
+        @keyframes boxGlow {
+            0% { 
+                box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+                border-color: rgba(0, 255, 255, 0.4);
+            }
+            100% { 
+                box-shadow: 0 8px 40px rgba(0, 255, 255, 0.35), inset 0 0 40px rgba(0, 255, 255, 0.15);
+                border-color: rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        .bullet-item {
+            display: flex; align-items: center; justify-content: flex-start;
+            margin: 1.2vh 0;
+            font-size: clamp(0.9rem, 3.8vw, 1.2rem);
+            font-weight: 700;
             text-align: left;
-            margin: 10px 0;
+            animation: bulletSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            color: #fff;
+        }
+
+        .bullet-item:nth-child(1) { animation-delay: 0.1s; }
+        .bullet-item:nth-child(2) { animation-delay: 0.2s; }
+        .bullet-item:nth-child(3) { animation-delay: 0.3s; }
+        .bullet-item:nth-child(4) { animation-delay: 0.4s; }
+        .bullet-item:nth-child(5) { animation-delay: 0.5s; }
+        .bullet-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes bulletSlide {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .bullet-icon {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            margin-right: 2vw;
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .highlight {
+            color: var(--volt-yellow);
+            font-weight: 900;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 0.6);
+        }
+
+        .critical {
+            color: var(--danger-red);
+            font-weight: 900;
+            text-transform: uppercase;
+            animation: criticalPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 23, 68, 0.8); }
+            50% { text-shadow: 0 0 30px rgba(255, 23, 68, 1); }
+        }
+
+        .split-box {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 380px;
+            gap: 3vw;
+        }
+
+        .split-item {
+            flex: 1;
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 15px;
+            padding: 2vh 2vw;
+            animation: splitPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            transition: all 0.3s ease;
+        }
+
+        .split-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .split-item:nth-child(1) { animation-delay: 0.2s; }
+        .split-item:nth-child(2) { animation-delay: 0.35s; }
+
+        @keyframes splitPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .split-icon {
+            font-size: clamp(2rem, 8vw, 3rem);
+            margin-bottom: 1vh;
+        }
+
+        .emphasis {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            font-weight: 900;
+            color: var(--success-green);
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.7), 0 0 50px rgba(0, 255, 65, 0.3);
+            animation: emphasize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+            margin: 2vh 0;
+        }
+
+        @keyframes emphasize {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            padding: 2vh 5vw;
+            border-radius: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 2vh 0;
+            animation: ctaPulse 2s ease-in-out infinite, ctaEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
+            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6);
+            max-width: 85%;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 70px rgba(255, 0, 128, 0.9); }
+        }
+
+        @keyframes ctaEntrance {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .website-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.1rem, 4.8vw, 1.6rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-decoration: none;
+            background: rgba(255, 255, 0, 0.12);
+            padding: 1.5vh 4vw;
+            border-radius: 15px;
+            border: 2px solid var(--volt-yellow);
+            display: inline-block;
+            margin-top: 2vh;
+            animation: linkGlow 2s ease-in-out infinite, linkEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s backwards;
+            transition: all 0.3s ease;
+        }
+
+        .website-link:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 0, 0.2);
+        }
+
+        @keyframes linkGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(255, 255, 0, 0.7); }
+        }
+
+        @keyframes linkEntrance {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* FOOTER - Fixed at bottom with branding */
+        .footer-brand {
+            position: absolute;
+            bottom: 6vh;
+            left: 0;
             width: 100%;
+            text-align: center;
+            z-index: 100;
+            padding: 1.5vh 4vw;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9));
+            backdrop-filter: blur(10px);
         }
 
-        .list-item {
-            font-size: 26px;
-            font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
-            animation: slideUpIn 0.6s ease-out forwards;
-            opacity: 0;
-            line-height: 1.3;
-        }
-
-        .list-item:nth-child(1) { animation-delay: 0.2s; }
-        .list-item:nth-child(2) { animation-delay: 0.35s; }
-        .list-item:nth-child(3) { animation-delay: 0.5s; }
-        .list-item:nth-child(4) { animation-delay: 0.65s; }
-        .list-item:nth-child(5) { animation-delay: 0.8s; }
-        .list-item:nth-child(6) { animation-delay: 0.95s; }
-
-        /* CTA Box */
-        .cta-box {
-            background: rgba(0, 204, 68, 0.15);
-            border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
-            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
-            opacity: 0;
-            width: 100%;
-        }
-
-        .cta-text {
-            font-size: 24px;
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.7rem, 3.2vw, 0.95rem);
             font-weight: 600;
-            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5vh;
+            letter-spacing: 0.5px;
         }
 
-        .cta-url {
-            font-size: 32px;
-            font-weight: 800;
-            animation: pulse 2s ease-in-out infinite;
-            word-break: break-all;
+        .footer-website {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.85rem, 3.8vw, 1.15rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            animation: footerPulse 3s ease-in-out infinite;
+            letter-spacing: 0.3px;
         }
 
-        .icon {
-            font-size: 60px;
-            margin: 12px 0;
-            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
-            opacity: 0;
+        @keyframes footerPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
         }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
+        /* Progress Bar - Above footer */
+        .progress-bar {
+            position: absolute;
+            bottom: 4vh;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow), var(--plasma-purple));
+            background-size: 200% 100%;
+            animation: progressGradient 3s linear infinite;
+            transition: width 0.1s linear;
+            z-index: 101;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 128, 0.5);
+            border-radius: 0 5px 5px 0;
+        }
+
+        @keyframes progressGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .scene-counter {
+            position: absolute;
+            top: 2vh; right: 4vw;
+            font-size: clamp(0.85rem, 3.8vw, 1.1rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8vh 2vw;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Corner Accent Glow */
+        .corner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-glow.top-left {
+            top: -75px;
+            left: -75px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        .corner-glow.bottom-right {
+            bottom: -75px;
+            right: -75px;
+            background: radial-gradient(circle, rgba(255, 0, 128, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        /* Hide scenes by default */
+        .scene { display: none; }
+        .scene.active { display: flex; }
+
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <!-- Scene 1: Hook -->
-    <div id="scene1" class="scene">
-        <div class="icon">📉</div>
-        <div class="title text-accent">THE SILENT KILLER</div>
-        <div class="subtitle text-primary">Industrial Voltage Drop</div>
-        <div class="description text-dim">Why 5% isn't always the rule...</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-white" style="font-size: 24px; animation-delay: 0.4s;">An Engineer's Guide</div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
- 
-
-    <!-- Scene 2: NEW - Part 1 Title -->
-    <div id="scene2" class="scene" style="justify-content: center;">
-        <div class="title text-primary">PART 1</div>
-        <div class="subtitle text-white">Power Systems (AC)</div>
-        <div class="description text-dim" style="font-size: 24px;">(Motors, Feeders, Lighting)</div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
+    <div class="grid-bg"></div>
+    <div class="corner-glow top-left"></div>
+    <div class="corner-glow bottom-right"></div>
     
+    <!-- Total scene count is 18 -->
+    <div class="scene-counter"><span id="current">1</span>/<span id="total">18</span></div>
+    
+    <!-- 
+    ====================================================================
+    NEW SCENE CONTENT FOR VOLTAGE DROP SIZING
+    ====================================================================
+    -->
 
-    <!-- Scene 3: The Power Problem (Was Scene 2) -->
-    <div id="scene3" class="scene">
-        <div class="title text-warning">The Power Problem</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Why It's Critical</div>
-        
-        <div class="card warning">
-            <div class="card-title text-warning">Motors (Running)</div>
-            <div class="card-value text-warning" style="font-size: 44px;">> 5% Drop</div>
-            <div class="card-text text-dim">Overheating, torque loss, reduced life, inefficiency. (Ref: IEC 60364-5-52)</div>
-        </div>
-
-        <div class="card accent">
-            <div class="card-title text-accent">Motors (Starting)</div>
-            <div class="card-value text-accent" style="font-size: 44px;">> 15% Drop</div>
-            <div class="card-text text-dim">Motor STALLS, fails to start, trips breaker. (Ref: IEEE Std 3004.8)</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
+    <!-- Scene 1: HOOK (4s) -->
+    <div class="scene active" data-duration="4000">
+        <div class="mega-title">VOLTAGE DROP</div>
+        <div class="subtitle">Get It Wrong? 🔥 <span class="critical">FAILURE!</span></div>
+        <div class="mega-icon">📉</div>
+        <div class="emphasis">Master It in 90 Seconds!</div>
     </div>
-  
 
-    <!-- Scene 4: Power Formula (AC 3-Phase) (Was Scene 4) -->
-    <div id="scene4" class="scene">
-        <div class="title text-primary">Power Formula (3Ø)</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The Full Formula</div>
-        <div class="description text-dim" style="font-size: 24px;">It's NOT just resistance.</div>
-        
-        <div class="card primary">
-            <div class="card-text text-white" style="font-size: 22px; line-height: 1.4; font-weight: 600;">
-                VD = (√3 × I × L) × (R·cos(φ) + X·sin(φ))
+    <!-- Scene 2: The Problem (5s) -->
+    <div class="scene" data-duration="5000">
+        <div class="step-number">!</div>
+        <div class="subtitle">WHAT IS IT?</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">⚡</span> Power leaves source</div>
+            <div class="bullet-item"><span class="bullet-icon">➖</span> Voltage "lost" in cable</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> <span class="critical">Weak</span> power at load!</div>
+        </div>
+        <div class="emphasis" style="color: var(--danger-red);">= WASTED ENERGY!</div>
+    </div>
+
+    <!-- Scene 3: The Limit (4s) -->
+    <div class="scene" data-duration="4000">
+        <div class="step-number">?</div>
+        <div class="subtitle">KNOW THE LIMIT!</div>
+        <div class="mega-icon">🎯</div>
+        <div class="emphasis">Industry Std: <span class="highlight">3% - 5%</span></div>
+        <div class="subtitle" style="margin-top: 2vh;">More? <span class="critical">CODE VIOLATION!</span></div>
+    </div>
+
+    <!-- Scene 4: NEW - Instrumentation (5s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">INSTRUMENTATION?</div>
+        <div class="mega-icon">📡</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">🔬</span> Sensitive Analyzers?</div>
+            <div class="bullet-item"><span class="bullet-icon">💻</span> DCS / PLC Loops?</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> <span class="critical">LIMIT = 1% MAX!</span></div>
+        </div>
+        <div class="emphasis" style="color: var(--danger-red);">NO COMPROMISE!</div>
+    </div>
+
+    <!-- Scene 5: NEW - Standards (5s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">KNOW THE CODE!</div>
+        <div class="mega-icon">📚</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">🇺🇸</span> NEC Art. 210.19, 215.2</div>
+            <div class="bullet-item"><span class="bullet-icon">🌍</span> IEC 60364-5-52</div>
+            <div class="bullet-item"><span class="bullet-icon">⚙️</span> ISA-TR84.00.04</div>
+        </div>
+        <div class="emphasis">FOLLOW THE STANDARDS!</div>
+    </div>
+
+    <!-- Scene 6: STEP 1 - Inputs (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="step-number">1</div>
+        <div class="subtitle">GET YOUR DATA</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">💡</span> Load Current (Amps)</div>
+            <div class="bullet-item"><span class="bullet-icon">📏</span> Cable Length (m/ft)</div>
+            <div class="bullet-item"><span class="bullet-icon">⚡</span> System Voltage</div>
+        </div>
+        <div class="emphasis"><span class="critical">ALL ARE ESSENTIAL!</span></div>
+    </div>
+
+    <!-- Scene 7: DANGER - Cable Size (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="mega-icon" style="color: var(--danger-red);">⚠️</div>
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.6rem);">CABLE SIZE IS KEY!</div>
+        <div class="subtitle">Small Cable (High R) =</div>
+        <div class="emphasis" style="color: var(--danger-red); font-size: clamp(1.5rem, 6.5vw, 2.2rem);">MASSIVE VOLTAGE DROP!</div>
+        <div class="subtitle" style="margin-top: 2vh;">(And dangerous heat! 🔥)</div>
+    </div>
+
+    <!-- Scene 8: Copper vs. Aluminum (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="subtitle">COPPER vs. ALUMINUM?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">🏆</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">COPPER (Cu)</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Less R<br>More Efficient</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">⚖️</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">ALUMINUM (Al)</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">More R<br>Needs Bigger Size!</div>
             </div>
         </div>
-        
-        <div class="list" style="font-size: 22px;">
-            <div class="list-item text-white" style="font-size: 22px;">I = Load Current (Amps)</div>
-            <div class="list-item text-white" style="font-size: 22px;">L = Cable Length (km)</div>
-            <div class="list-item text-white" style="font-size: 22px;">R = Cable Resistance (Ω/km)</div>
-            <div class="list-item text-white" style="font-size: 22px;">X = Cable Reactance (Ω/km)</div>
-            <div class="list-item text-white" style="font-size: 22px;">cos(φ) = Power Factor</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-    
-    
-    <!-- Scene 5: Key Factor: Reactance (X) (Was Scene 5) -->
-    <div id="scene5" class="scene">
-        <div class="title text-accent">The 'X' Factor</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Why Reactance Matters</div>
-        <div class="description text-dim" style="font-size: 24px;">For large cables, X can be > R!</div>
-        
-        <div class="card accent">
-            <div class="card-title text-accent">Large Feeders</div>
-            <div class="card-value text-accent" style="font-size: 44px;">X >> R</div>
-            <div class="card-text text-dim">Ignoring reactance (X) gives a dangerously optimistic (low) %VD calculation.</div>
-        </div>
-        
-        <div class="card success">
-            <div class="card-title text-success">VFD Cables</div>
-            <div class="card-text text-white">Check for harmonic voltage drop & cable capacitance. Standard formula may not apply.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
     </div>
 
-    <!-- Scene 6: Advanced Power Checks (Was Scene 7, EDITED) -->
-    <div id="scene6" class="scene">
-        <div class="title text-success">Advanced Power Checks</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Beyond the Basics</div>
-        
-        <div class="list">
-            <div class="list-item text-white" style="font-size: 24px;">✓ Conductor Temperature</div>
-            <div class="list-item text-dim" style="font-size: 20px;">Use R at 90°C (XLPE), not 20°C.</div>
-            
-            <div class="list-item text-white" style="font-size: 24px;">✓ Skin & Proximity Effect</div>
-            <div class="list-item text-dim" style="font-size: 20px;">Increases AC resistance (R_ac > R_dc).</div>
-            
-            <div class="list-item text-white" style="font-size: 24px;">✓ Transformer %Z</div>
-            <div class="list-item text-dim" style="font-size: 20px;">Include drop inside the transformer.</div>
-            
-            <div class="list-item text-white" style="font-size: 24px;">✓ Mfg. Datasheets</div>
-            <div class="list-item text-dim" style="font-size: 20px;">Use exact R & X values from vendor.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>    
-
-    <!-- Scene 7: NEW - Part 2 Title -->
-    <div id="scene7" class="scene" style="justify-content: center;">
-        <div class="title text-warning">PART 2</div>
-        <div class="subtitle text-white">I&C Systems (DC/LV)</div>
-        <div class="description text-dim" style="font-size: 24px;">(Analog Loops, Fieldbus, Controls)</div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
+    <!-- Scene 9: DANGER - Hidden Killers (4s) -->
+    <div class="scene" data-duration="4000">
+        <div class="mega-icon" style="color: var(--danger-red);">👻</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLERS!</div>
+        <div class="subtitle">It's not just Resistance (R)!</div>
+        <div class="emphasis">You MUST check...</div>
     </div>
 
-    <!-- Scene 8: The Control Problem (Was Scene 3) -->
-    <div id="scene8" class="scene">
-        <div class="title text-warning">The Control Problem</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Signal Integrity Failure</div>
-        
-        <div class="card warning">
-            <div class="card-title text-warning">Analog (4-20mA)</div>
-            <div class="card-value text-warning" style="font-size: 44px;">"Ghost" Readings</div>
-            <div class="card-text text-dim">Insufficient voltage for transmitter. Loop fails, shows 0mA or false reading.</div>
+    <!-- Scene 10: Killer 1 - Temp (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="subtitle">KILLER 1: HEAT</div>
+        <div class="mega-icon" style="color: var(--danger-red);">🔥</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">🌡️</span> Hot Cable / Ambient?</div>
+            <div class="bullet-item"><span class="bullet-icon">📈</span> = <span class="critical">HIGHER</span> Resistance!</div>
+            <div class="bullet-item"><span class="bullet-icon">📉</span> = <span class="critical">HIGHER</span> Voltage Drop!</div>
         </div>
+        <div class="emphasis"><span class="critical">MUST CORRECT!</span></div>
+    </div>
 
-        <div class="card accent">
-            <div class="card-title text-accent">Digital / Fieldbus</div>
-            <div class="card-value text-accent" style="font-size: 44px;">Data Corruption</div>
-            <div class="card-text text-dim">Signal degrades, packets lost, intermittent control failure.</div>
+    <!-- Scene 11: Killer 2 - Power Factor (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="subtitle">KILLER 2: POWER FACTOR</div>
+        <div class="mega-icon">🌀</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">⚙️</span> Motors, VFDs? (Inductive)</div>
+            <div class="bullet-item"><span class="bullet-icon">📉</span> = Low Power Factor (PF)</div>
+            <div class="bullet-item"><span class="bullet-icon">⚡</span> <span class="critical">REACTANCE (X)</span> now matters!</div>
         </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="emphasis">Low PF = <span class="critical">Worse VD!</span></div>
+    </div>
+
+    <!-- Scene 12: NEW - Motor Starting (5s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">KILLER 3: MOTOR START</div>
+        <div class="mega-icon" style="color: var(--volt-yellow);">⚙️</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">💨</span> 6-8x Inrush Current!</div>
+            <div class="bullet-item"><span class="bullet-icon">📉</span> <span class="critical">MASSIVE</span> (temp) VD!</div>
+            <div class="bullet-item"><span class="bullet-icon">💡</span> = Lights flicker / Trips!</div>
+        </div>
+        <div class="emphasis"><span class="critical">SIZE FOR STARTING!</span></div>
+    </div>
+
+    <!-- Scene 13: 1-Ph vs 3-Ph (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="subtitle">1-PHASE vs 3-PHASE?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon" style="color: var(--danger-red)">1Ф</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">SINGLE</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="critical">Higher VD</span><br>(Current x 2 ways)</div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon" style="color: var(--success-green)">3Ф</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;">THREE</div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">More Efficient</span><br>(Better VD)</div>
+            </div>
+        </div>
+        <div class="emphasis" style="margin-top: 2vh;"><span class="critical">Use correct formula!</span></div>
+    </div>
+
+    <!-- Scene 14: The Formula Concept (5s) -->
+    <div class="scene" data-duration="5000">
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">THE CALCULATION</div>
+        <div class="mega-icon">📊</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">1.</span> Get Amps, Length, PF</div>
+            <div class="bullet-item"><span class="bullet-icon">2.</span> Find Cable R & X (from table)</div>
+            <div class="bullet-item"><span class="bullet-icon">3.</span> Apply Temp Factor</div>
+        </div>
+        <div class="emphasis" style="font-size: clamp(0.9rem, 3.8vw, 1.2rem); margin: 1vh 0; color: var(--volt-yellow);">
+            Volts Lost = I * L * (R*PF + X*sin(PF))
         </div>
     </div>
 
-    <!-- Scene 9: I&C Loop Check (Was Scene 6) -->
-    <div id="scene9" class="scene">
-        <div class="title text-primary">I&C Loop Check</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The DC Loop Formula</div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary" style="font-size: 26px;">Available Voltage Check</div>
-            <div class="card-text text-white" style="font-size: 22px;">V_supply > V_drop + V_min_instr</div>
-            <div class="card-text text-dim" style="font-size: 20px;">(e.g. 24V > (V_cable + V_barrier) + 12V)</div>
-        </div>
-        
-        <div class="list">
-            <div class="list-item text-white" style="font-size: 22px;">V_supply = Power Supply VDC</div>
-            <div class="list-item text-white" style="font-size: 22px;">V_drop = (I_loop × R_loop) + V_barrier</div>
-            <div class="list-item text-white" style="font-size: 22px;">R_loop = Total loop resistance (2 cores)</div>
-            <div class="list-item text-white" style="font-size: 22px;">V_min_instr = Transmitter min. voltage</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 15: The Solution (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="subtitle">VD TOO HIGH? (>5%)</div>
+        <div class="mega-icon">⬆️</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem);">THE <span class="highlight">ONLY</span> FIX:</div>
+        <div class="subtitle" style="margin-top: 2vh;"><span class="highlight">INCREASE CABLE SIZE!</span></div>
+        <div class="emphasis" style="color: var(--success-green);">(e.g., 50mm² → 70mm²)</div>
+    </div>
+
+    <!-- Scene 16: Quick Checklist (5.2s) -->
+    <div class="scene" data-duration="5200">
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">FINAL CHECKLIST!</div>
+        <div class="content-box" style="width: 85%;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Amps & Length?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> VD Limit OK? (3/5/1%)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Cable Size (Cu/Al)?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Temp Corrected?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Power Factor (R & X)?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">Motor Start?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> 1-Ph / 3-Ph Formula?</div>
         </div>
     </div>
 
-    <!-- Scene 10: NEW - Fieldbus Networks -->
-    <div id="scene10" class="scene">
-        <div class="title text-accent">Fieldbus Networks</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The "Wow" Factor</div>
-        
-        <div class="card accent">
-            <div class="card-title text-accent">It's NOT a DC Loop!</div>
-            <div class="card-text text-white">Foundation Fieldbus, Profibus PA, etc. have *strict* rules.</div>
-        </div>
-        
-        <div class="card success">
-            <div class="card-title text-success">Vendor is KING</div>
-            <div class="card-text text-white">✓ Check max segment length.</div>
-            <div class="card-text text-white">✓ Check specific cable type (e.g. Type A).</div>
-            <div class="card-text text-white">✓ Check terminator requirements.</div>
-            <div class="card-text text-dim">Standard VD% rules do NOT apply.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>    
-
-    <!-- Scene 11: The Standards - IEC/IEEE (Was Scene 8) -->
-    <div id="scene11" class="scene">
-        <div class="title text-warning">The Standards</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The Final Authority</div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">IEC 60364-5-52</div>
-            <div class="card-text text-white">Recommends 3% (Lighting), 5% (Other). This is a *recommendation*, not a hard rule.</div>
-        </div>
-        
-        <div class="card warning">
-            <div class="card-title text-warning">IEEE Std 3004.8</div>
-            <div class="card-text text-white">Recommends max 15% drop at motor terminals during START-UP.</div>
-        </div>
-        
-        <div class="card success">
-            <div class="card-title text-success">Vendor Specs</div>
-            <div class="card-text text-white">ALWAYS follow the manufacturer's specific voltage/length limits for VFDs & Fieldbus.</div>
-        </div>
-        <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>    
-
-    <!-- Scene 12: Final Message (Was Scene 9) -->
-    <div id="scene12" class="scene">
-        <div class="icon" style="font-size: 80px;">✅</div>
-        <div class="title text-accent">VD is an...</div>
-        <div class="title text-primary">Engineering Decision.</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-success" style="font-size: 26px;">Balance Performance, Safety, and Cost.</div>
-        
-        <div class="spacing-medium"></div>
-
-        <div class="cta-box">
-            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
-            <div class="cta-url text-success">https://designcalculators.co.in</div>
-        </div>
-
-        <div class="spacing-medium"></div>
-        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
+    <!-- Scene 17: The Result (4.8s) -->
+    <div class="scene" data-duration="4800">
+        <div class="mega-icon">🎯</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THESE =</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">STABLE VOLTAGE!</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">SAFE EQUIPMENT!</div>
     </div>
+
+    <!-- Scene 18: FINAL CTA (7.2s) -->
+    <div class="scene" data-duration="7200">
+        <div class="mega-icon">👍</div>
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.4rem);">WANT PRECISION TOOLS?</div>
+        <div class="final-cta">EXACT CALCULATIONS</div>
+        <div class="subtitle" style="margin-top: 2vh;">Visit Website:</div>
+        <a href="https://designcalculators.co.in" class="website-link" target="_blank">
+            https://designcalculators.co.in
+        </a>
+    </div>
+
+    <!-- Footer Brand - Shows on ALL pages (Same as original) -->
+    <div class="footer-brand">
+        <div class="footer-text">PREPARED BY:</div>
+        <div class="footer-website">designcalculators.co.in</div>
+    </div>
+
+    <!-- Progress Bar - Above footer (Same as original) -->
+    <div class="progress-bar" id="progress"></div>
+
 </div>
 
 <script>
-    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
-    // Durations in ms, matched to each scene by index
-    const sceneDurations = [
-        5000,  // Scene 1 (Hook)
-        4000,  // Scene 2 (NEW: Part 1 Title)
-        8000,  // Scene 3 (Power Problem)
-        9000,  // Scene 4 (Power Formula)
-        8000,  // Scene 5 (Reactance)
-        9000,  // Scene 6 (Advanced Power Checks)
-        4000,  // Scene 7 (NEW: Part 2 Title)
-        8000,  // Scene 8 (I&C Problem)
-        9000,  // Scene 9 (I&C Formula)
-        9000,  // Scene 10 (NEW: Fieldbus)
-        9000,  // Scene 11 (Standards)
-        7000   // Scene 12 (Final)
-    ];
+    // All JavaScript is identical to the provided file for functionality
+    const container = document.getElementById('container');
+    const scenes = document.querySelectorAll('.scene');
+    const progressBar = document.getElementById('progress');
+    const currentCounter = document.getElementById('current');
+    const totalCounter = document.getElementById('total');
+    
     let currentScene = 0;
-    let sceneTimeout; // Use setTimeout instead of setInterval
-
-    function showScene(index) {
-        // Clear any existing timer
-        clearTimeout(sceneTimeout);
-
-        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
-        const sceneElement = document.getElementById(`scene${scenes[index]}`);
-        if(sceneElement) {
-            sceneElement.classList.remove('hidden');
-            sceneElement.scrollTop = 0;
+    let sceneTimer;
+    let progressInterval;
+    let progressValue = 0;
+    
+    // Set total scene count dynamically
+    totalCounter.textContent = scenes.length;
+    
+    // Create enhanced particles
+    function createParticles() {
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            container.appendChild(particle);
         }
-        
-        // Ensure index is valid for durations array
-        const durationIndex = index % sceneDurations.length;
-        const duration = sceneDurations[durationIndex];
-        
-        // Schedule the next scene based on the current scene's duration
-        sceneTimeout = setTimeout(nextScene, duration);
     }
-
+    
+    // Create lightning effects
+    function createLightning() {
+        for (let i = 0; i < 5; i++) {
+            const lightning = document.createElement('div');
+            lightning.className = 'lightning';
+            lightning.style.left = Math.random() * 100 + '%';
+            lightning.style.animationDelay = Math.random() * 8 + 's';
+            container.appendChild(lightning);
+        }
+    }
+    
+    createParticles();
+    createLightning();
+    
+    function showScene(index) {
+        // Hide all scenes
+        scenes.forEach(s => s.classList.remove('active'));
+        
+        // Show current scene
+        if (scenes[index]) {
+            scenes[index].classList.add('active');
+            scenes[index].classList.add('fade-in');
+            currentCounter.textContent = index + 1;
+            
+            // Reset and start progress bar
+            progressValue = 0;
+            const duration = parseInt(scenes[index].dataset.duration);
+            const updateInterval = 50; // Update every 50ms
+            const increment = (100 / duration) * updateInterval;
+            
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                progressValue += increment;
+                if (progressValue >= 100) {
+                    progressValue = 100;
+                    clearInterval(progressInterval);
+                }
+                progressBar.style.width = progressValue + '%';
+            }, updateInterval);
+        }
+    }
+    
     function nextScene() {
         currentScene = (currentScene + 1) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
     function prevScene() {
         currentScene = (currentScene - 1 + scenes.length) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
-    // Initial load
-    showScene(0); // This will show scene 0 and schedule scene 1
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            nextScene(); // This will show the next scene and reset the timer
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevScene(); // This will show the previous scene and reset the timer
-        }
+    function scheduleNextScene() {
+        clearTimeout(sceneTimer);
+        const duration = parseInt(scenes[currentScene].dataset.duration);
+        sceneTimer = setTimeout(nextScene, duration);
+    }
+    
+    // Start the show
+    showScene(0);
+    scheduleNextScene();
+    
+    // Click to advance
+    let clickDisabled = false;
+    container.addEventListener('click', (e) => {
+        // Do not advance if clicking a link
+        if (clickDisabled || e.target.tagName === 'A' || e.target.closest('A')) return;
+        clickDisabled = true;
+        nextScene();
+        setTimeout(() => clickDisabled = false, 300);
     });
+    
+    // Swipe support
+    let touchStartX = 0;
+    container.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'A' || e.target.closest('A')) return;
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    container.addEventListener('touchend', (e) => {
+        if (!touchStartX || e.target.tagName === 'A' || e.target.closest('A')) {
+            touchStartX = 0;
+            return;
+        }
+        const touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        touchStartX = 0;
+        
+        if (Math.abs(diff) > 50) {
+            if (!clickDisabled) {
+                clickDisabled = true;
+                if (diff < 0) nextScene(); // Swipe left
+                else prevScene(); // Swipe right
+                setTimeout(() => clickDisabled = false, 300);
+            }
+        }
+    }, { passive: true });
 </script>
 
 </body>
