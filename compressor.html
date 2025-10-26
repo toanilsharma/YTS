@@ -2,577 +2,865 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industrial Compressor Sizing Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Title changed to new topic -->
+    <title>💨 Compressor Sizing MASTERY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        /* All CSS is identical to the provided file for theme consistency */
         :root {
-            --primary: #0066ff;
-            --accent: #ff0066;
-            --success: #00cc44;
-            --warning: #ff9900;
-            --dark-bg: #0d0f1a;
-            --card-bg: #1a1f3a;
-            --text-main: #ffffff;
-            --text-dim: #b0b8c8;
+            --electric-cyan: #00ffff;
+            --neon-pink: #ff0080;
+            --volt-yellow: #ffff00;
+            --plasma-purple: #bf00ff;
+            --danger-red: #ff1744;
+            --success-green: #00ff41;
+            --dark: #0a0a0f;
+            --darker: #050508;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: var(--darker);
+        }
+
         body {
-            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Inter', sans-serif; color: #fff;
         }
 
         #container {
-            width: 100%;
-            max-width: 540px;
-            aspect-ratio: 9/16;
-            background: var(--dark-bg);
-            border: 3px solid var(--primary);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            width: 100%; max-width: 450px; height: 100vh; max-height: 800px;
+            aspect-ratio: 9/16; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 100%);
+            position: relative; overflow: hidden; cursor: pointer;
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Animated Background Grid */
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        /* Enhanced Particle Effect */
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--electric-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 4s linear infinite;
+            box-shadow: 0 0 12px var(--electric-cyan);
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) translateX(50px) scale(1); opacity: 0; }
+        }
+
+        /* Lightning Effect */
+        .lightning {
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(180deg, transparent, var(--electric-cyan), transparent);
+            box-shadow: 0 0 20px var(--electric-cyan);
+            animation: lightning 8s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes lightning {
+            0%, 100% { opacity: 0; transform: translateY(-100px); }
+            5% { opacity: 1; transform: translateY(0); }
+            10% { opacity: 0; transform: translateY(100vh); }
         }
 
         .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 30px 25px;
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 8vh 6vw 14vh 6vw; /* Added bottom padding for footer */
             text-align: center;
-            opacity: 0;
-            animation: fadeInScene 1s ease-out forwards;
-            overflow-y: auto;
-            scrollbar-width: none;
+            z-index: 10;
         }
 
-        .scene::-webkit-scrollbar { display: none; }
+        /* Typography with WOW factor */
+        .mega-title {
+            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite, titlePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 1.5vh;
+            filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+        }
 
-        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-        .hidden { display: none !important; }
-
-        /* Text Styles - LARGER */
-        .title {
-            font-size: 60px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            line-height: 1.1;
-            animation: slideDownIn 0.8s ease-out;
+        @keyframes titlePop {
+            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .subtitle {
-            font-size: 44px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.15;
-            animation: slideUpIn 0.8s ease-out 0.15s forwards;
-            opacity: 0;
-        }
-
-        .text-primary { color: var(--primary); }
-        .text-accent { color: var(--accent); }
-        .text-success { color: var(--success); }
-        .text-warning { color: var(--warning); }
-        .text-white { color: white; }
-        .text-dim { color: var(--text-dim); }
-
-        .description {
-            font-size: 28px;
-            font-weight: 500;
-            margin: 12px 0;
-            line-height: 1.3;
-            animation: slideUpIn 0.8s ease-out 0.3s forwards;
-            opacity: 0;
-        }
-
-        /* Cards - LARGER */
-        .card {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
-            animation: scaleUpIn 0.7s ease-out;
-            width: 100%;
-        }
-
-        .card.accent {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: var(--accent);
-        }
-
-        .card.success {
-            background: rgba(0, 204, 68, 0.1);
-            border-color: var(--success);
-        }
-
-        .card.warning {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--warning);
-        }
-        
-        .card-title {
-            font-size: 30px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .card-value {
-            font-size: 52px;
+            font-size: clamp(1rem, 4.5vw, 1.6rem);
             font-weight: 800;
-            margin: 10px 0;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 50px rgba(255, 255, 0, 0.3);
+            animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            margin-bottom: 2vh;
         }
 
-        .card-text {
-            font-size: 22px;
-            font-weight: 500;
-            margin: 8px 0;
-            line-height: 1.3;
-        }
-        
-        .formula-box {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 15px;
-            margin: 10px 0;
-            animation: scaleUpIn 0.7s ease-out;
-            width: 100%;
-            font-size: 24px;
-            font-weight: 600;
-            line-height: 1.4;
-            color: var(--text-main);
-            word-wrap: break-word;
-        }
-        
-        .formula-box.accent {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        
-        .formula-box.warning {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--warning);
-            color: var(--warning);
-            font-size: 20px;
-        }
-        
-        .formula-box.success {
-            background: rgba(0, 204, 68, 0.1);
-            border-color: var(--success);
-            color: var(--success);
-            font-size: 22px;
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* List - LARGER */
-        .list {
+        .mega-icon {
+            font-size: clamp(4rem, 18vw, 8rem);
+            animation: iconEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards,
+                         iconFloat 3s ease-in-out infinite 1s;
+            margin: 2vh 0;
+            filter: drop-shadow(0 0 35px currentColor);
+        }
+
+        @keyframes iconEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .step-number {
+            font-size: clamp(3rem, 13vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: numberZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1;
+            margin-bottom: 1vh;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.6));
+        }
+
+        @keyframes numberZoom {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .content-box {
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 2.5vh 4vw;
+            margin: 2vh 0;
+            width: 90%;
+            max-width: 380px;
+            backdrop-filter: blur(10px);
+            animation: boxGlow 2s ease-in-out infinite alternate;
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+        }
+
+        @keyframes boxGlow {
+            0% { 
+                box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
+                border-color: rgba(0, 255, 255, 0.4);
+            }
+            100% { 
+                box-shadow: 0 8px 40px rgba(0, 255, 255, 0.35), inset 0 0 40px rgba(0, 255, 255, 0.15);
+                border-color: rgba(0, 255, 255, 0.6);
+            }
+        }
+
+        /* Animation: Pulsing Border for emphasis */
+        .pulse-border-anim {
+            animation: pulseBorder 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulseBorder {
+            0%, 100% { border-color: rgba(0, 255, 255, 0.4); }
+            50% { border-color: var(--volt-yellow); box-shadow: 0 0 30px var(--volt-yellow); }
+        }
+
+        /* Animation: Screen Shake */
+        .shake-danger {
+            animation: screenShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes screenShake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        .bullet-item {
+            display: flex; align-items: center; justify-content: flex-start;
+            margin: 1.2vh 0;
+            font-size: clamp(0.9rem, 3.8vw, 1.2rem);
+            font-weight: 700;
             text-align: left;
-            margin: 10px 0;
+            animation: bulletSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            color: #fff;
+        }
+
+        .bullet-item:nth-child(1) { animation-delay: 0.1s; }
+        .bullet-item:nth-child(2) { animation-delay: 0.2s; }
+        .bullet-item:nth-child(3) { animation-delay: 0.3s; }
+        .bullet-item:nth-child(4) { animation-delay: 0.4s; }
+        .bullet-item:nth-child(5) { animation-delay: 0.5s; }
+        .bullet-item:nth-child(6) { animation-delay: 0.6s; }
+        .bullet-item:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes bulletSlide {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .bullet-icon {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            margin-right: 2vw;
+            animation: iconPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .highlight {
+            color: var(--volt-yellow);
+            font-weight: 900;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 0.6);
+        }
+
+        .critical {
+            color: var(--danger-red);
+            font-weight: 900;
+            text-transform: uppercase;
+            animation: criticalPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes criticalPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 23, 68, 0.8); }
+            50% { text-shadow: 0 0 30px rgba(255, 23, 68, 1); }
+        }
+
+        .split-box {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            max-width: 380px;
+            gap: 3vw;
+        }
+
+        .split-item {
+            flex: 1;
+            background: rgba(0, 255, 255, 0.06);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 15px;
+            padding: 2vh 2vw;
+            animation: splitPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+            transition: all 0.3s ease;
+        }
+
+        .split-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .split-item:nth-child(1) { animation-delay: 0.2s; }
+        .split-item:nth-child(2) { animation-delay: 0.35s; }
+
+        @keyframes splitPop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .split-icon {
+            font-size: clamp(2rem, 8vw, 3rem);
+            margin-bottom: 1vh;
+        }
+
+        .emphasis {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            font-weight: 900;
+            color: var(--success-green);
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.7), 0 0 50px rgba(0, 255, 65, 0.3);
+            animation: emphasize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+            margin: 2vh 0;
+        }
+
+        @keyframes emphasize {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            padding: 2vh 5vw;
+            border-radius: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 2vh 0;
+            animation: ctaPulse 2s ease-in-out infinite, ctaEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
+            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6);
+            max-width: 85%;
+        }
+
+        @keyframes ctaPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 70px rgba(255, 0, 128, 0.9); }
+        }
+
+        @keyframes ctaEntrance {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .website-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.1rem, 4.8vw, 1.6rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-decoration: none;
+            background: rgba(255, 255, 0, 0.12);
+            padding: 1.5vh 4vw;
+            border-radius: 15px;
+            border: 2px solid var(--volt-yellow);
+            display: inline-block;
+            margin-top: 2vh;
+            animation: linkGlow 2s ease-in-out infinite, linkEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s backwards;
+            transition: all 0.3s ease;
+        }
+
+        .website-link:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 0, 0.2);
+        }
+
+        @keyframes linkGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(255, 255, 0, 0.7); }
+        }
+
+        @keyframes linkEntrance {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* FOOTER - Fixed at bottom with branding */
+        .footer-brand {
+            position: absolute;
+            bottom: 6vh;
+            left: 0;
             width: 100%;
+            text-align: center;
+            z-index: 100;
+            padding: 1.5vh 4vw;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9));
+            backdrop-filter: blur(10px);
         }
 
-        .list-item {
-            font-size: 26px; /* Slightly smaller for long lists */
-            font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
-            animation: slideUpIn 0.6s ease-out forwards;
-            opacity: 0;
-            line-height: 1.3;
-        }
-
-        .list-item:nth-child(1) { animation-delay: 0.2s; }
-        .list-item:nth-child(2) { animation-delay: 0.3s; }
-        .list-item:nth-child(3) { animation-delay: 0.4s; }
-        .list-item:nth-child(4) { animation-delay: 0.5s; }
-        .list-item:nth-child(5) { animation-delay: 0.6s; }
-
-
-        /* CTA Box */
-        .cta-box {
-            background: rgba(0, 204, 68, 0.15);
-            border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
-            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
-            opacity: 0;
-            width: 100%;
-        }
-
-        .cta-text {
-            font-size: 22px;
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.7rem, 3.2vw, 0.95rem);
             font-weight: 600;
-            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5vh;
+            letter-spacing: 0.5px;
         }
 
-        .cta-url {
-            font-size: 24px;
-            font-weight: 800;
-            animation: pulse 2s ease-in-out infinite;
-            word-break: break-all;
+        .footer-website {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.85rem, 3.8vw, 1.15rem);
+            font-weight: 700;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            animation: footerPulse 3s ease-in-out infinite;
+            letter-spacing: 0.3px;
         }
 
-        .icon {
-            font-size: 60px;
-            margin: 12px 0;
-            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
-            opacity: 0;
+        @keyframes footerPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
         }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
-        
-        .footer-credit {
-            font-size: 20px;
-            margin-top: auto;
-            padding-top: 15px;
-            word-break: break-all;
+        /* Progress Bar - Above footer */
+        .progress-bar {
+            position: absolute;
+            bottom: 4vh;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow), var(--plasma-purple));
+            background-size: 200% 100%;
+            animation: progressGradient 3s linear infinite;
+            transition: width 0.1s linear;
+            z-index: 101;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 128, 0.5);
+            border-radius: 0 5px 5px 0;
+        }
+
+        @keyframes progressGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .scene-counter {
+            position: absolute;
+            top: 2vh; right: 4vw;
+            font-size: clamp(0.85rem, 3.8vw, 1.1rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8vh 2vw;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Corner Accent Glow */
+        .corner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-glow.top-left {
+            top: -75px;
+            left: -75px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        .corner-glow.bottom-right {
+            bottom: -75px;
+            right: -75px;
+            background: radial-gradient(circle, rgba(255, 0, 128, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        /* Hide scenes by default */
+        .scene { display: none; }
+        .scene.active { display: flex; }
+
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <!-- Scene 1: Hook -->
-    <div id="scene1" class="scene">
-        <div class="icon">💨</div>
-        <div class="title text-accent">COMPRESSOR SIZING</div>
-        <div class="subtitle text-primary">The #1 "Viral" Trap</div>
-        <div class="description text-dim">Is your "100 CFM" compressor undersized?</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-white" style="font-size: 22px; animation-delay: 0.4s;">The ACFM vs. SCFM Secret</div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
+    <div class="grid-bg"></div>
+    <div class="corner-glow top-left"></div>
+    <div class="corner-glow bottom-right"></div>
     
-    <!-- Scene 2: The #1 Trap: ACFM vs. SCFM -->
-    <div id="scene2" class="scene">
-        <div class="title text-accent">The #1 "Secret"</div>
-        <div class="subtitle text-white" style="font-size: 32px;">ACFM vs. SCFM</div>
-        
-        <div class="card accent" style="animation-delay: 0.1s;">
-            <div class="card-title text-accent">SCFM (Standard CFM)</div>
-            <div class="card-text text-white">The "mass" of air your tools need. Measured at a standard (e.g., 14.7 psi, 68°F).</div>
-        </div>
-        
-        <div class="card primary" style="animation-delay: 0.2s;">
-            <div class="card-title text-primary">ACFM (Actual CFM)</div>
-            <div class="card-text text-white">The "volume" of air the compressor *actually* inhales at your plant's altitude & temp.</div>
-        </div>
-        
-        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>TRAP:</b> You MUST buy a compressor rated for <b>ACFM</b> to deliver the required <b>SCFM</b>.</div>
-
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 3: Step 1 - Demand (SCFM) -->
-    <div id="scene3" class="scene">
-        <div class="title text-primary">STEP 1: Demand</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Find Total Required SCFM</div>
-        
-        <div class="list">
-            <div class="list-item text-white">1. Sum all tool SCFM needs.</div>
-            <div class="list-item text-white">2. Apply Diversity Factor (e.g., 0.8 if not all run at once).</div>
-            <div class="list-item text-white">3. Add Future Growth (25%).</div>
-        </div>
-        
-        <div class="formula-box success" style="animation-delay: 0.4s; font-size: 20px;">
-            (Tool 1 + Tool 2) * Diversity * 1.25 = <b>Total SCFM</b>
-        </div>
-        
-        <div class="card-text text-white" style="font-size: 20px; margin-top: 10px;">This is the "mass" of air you must deliver.</div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 4: Step 2 - Correction (ACFM) -->
-    <div id="scene4" class="scene">
-        <div class="title text-warning">STEP 2: Correction</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Convert SCFM to ACFM</div>
-        
-        <div class="description text-dim" style="font-size: 24px;">Correct for your site's altitude & temperature.</div>
-        <div class="spacing-small"></div>
-        
-        <div class="formula-box" style="animation-delay: 0.1s; font-size: 18px; line-height: 1.3;">
-            ACFM = SCFM &times; (P<sub>std</sub> / P<sub>actual</sub>) &times; (T<sub>actual</sub> / T<sub>std</sub>)
-        </div>
-        
-        <div class="card accent" style="animation-delay: 0.2s;">
-            <div class="card-title text-accent">High Altitude?</div>
-            <div class="card-text text-white">Air is thinner (P<sub>actual</sub> is low). You need a *higher* ACFM compressor to deliver the same SCFM mass.</div>
-        </div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 5: Step 3 - Total Pressure -->
-    <div id="scene5" class="scene">
-        <div class="title text-accent">STEP 3: Total Pressure</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The "OpEx" Trap</div>
-        
-        <div class="description text-dim" style="font-size: 24px;">Your compressor must fight the *entire* system.</div>
-        <div class="spacing-small"></div>
-        
-        <div class="formula-box accent" style="animation-delay: 0.1s; font-size: 20px;">
-            P<sub>comp</sub> = P<sub>tool</sub> + &Delta;P<sub>dryer</sub> + &Delta;P<sub>filters</sub> + &Delta;P<sub>piping</sub>
-        </div>
-        
-        <div class="card warning" style="animation-delay: 0.2s;">
-            <div class="card-title text-warning">The "OpEx" Trap</div>
-            <div class="card-text text-white">Every 2 psi of extra pressure drop costs 1% in energy. Size pipes and filters correctly!</div>
-        </div>
-
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
+    <!-- Total scene count is 20 -->
+    <div class="scene-counter"><span id="current">1</span>/<span id="total">20</span></div>
     
-    <!-- Scene 6: Step 4 - The "Real" Physics -->
-    <div id="scene6" class="scene">
-        <div class="title text-primary">STEP 4: The Physics</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Polytropic Compression</div>
-        
-        <div class="card" style="animation-delay: 0.1s;">
-            <div class="card-title text-dim">Isothermal (n=1)</div>
-            <div class="card-text text-white">Perfectly cooled. 100% efficient. Impossible.</div>
-        </div>
-        
-        <div class="card accent" style="animation-delay: 0.2s;">
-            <div class="card-title text-accent">Isentropic (n=k)</div>
-            <div class="card-text text-white">No cooling (adiabatic). Hot, inefficient.</div>
-        </div>
-        
-        <div class="card success" style="animation-delay: 0.3s;">
-            <div class="card-title text-success">Polytropic (n=~1.3)</div>
-            <div class="card-text text-white">The real-world path *with* intercooling. This is what you must calculate.</div>
-        </div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
+    <!-- 
+    ====================================================================
+    NEW SCENE CONTENT FOR COMPRESSOR SIZING (94.0s Total)
+    ====================================================================
+    -->
+
+    <!-- Scene 1: HOOK (4.0s) -->
+    <div class="scene active" data-duration="4000">
+        <div class="mega-title">COMPRESSOR SIZING</div>
+        <div class="subtitle">Get It Wrong? 💨 <span class="critical">NO AIR!</span></div>
+        <div class="mega-icon shake-danger">💨</div>
+        <div class="emphasis">Master It in 90 Seconds!</div>
+    </div>
+
+    <!-- Scene 2: Why Size Right? (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle">WHY SIZE RIGHT?</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div class="split-icon">📉</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">UNDERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">No Pressure! / <span class="critical">FAIL!</span></div>
+            </div>
+            <div class="split-item">
+                <div class="split-icon">💸</div>
+                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">OVERSIZE</span></div>
+                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">Wasted Energy!</span> / High Cost!</div>
+            </div>
         </div>
     </div>
 
-    <!-- Scene 7: The "Money" Formula -->
-    <div id="scene7" class="scene">
-        <div class="title text-success">STEP 5: The Power</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Brake Horsepower (BHP)</div>
-        
-        <div class="description text-dim" style="font-size: 24px;">The industrial formula:</div>
-        <div class="spacing-small"></div>
-        
-        <div class="formula-box success" style="animation-delay: 0.1s; font-size: 16px; line-height: 1.3;">
-            BHP = [ (P<sub>in</sub> &times; ACFM) / (229 &times; &eta;<sub>poly</sub>) ] &times; [ (P<sub>out</sub>/P<sub>in</sub>)<sup>(n-1)/n</sup> - 1 ]
-        </div>
-        
-        <div class="list">
-            <div class="list-item text-white" style="font-size: 22px;">P<sub>in</sub>/P<sub>out</sub> = Inlet/Outlet Pressure</div>
-            <div class="list-item text-white" style="font-size: 22px;">n = Polytropic Exponent (~1.3)</div>
-            <div class="list-item text-white" style="font-size: 22px;">&eta;<sub>poly</sub> = Polytropic Efficiency</div>
-        </div>
+    <!-- Scene 3: STEP 1 - The Goal (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="step-number">1</div>
+        <div class="subtitle">FIND YOUR DEMAND!</div>
+        <div class="mega-icon">📊</div>
+        <div class="emphasis" style="color: #fff;">This is your <span class="critical">TARGET!</span></div>
+    </div>
 
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 4: The Unit: CFM (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">THE UNIT: (CFM)</div>
+        <div class="mega-icon">🌬️</div>
+        <div class="emphasis">"Cubic Feet per Minute"</div>
+        <div class="subtitle" style="margin-top: 1vh;">This is your <span class="critical" style="font-size: 1.5em;">FLOW (F)</span></div>
+    </div>
+
+    <!-- Scene 5: The Other Unit: PSIG (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle">THE OTHER UNIT: (PSIG)</div>
+        <div class="mega-icon">📈</div>
+        <div class="emphasis">"Pounds per Square Inch"</div>
+        <div class="subtitle" style="margin-top: 1vh;">This is your <span class="critical" style="font-size: 1.5em;">PRESSURE (P)</span></div>
+    </div>
+
+    <!-- Scene 6: STEP 2 - Find Flow (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">2</div>
+        <div class="subtitle">FIND TOTAL FLOW (F)</div>
+        <div class="mega-icon">➕</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> Sum <span class="highlight">ALL</span> tools & processes!</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> = Your <span class="critical">Base CFM!</span></div>
         </div>
     </div>
 
-    <!-- Scene 8: Air Treatment -->
-    <div id="scene8" class="scene">
-        <div class="title text-warning">STEP 6: Air Quality</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Hot, Wet & Oily Air</div>
-        
-        <div class="description text-dim" style="font-size: 24px;">Air from the compressor is useless for instruments.</div>
-        <div class="spacing-small"></div>
-        
-        <div class="card" style="animation-delay: 0.1s;">
-            <div class="card-title text-primary">Aftercooler & Dryer</div>
-            <div class="card-text text-white">Cools the air and removes moisture. (Refrigerated or Desiccant)</div>
-        </div>
-        
-        <div class="card warning" style.animation-delay: 0.2s;>
-            <div class="card-title text-warning">Filters (Coalescing)</div>
-            <div class="card-text text-white">Removes oil aerosols. Critical for "Instrument Air."</div>
-        </div>
-        
-        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>Pro Tip:</b> Specify air quality via **ISO 8573.1 Class** (e.g., "Class 1.2.1").</div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
+    <!-- Scene 7: STEP 3 - Growth (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">3</div>
+        <div class="subtitle">FUTURE GROWTH</div>
+        <div class="mega-icon">🚀</div>
+        <div class="emphasis" style="color: #fff;">Plan for the future!</div>
+        <div class="emphasis"><span class="highlight">Add 25%</span> for growth & leaks!</div>
     </div>
-    
-    <!-- Scene 9: Compressor Types -->
-    <div id="scene9" class="scene">
-        <div class="title text-primary">STEP 7: The Choice</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Compressor Types</div>
-        
-        <div class="card primary" style="animation-delay: 0.1s;">
-            <div class="card-title text-primary">Positive Displacement</div>
-            <div class="card-text text-white">(Reciprocating / Screw) <br> Good efficiency at part-load. Best for variable demand.</div>
-        </div>
-        
-        <div class="card accent" style="animation-delay: 0.2s;">
-            <div class="card-title text-accent">Centrifugal (Dynamic)</div>
-            <div class="card-text text-white">High efficiency at *full* load. Best for steady, high-demand baseloads. Risk of "Surge."</div>
-        </div>
 
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 8: STEP 4 - Find Pressure (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">4</div>
+        <div class="subtitle">FIND PRESSURE (P)</div>
+        <div class="mega-icon">🎯</div>
+        <div class="emphasis" style="color: #fff;">What's your <span class="critical">HIGHEST</span> user need?</div>
+        <div class="emphasis" style="margin-top: 1vh;"><span class="highlight">Add 10-15 PSIG</span> for drops!</div>
+    </div>
+
+    <!-- Scene 9: STEP 5 - Duty Cycle (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="step-number">5</div>
+        <div class="subtitle">DUTY CYCLE?</div>
+        <div class="mega-icon">⏳</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div style="font-weight: 800;"><span class="critical">INTERMITTENT?</span><br>(Stops / Starts)</div>
+            </div>
+            <div class="split-item">
+                <div style="font-weight: 800;"><span class="highlight">CONTINUOUS?</span><br>(Runs 24/7)</div>
+            </div>
         </div>
     </div>
 
-    <!-- Scene 10: The "Viral" Tip -->
-    <div id="scene10" class="scene">
-        <div class="title text-accent">The $10,000 Leak</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The "Real" OpEx Killer</div>
-        
-        <div class="description text-dim" style="font-size: 24px;">Your #1 enemy isn't efficiency. It's leaks.</div>
-        <div class="spacing-small"></div>
-        
-        <div class="card accent" style="animation-delay: 0.1s;">
-            <div class="card-title text-accent">A Single 1/4" (6mm) Leak</div>
-            <div class="card-text text-white">At 100 psi, a tiny leak like this can cost over <b>$10,000 per year</b> in wasted electricity.</div>
-        </div>
-        
-        <div class="card-text text-success" style="font-size: 20px; margin-top: 10px;"><b>Pro Tip:</b> An ultrasonic leak detector will pay for itself in one day.</div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
-        </div>
+    <!-- Scene 10: STEP 6 - Choose Type (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="step-number">6</div>
+        <div class="subtitle">CHOOSE YOUR TYPE</div>
+        <div class="mega-icon">⚙️</div>
+        <div class="emphasis">This is <span class="critical">KEY!</span></div>
     </div>
-    
-    <!-- Scene 11: Final Spec Sheet -->
-    <div id="scene11" class="scene">
-        <div class="title text-warning">STEP 8: OEM Spec</div>
-        <div class="subtitle text-white" style="font-size: 32px;">What to Tell the Vendor</div>
-        
-        <div class="list" style="font-size: 24px; line-height: 1.3;">
-            <div class="list-item text-white">✓ <b>Required SCFM</b></div>
-            <div class="list-item text-white">✓ <b>Site Conditions:</b></div>
-            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">Altitude, Ambient Temp</div>
-            <div class="list-item text-white">✓ <b>Calculated ACFM</b></div>
-            <div class="list-item text-white">✓ <b>Discharge Pressure</b></div>
-            <div class="list-item text-white">✓ <b>Required Air Quality:</b></div>
-            <div class="list-item text-dim" style="padding-left: 45px; font-size: 22px;">ISO 8573.1 Class</div>
-            <div class="list-item text-white">✓ <b>Compressor Type</b></div>
-            <div class="list-item text-white">✓ <b>Motor (kW/BHP, VFD?)</b></div>
-        </div>
-        
-        <div class="text-dim footer-credit">
-            prepared by https://designcalculators.co.in
+
+    <!-- Scene 11: Type: Reciprocating (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">RECIPROCATING (PISTON)</div>
+        <div class="mega-icon" style="color: var(--electric-cyan);">🔧</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Intermittent</span> Use</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> High Pressure (PSIG)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Lower First Cost</div>
         </div>
     </div>
 
-    <!-- Scene 12: Final Message -->
-    <div id="scene12" class="scene">
-        <div class="icon" style="font-size: 80px;">✅</div>
-        <div class="title text-accent">Don't Buy "CFM"</div>
-        <div class="title text-primary">Demand "SCFM"!</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-success" style="font-size: 26px;">This is the #1 secret to industrial air sizing.</div>
-        
-        <div class="spacing-medium"></div>
-
-        <div class="cta-box">
-            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
-            <div class="cta-url text-success">https://designcalculators.co.in</div>
+    <!-- Scene 12: Type: Rotary Screw (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle">ROTARY SCREW</div>
+        <div class="mega-icon" style="color: var(--plasma-purple);">🌀</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">Continuous</span> Use (24/7)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> High Flow (CFM)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Better Efficiency</div>
         </div>
-
-        <div class="spacing-medium"></div>
-        <div class="description text-dim" style="font-size: 20px;">Save & Share With Your Engineering Team</div>
     </div>
+
+    <!-- Scene 13: Type: Centrifugal (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle">CENTRIFUGAL</div>
+        <div class="mega-icon" style="color: var(--volt-yellow);">🌪️</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">HUGE</span> Flow (CFM)</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="highlight">Oil-Free</span> Air</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Process Air</div>
+        </div>
+    </div>
+
+    <!-- Scene 14: STEP 7 - Air Quality (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="step-number">7</div>
+        <div class="subtitle">AIR QUALITY?</div>
+        <div class="mega-icon">🧪</div>
+        <div class="split-box">
+            <div class="split-item">
+                <div style="font-weight: 800;">Standard<br>Plant Air?</div>
+            </div>
+            <div class="split-item">
+                <div style="font-weight: 800;"><span class="critical">OIL-FREE?</span><br>(Food/Pharma)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 15: STEP 8 - Derating (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="step-number">8</div>
+        <div class="mega-icon shake-danger" style="color: var(--danger-red);">👻</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLER!</div>
+        <div class="subtitle"><span class="critical">DERATING!</span></div>
+    </div>
+
+    <!-- Scene 16: Derating Factors (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle">DERATING?</div>
+        <div class="mega-icon">📉</div>
+        <div class="content-box">
+            <div class="bullet-item"><span class="bullet-icon">🔥</span> High Ambient Temp?</div>
+            <div class="bullet-item"><span class="bullet-icon">🏔️</span> High Altitude?</div>
+            <div class="bullet-item"><span class="bullet-icon">➡️</span> = <span class="critical">LESS AIR!</span></div>
+        </div>
+        <div class="emphasis" style="color: var(--danger-red);"><span class="critical">MUST SIZE UP!</span></div>
+    </div>
+
+    <!-- Scene 17: STEP 9 - Storage (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">9</div>
+        <div class="subtitle">AIR RECEIVER (TANK)</div>
+        <div class="mega-icon">📦</div>
+        <div class="content-box" style="padding: 1.5vh 3vw;">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Stores Air</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Reduces Cycles</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Handles <span class="highlight">Surges!</span></div>
+        </div>
+    </div>
+
+    <!-- Scene 18: Quick Checklist (6.5s) -->
+    <div class="scene" data-duration="6500">
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">FINAL CHECKLIST!</div>
+        <div class="content-box" style="width: 85%; padding: 2vh 4vw; font-size: clamp(0.8rem, 3.5vw, 1.1rem);">
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Total CFM (+ Growth)?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Max PSIG (+ Drops)?</span></div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Duty Cycle (Inter/Cont)?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Compressor Type?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Air Quality (Oil-Free)?</div>
+            <div class="bullet-item"><span class="bullet-icon">✅</span> Derated (Temp/Alt)?</div>
+        </div>
+    </div>
+
+    <!-- Scene 19: The Result (4.0s) -->
+    <div class="scene" data-duration="4000">
+        <div class="mega-icon">🎯</div>
+        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THIS =</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">PERFECT PRESSURE!</div>
+        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);"><span class="highlight" style="color: var(--success-green);">ZERO DOWNTIME!</span></div>
+    </div>
+
+    <!-- Scene 20: FINAL CTA (7.0s) -->
+    <div class="scene" data-duration="7000">
+        <div class="mega-icon">👍</div>
+        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.4rem);">WANT PRECISION TOOLS?</div>
+        <div class="final-cta">EXACT CALCULATIONS</div>
+        <div class="subtitle" style="margin-top: 2vh;">Visit Website:</div>
+        <a href="https://designcalculators.co.in" class="website-link" target="_blank">
+            https://designcalculators.co.in
+        </a>
+    </div>
+
+    <!-- Footer Brand - Shows on ALL pages (Same as original) -->
+    <div class="footer-brand">
+        <div class="footer-text">PREPARED BY:</div>
+        <div class="footer-website">designcalculators.co.in</div>
+    </div>
+
+    <!-- Progress Bar - Above footer (Same as original) -->
+    <div class="progress-bar" id="progress"></div>
+
 </div>
 
 <script>
-    // Updated scenes array
-    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; 
-    // Updated durations in ms
-    const sceneDurations = [
-        8000,  // Scene 1: Hook
-        15000, // Scene 2: The #1 Trap (ACFM vs SCFM)
-        12000, // Scene 3: Demand (SCFM)
-        15000, // Scene 4: Correction (ACFM)
-        15000, // Scene 5: Total Pressure (The OpEx Trap)
-        12000, // Scene 6: The "Real" Physics
-        15000, // Scene 7: The "Money" Formula (BHP)
-        15000, // Scene 8: Air Treatment (ISO Class)
-        12000, // Scene 9: Compressor Types
-        12000, // Scene 10: The "Viral" Tip ($10k Leak)
-        15000, // Scene 11: Final Spec Sheet
-        8000   // Scene 12: Final Message
-    ];
+    // All JavaScript is identical to the provided file for functionality
+    const container = document.getElementById('container');
+    const scenes = document.querySelectorAll('.scene');
+    const progressBar = document.getElementById('progress');
+    const currentCounter = document.getElementById('current');
+    const totalCounter = document.getElementById('total');
+    
     let currentScene = 0;
-    let sceneTimeout; // Use setTimeout instead of setInterval
-
-    function showScene(index) {
-        // Clear any existing timer
-        clearTimeout(sceneTimeout);
-
-        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
-        const sceneElement = document.getElementById(`scene${scenes[index]}`);
-        if(sceneElement) {
-            sceneElement.classList.remove('hidden');
-            sceneElement.scrollTop = 0;
+    let sceneTimer;
+    let progressInterval;
+    let progressValue = 0;
+    
+    // Set total scene count dynamically
+    totalCounter.textContent = scenes.length;
+    
+    // Create enhanced particles
+    function createParticles() {
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            container.appendChild(particle);
         }
-        
-        // Ensure index is valid for durations array
-        const durationIndex = index % sceneDurations.length;
-        const duration = sceneDurations[durationIndex];
-        
-        // Schedule the next scene based on the current scene's duration
-        sceneTimeout = setTimeout(nextScene, duration);
     }
-
+    
+    // Create lightning effects
+    function createLightning() {
+        for (let i = 0; i < 5; i++) {
+            const lightning = document.createElement('div');
+            lightning.className = 'lightning';
+            lightning.style.left = Math.random() * 100 + '%';
+            lightning.style.animationDelay = Math.random() * 8 + 's';
+            container.appendChild(lightning);
+        }
+    }
+    
+    createParticles();
+    createLightning();
+    
+    function showScene(index) {
+        // Hide all scenes
+        scenes.forEach(s => s.classList.remove('active'));
+        
+        // Show current scene
+        if (scenes[index]) {
+            scenes[index].classList.add('active');
+            scenes[index].classList.add('fade-in');
+            currentCounter.textContent = index + 1;
+            
+            // Reset and start progress bar
+            progressValue = 0;
+            const duration = parseInt(scenes[index].dataset.duration);
+            const updateInterval = 50; // Update every 50ms
+            const increment = (100 / duration) * updateInterval;
+            
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                progressValue += increment;
+                if (progressValue >= 100) {
+                    progressValue = 100;
+                    clearInterval(progressInterval);
+                }
+                progressBar.style.width = progressValue + '%';
+            }, updateInterval);
+        }
+    }
+    
     function nextScene() {
         currentScene = (currentScene + 1) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
     function prevScene() {
         currentScene = (currentScene - 1 + scenes.length) % scenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
-    // Initial load
-    showScene(0); // This will show scene 0 and schedule scene 1
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            nextScene(); // This will show the next scene and reset the timer
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevScene(); // This will show the previous scene and reset the timer
-        }
+    function scheduleNextScene() {
+        clearTimeout(sceneTimer);
+        const duration = parseInt(scenes[currentScene].dataset.duration);
+        sceneTimer = setTimeout(nextScene, duration);
+    }
+    
+    // Start the show
+    showScene(0);
+    scheduleNextScene();
+    
+    // Click to advance
+    let clickDisabled = false;
+    container.addEventListener('click', (e) => {
+        // Do not advance if clicking a link
+        if (clickDisabled || e.target.tagName === 'A' || e.target.closest('A')) return;
+        clickDisabled = true;
+        nextScene();
+        setTimeout(() => clickDisabled = false, 300);
     });
+    
+    // Swipe support
+    let touchStartX = 0;
+    container.addEventListener('touchstart', (e) => {
+        if (e.target.tagName === 'A' || e.target.closest('A')) return;
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    container.addEventListener('touchend', (e) => {
+        if (!touchStartX || e.target.tagName === 'A' || e.target.closest('A')) {
+            touchStartX = 0;
+            return;
+        }
+        const touchEndX = e.changedTouches[0].screenX;
+        const diff = touchEndX - touchStartX;
+        touchStartX = 0;
+        
+        if (Math.abs(diff) > 50) {
+            if (!clickDisabled) {
+                clickDisabled = true;
+                if (diff < 0) nextScene(); // Swipe left
+                else prevScene(); // Swipe right
+                setTimeout(() => clickDisabled = false, 300);
+            }
+        }
+    }, { passive: true });
 </script>
 
 </body>
