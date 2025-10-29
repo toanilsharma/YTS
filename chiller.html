@@ -60,38 +60,7 @@
             border: 1px solid rgba(0, 217, 255, 0.3);
         }
 
-        /* START OVERLAY */
-        #start-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(5, 5, 10, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: opacity 0.5s ease-out;
-        }
-        #start-button {
-            font-size: 6rem;
-            animation: pulse 1.5s ease-in-out infinite;
-            color: var(--electric-blue);
-        }
-        #start-overlay p {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.5rem;
-            color: var(--neon-green);
-            text-shadow: 0 0 20px var(--neon-green);
-            margin-top: 1rem;
-            text-transform: uppercase;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.2); opacity: 1; }
-        }
+        /* START OVERLAY - REMOVED */
 
         /* MUTE CONTROL - REMOVED */
 
@@ -209,11 +178,12 @@
         }
         .info-block {
             width: 100%;
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(176, 36, 255, 0.05) 100%);
-            border: 1px solid rgba(0, 217, 255, 0.2);
-            border-radius: 12px;
-            padding: 1.5vh 3vw;
-            backdrop-filter: blur(5px);
+            /* background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(176, 36, 255, 0.05) 100%); */
+            /* border: 1px solid rgba(0, 217, 255, 0.2); */
+            /* border-radius: 12px; */
+            /* padding: 1.5vh 3vw; */
+            /* backdrop-filter: blur(5px); */
+            margin-bottom: 1.5vh; /* Add space between items */
         }
         .info-block-value {
             font-family: 'Orbitron', sans-serif;
@@ -250,7 +220,7 @@
         }
         .info-block-stack.three-col .info-block {
             width: 30%; /* Three columns */
-            padding: 2vh 1vw;
+            /* padding: 2vh 1vw; */ /* REMOVED */
         }
         .info-block-stack.three-col .info-block-value {
             font-size: clamp(1.2rem, 5vw, 1.8rem);
@@ -403,11 +373,7 @@
         <!-- Background Effects -->
         <div class="grid-3d"></div>
         
-        <!-- Start Overlay -->
-        <div id="start-overlay">
-            <div id="start-button">▶️</div>
-            <p>TAP TO START</p>
-        </div>
+        <!-- Start Overlay - REMOVED -->
 
         <!-- UI Controls -->
         <!-- Mute Toggle Removed -->
@@ -481,7 +447,7 @@
             <div class="subtitle">STEP 3: Inverter AC!</div>
             <div class="emphasis" style="margin-top: -1vh; margin-bottom: 2vh; color: var(--ice-white);">(The #1 Money Saver!)</div>
             <div class="info-block-stack two-col">
-                <div class="info-block" style="border-color: var(--neon-green); box-shadow: 0 0 30px var(--neon-green);">
+                <div class="info-block"> <!-- STYLE REMOVED FROM HERE -->
                     <div class="info-block-value">✅ Inverter</div>
                     <div class="info-block-label">Smart Compressor<br>Saves 30-50% Power!<br>Super Quiet</div>
                 </div>
@@ -497,7 +463,7 @@
         <div class="scene" data-duration="7000">
             <div class="subtitle">STEP 4: Check The Stars ⭐</div>
              <div class="info-block-stack two-col">
-                <div class="info-block" style="border-color: var(--neon-green); box-shadow: 0 0 30px var(--neon-green);">
+                <div class="info-block"> <!-- STYLE REMOVED FROM HERE -->
                     <div class="info-block-value">⭐⭐⭐⭐⭐</div>
                     <div class="info-block-label">Use it <span class="highlight">EVERY DAY?</span><br>BUY THIS!</div>
                 </div>
@@ -562,7 +528,7 @@
         const scenes = document.querySelectorAll('.scene');
         const progressBar = document.getElementById('progress');
         const countdownDisplay = document.getElementById('countdown');
-        const startOverlay = document.getElementById('start-overlay');
+        // const startOverlay = document.getElementById('start-overlay'); // REMOVED
         // muteToggle reference removed
 
         let currentScene = 0;
@@ -633,13 +599,11 @@
             }, 1000);
         }
 
-        // Start button - Simplified (no audio)
-        startOverlay.addEventListener('click', () => {
+        // Start button - REMOVED
+        
+        // NEW: Autostart on load
+        window.addEventListener('load', () => {
             if (isPlaying) return; // Prevent multiple clicks
-
-            startOverlay.style.opacity = '0';
-            startOverlay.style.pointerEvents = 'none';
-            
             isPlaying = true;
             showScene(0);
             startCountdown();
