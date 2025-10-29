@@ -3,773 +3,611 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- Title changed to new topic -->
-    <title>❄️ Chiller Sizing MASTERY</title>
+    <title>❄️ Complete AC Buying Guide - 60 Seconds!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=Orbitron:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Removed Tone.js as audio is removed -->
+
     <style>
-        /* All CSS is identical to the provided file for theme consistency */
         :root {
-            --electric-cyan: #00ffff;
-            --neon-pink: #ff0080;
-            --volt-yellow: #ffff00;
-            --plasma-purple: #bf00ff;
-            --danger-red: #ff1744;
-            --success-green: #00ff41;
-            --dark: #0a0a0f;
-            --darker: #050508;
+            --electric-blue: #00d9ff;
+            --cyber-purple: #b024ff;
+            --neon-green: #39ff14;
+            --plasma-pink: #ff006e;
+            --volt-orange: #ff6b00;
+            --danger-red: #ff0040;
+            --volt-yellow: #ffea00;
+            --dark-void: #05050a;
+            --deep-purple: #0a0015;
+            --ice-white: #f0f8ff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         html, body {
-            width: 100%; height: 100%; overflow: hidden;
-            background: var(--darker);
+            width: 100%;
+            height: 100dvh; 
+            overflow: hidden;
+            background: var(--dark-void);
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
-            display: flex; justify-content: center; align-items: center;
-            font-family: 'Inter', sans-serif; color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            color: #fff;
         }
 
         #container {
-            width: 100%; max-width: 450px; height: 100vh; max-height: 800px;
-            aspect-ratio: 9/16; background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 100%);
-            position: relative; overflow: hidden; cursor: pointer;
-            box-shadow: 0 0 100px rgba(0, 255, 255, 0.4);
+            width: 100%;
+            max-width: 450px; 
+            height: 100dvh;
+            max-height: 800px;
+            aspect-ratio: 9/16;
+            background: radial-gradient(circle at 30% 20%, #001f33 0%, #05050a 50%, #000510 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 150px rgba(0, 217, 255, 0.6), 0 0 300px rgba(176, 36, 255, 0.4);
+            border: 1px solid rgba(0, 217, 255, 0.3);
         }
 
-        /* Animated Background Grid */
-        .grid-bg {
+        /* START OVERLAY */
+        #start-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(5, 5, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.5s ease-out;
+        }
+        #start-button {
+            font-size: 6rem;
+            animation: pulse 1.5s ease-in-out infinite;
+            color: var(--electric-blue);
+        }
+        #start-overlay p {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            margin-top: 1rem;
+            text-transform: uppercase;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* MUTE CONTROL - REMOVED */
+
+        /* Background Effects */
+        .grid-3d {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
+            background-image:
+                linear-gradient(rgba(0, 217, 255, 0.1) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(176, 36, 255, 0.1) 2px, transparent 2px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(60deg) scale(2);
+            transform-origin: center center;
+            animation: grid3DMove 15s linear infinite;
             z-index: 0;
+            opacity: 0.4;
+        }
+        @keyframes grid3DMove {
+            0% { transform: perspective(500px) rotateX(60deg) scale(2) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) scale(2) translateY(50px); }
         }
 
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
-        }
-
-        /* Enhanced Particle Effect */
-        .particle {
+        .particle-glow {
             position: absolute;
             width: 4px; height: 4px;
-            background: var(--electric-cyan);
-            border-radius: 50%;
+            background: radial-gradient(circle, var(--ice-white), transparent);
+            box-shadow: 0 0 15px var(--ice-white);
+            animation: particleFall 7s ease-in infinite;
+            z-index: 2;
             pointer-events: none;
-            animation: particleFloat 4s linear infinite;
-            box-shadow: 0 0 12px var(--electric-cyan);
         }
-
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; }
+        @keyframes particleFall {
+            0% { transform: translateY(-10vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: scale(1); }
             90% { opacity: 1; }
-            100% { transform: translateY(-20vh) translateX(50px) scale(1); opacity: 0; }
+            100% { transform: translateY(100vh) translateX(20px) scale(0.5); opacity: 0; }
         }
 
-        /* Lightning Effect */
-        .lightning {
-            position: absolute;
-            width: 2px;
-            height: 60px;
-            background: linear-gradient(180deg, transparent, var(--electric-cyan), transparent);
-            box-shadow: 0 0 20px var(--electric-cyan);
-            animation: lightning 8s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes lightning {
-            0%, 100% { opacity: 0; transform: translateY(-100px); }
-            5% { opacity: 1; transform: translateY(0); }
-            10% { opacity: 0; transform: translateY(100vh); }
-        }
-
+        /* Scene Container */
         .scene {
             position: absolute;
             width: 100%; height: 100%;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            padding: 8vh 6vw 14vh 6vw; /* Added bottom padding for footer */
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10vh 8vw 18vh 8vw; 
             text-align: center;
             z-index: 10;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+        }
+        
+        .scene.active {
+            display: flex;
+            animation: sceneSlideIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes sceneSlideIn {
+            0% { opacity: 0; transform: translateX(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateX(0) scale(1); }
         }
 
-        /* Typography with WOW factor */
+        /* Typography */
         .mega-title {
-            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.2rem, 8.5vw, 3.5rem);
             font-weight: 900;
-            line-height: 1;
-            letter-spacing: -1px;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
             text-transform: uppercase;
-            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow));
+            background: linear-gradient(135deg, var(--electric-blue) 0%, var(--ice-white) 30%, var(--neon-green) 60%, var(--cyber-purple) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite, titlePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background-size: 300% 300%;
+            animation: megaGradient 4s ease infinite;
             margin-bottom: 1.5vh;
-            filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+            filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.8));
+            text-shadow: 0 0 40px rgba(240, 248, 255, 0.5);
         }
-
-        @keyframes gradientShift {
+        @keyframes megaGradient {
             0%, 100% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
         }
 
-        @keyframes titlePop {
-            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
-            60% { transform: scale(1.1) rotate(2deg); }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
         .subtitle {
-            font-size: clamp(1rem, 4.5vw, 1.6rem);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.1rem, 5vw, 1.8rem); 
             font-weight: 800;
             color: var(--volt-yellow);
-            text-shadow: 0 0 25px rgba(255, 255, 0, 0.7), 0 0 50px rgba(255, 255, 0, 0.3);
-            animation: slideInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+            text-shadow: 0 0 30px rgba(255, 234, 0, 0.9), 0 0 60px rgba(255, 234, 0, 0.5);
             margin-bottom: 2vh;
-        }
-
-        @keyframes slideInUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            letter-spacing: 0.5px;
+            line-height: 1.3;
         }
 
         .mega-icon {
             font-size: clamp(4rem, 18vw, 8rem);
-            animation: iconEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards,
-                         iconFloat 3s ease-in-out infinite 1s;
             margin: 2vh 0;
-            filter: drop-shadow(0 0 35px currentColor);
+            filter: drop-shadow(0 0 40px currentColor);
+            animation: iconPulse 2s ease-in-out infinite;
         }
-
-        @keyframes iconEntrance {
-            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
-
-        .step-number {
-            font-size: clamp(3rem, 13vw, 5rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: numberZoom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            line-height: 1;
-            margin-bottom: 1vh;
-            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.6));
-        }
-
-        @keyframes numberZoom {
-            0% { transform: scale(0) rotate(180deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        .content-box {
-            background: rgba(0, 255, 255, 0.06);
-            border: 2px solid rgba(0, 255, 255, 0.4);
-            border-radius: 20px;
-            padding: 2.5vh 4vw;
-            margin: 2vh 0;
-            width: 90%;
-            max-width: 380px;
-            backdrop-filter: blur(10px);
-            animation: boxGlow 2s ease-in-out infinite alternate;
-            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
-        }
-
-        @keyframes boxGlow {
-            0% { 
-                box-shadow: 0 8px 32px rgba(0, 255, 255, 0.15), inset 0 0 30px rgba(0, 255, 255, 0.08);
-                border-color: rgba(0, 255, 255, 0.4);
-            }
-            100% { 
-                box-shadow: 0 8px 40px rgba(0, 255, 255, 0.35), inset 0 0 40px rgba(0, 255, 255, 0.15);
-                border-color: rgba(0, 255, 255, 0.6);
-            }
-        }
-
-        /* Animation: Pulsing Border for emphasis */
-        .pulse-border-anim {
-            animation: pulseBorder 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulseBorder {
-            0%, 100% { border-color: rgba(0, 255, 255, 0.4); }
-            50% { border-color: var(--volt-yellow); box-shadow: 0 0 30px var(--volt-yellow); }
-        }
-
-        /* Animation: Screen Shake */
-        .shake-danger {
-            animation: screenShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-        }
-
-        @keyframes screenShake {
-          10%, 90% { transform: translate3d(-1px, 0, 0); }
-          20%, 80% { transform: translate3d(2px, 0, 0); }
-          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-          40%, 60% { transform: translate3d(4px, 0, 0); }
-        }
-
-        .bullet-item {
-            display: flex; align-items: center; justify-content: flex-start;
-            margin: 1.2vh 0;
-            font-size: clamp(0.9rem, 3.8vw, 1.2rem);
-            font-weight: 700;
-            text-align: left;
-            animation: bulletSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-            color: #fff;
-        }
-
-        .bullet-item:nth-child(1) { animation-delay: 0.1s; }
-        .bullet-item:nth-child(2) { animation-delay: 0.2s; }
-        .bullet-item:nth-child(3) { animation-delay: 0.3s; }
-        .bullet-item:nth-child(4) { animation-delay: 0.4s; }
-        .bullet-item:nth-child(5) { animation-delay: 0.5s; }
-        .bullet-item:nth-child(6) { animation-delay: 0.6s; }
-        .bullet-item:nth-child(7) { animation-delay: 0.7s; }
-
-        @keyframes bulletSlide {
-            from { transform: translateX(-50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .bullet-icon {
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
-            margin-right: 2vw;
-            animation: iconPulse 1.5s ease-in-out infinite;
-        }
-
         @keyframes iconPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.08); }
         }
 
-        .highlight {
-            color: var(--volt-yellow);
+        /* NEW: Stacked Info Blocks (replaces tables) */
+        .info-block-stack {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5vh;
+            margin: 1.5vh 0;
+        }
+        .info-block {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, rgba(176, 36, 255, 0.05) 100%);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5vh 3vw;
+            backdrop-filter: blur(5px);
+        }
+        .info-block-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 6vw, 2.2rem);
             font-weight: 900;
-            text-shadow: 0 0 12px rgba(255, 255, 0, 0.6);
+            color: var(--neon-green);
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.7);
+            line-height: 1.1;
+        }
+        .info-block-label {
+            font-size: clamp(0.9rem, 3.8vw, 1.1rem);
+            font-weight: 700;
+            color: var(--ice-white);
+            margin-top: 0.5vh;
+            line-height: 1.3; /* Added for multi-line labels */
+        }
+
+        /* Specific styles for 2-column blocks */
+        .info-block-stack.two-col {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5vh 2vw; /* Added column gap */
+        }
+        .info-block-stack.two-col .info-block {
+            width: 48%; /* Two columns with a gap */
+        }
+         /* Specific styles for 3-column blocks */
+        .info-block-stack.three-col {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2vw;
+        }
+        .info-block-stack.three-col .info-block {
+            width: 30%; /* Three columns */
+            padding: 2vh 1vw;
+        }
+        .info-block-stack.three-col .info-block-value {
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
+        }
+         .info-block-stack.three-col .info-block-label {
+            font-size: clamp(0.8rem, 3vw, 1rem);
+            line-height: 1.2;
+        }
+
+
+        .highlight {
+            color: var(--neon-green);
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(57, 255, 20, 0.8);
         }
 
         .critical {
             color: var(--danger-red);
             font-weight: 900;
-            text-transform: uppercase;
-            animation: criticalPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes criticalPulse {
-            0%, 100% { text-shadow: 0 0 10px rgba(255, 23, 68, 0.8); }
-            50% { text-shadow: 0 0 30px rgba(255, 23, 68, 1); }
-        }
-
-        .split-box {
-            display: flex;
-            justify-content: space-around;
-            width: 90%;
-            max-width: 380px;
-            gap: 3vw;
-        }
-
-        .split-item {
-            flex: 1;
-            background: rgba(0, 255, 255, 0.06);
-            border: 2px solid rgba(0, 255, 255, 0.4);
-            border-radius: 15px;
-            padding: 2vh 2vw;
-            animation: splitPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
-            transition: all 0.3s ease;
-        }
-
-        .split-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
-        }
-
-        .split-item:nth-child(1) { animation-delay: 0.2s; }
-        .split-item:nth-child(2) { animation-delay: 0.35s; }
-
-        @keyframes splitPop {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .split-icon {
-            font-size: clamp(2rem, 8vw, 3rem);
-            margin-bottom: 1vh;
+            text-shadow: 0 0 20px rgba(255, 0, 64, 0.8);
         }
 
         .emphasis {
-            font-size: clamp(1.2rem, 5vw, 1.8rem);
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.1rem, 4.5vw, 1.7rem); /* Made smaller */
             font-weight: 900;
-            color: var(--success-green);
-            text-shadow: 0 0 25px rgba(0, 255, 65, 0.7), 0 0 50px rgba(0, 255, 65, 0.3);
-            animation: emphasize 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+            color: var(--neon-green);
+            text-shadow: 0 0 30px rgba(57, 255, 20, 0.9);
             margin: 2vh 0;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
         }
 
-        @keyframes emphasize {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.15); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .final-cta {
-            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
-            padding: 2vh 5vw;
-            border-radius: 50px;
-            font-size: clamp(1rem, 4.5vw, 1.5rem);
-            font-weight: 900;
-            text-transform: uppercase;
-            margin: 2vh 0;
-            animation: ctaPulse 2s ease-in-out infinite, ctaEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
-            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6);
-            max-width: 85%;
-        }
-
-        @keyframes ctaPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 70px rgba(255, 0, 128, 0.9); }
-        }
-
-        @keyframes ctaEntrance {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .website-link {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(1.1rem, 4.8vw, 1.6rem);
+        /* MODIFIED: Simple List (now centered) */
+        .simple-list {
+            text-align: center; /* Centered text */
+            margin: 1.5vh 0;
+            font-size: clamp(0.9rem, 4vw, 1.2rem); /* Made smaller to fit more text */
+            line-height: 1.5; /* Adjusted line height */
             font-weight: 700;
-            color: var(--volt-yellow);
-            text-decoration: none;
-            background: rgba(255, 255, 0, 0.12);
-            padding: 1.5vh 4vw;
-            border-radius: 15px;
-            border: 2px solid var(--volt-yellow);
-            display: inline-block;
-            margin-top: 2vh;
-            animation: linkGlow 2s ease-in-out infinite, linkEntrance 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s backwards;
-            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .simple-list div {
+            margin: 1.5vh 0; /* Increased margin */
+            position: relative;
+            padding: 0 1em; /* Padding to avoid icon overlap */
+            line-height: 1.5; /* Added for multi-line */
         }
 
-        .website-link:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 0, 0.2);
-        }
-
-        @keyframes linkGlow {
-            0%, 100% { box-shadow: 0 0 25px rgba(255, 255, 0, 0.4); }
-            50% { box-shadow: 0 0 50px rgba(255, 255, 0, 0.7); }
-        }
-
-        @keyframes linkEntrance {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* FOOTER - Fixed at bottom with branding */
+        /* Footer */
         .footer-brand {
             position: absolute;
-            bottom: 6vh;
+            bottom: 5vh;
             left: 0;
             width: 100%;
             text-align: center;
             z-index: 100;
-            padding: 1.5vh 4vw;
-            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9));
-            backdrop-filter: blur(10px);
+            padding: 1.8vh 4vw;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8) 40%, rgba(5, 5, 10, 0.95));
+            backdrop-filter: blur(15px);
         }
-
         .footer-text {
             font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.7rem, 3.2vw, 0.95rem);
+            font-size: clamp(0.72rem, 3.3vw, 0.98rem);
             font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 0.5vh;
-            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.6vh;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
-
         .footer-website {
             font-family: 'JetBrains Mono', monospace;
-            font-size: clamp(0.85rem, 3.8vw, 1.15rem);
+            font-size: clamp(0.9rem, 4vw, 1.2rem);
             font-weight: 700;
-            color: var(--volt-yellow);
-            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
-            animation: footerPulse 3s ease-in-out infinite;
-            letter-spacing: 0.3px;
+            background: linear-gradient(135deg, var(--electric-blue), var(--volt-yellow), var(--electric-blue));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: footerGradient 3s ease infinite;
+            letter-spacing: 0.5px;
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.6));
         }
-
-        @keyframes footerPulse {
-            0%, 100% { opacity: 0.85; }
-            50% { opacity: 1; }
+        @keyframes footerGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
-
-        /* Progress Bar - Above footer */
+        
+        /* Progress Bar */
         .progress-bar {
             position: absolute;
-            bottom: 4vh;
+            bottom: 3vh;
             left: 0;
-            height: 5px;
-            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow), var(--plasma-purple));
-            background-size: 200% 100%;
-            animation: progressGradient 3s linear infinite;
-            transition: width 0.1s linear;
+            height: 6px;
+            background: linear-gradient(90deg, var(--electric-blue) 0%, var(--cyber-purple) 25%, var(--neon-green) 50%, var(--plasma-pink) 75%, var(--volt-orange) 100%);
+            background-size: 300% 100%;
+            animation: progressFlow 4s linear infinite;
+            transition: width 0.05s linear;
             z-index: 101;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 128, 0.5);
-            border-radius: 0 5px 5px 0;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.9);
+            border-radius: 0 10px 10px 0;
         }
-
-        @keyframes progressGradient {
+        @keyframes progressFlow {
             0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
+            100% { background-position: 300% 50%; }
         }
-
-        .scene-counter {
+        
+        /* 60-Second Countdown Clock - UPDATED */
+        .countdown-clock {
             position: absolute;
             top: 2vh; right: 4vw;
-            font-size: clamp(0.85rem, 3.8vw, 1.1rem);
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.6);
+            width: clamp(45px, 13vw, 55px);  /* Fixed size circle */
+            height: clamp(45px, 13vw, 55px); /* Fixed size circle */
+            font-size: clamp(1.1rem, 5vw, 1.6rem);
+            font-weight: 900;
+            color: var(--volt-yellow);
             z-index: 100;
-            font-family: 'JetBrains Mono', monospace;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 0.8vh 2vw;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 50%; /* Make it round */
+            border: 3px solid var(--volt-yellow);
+            box-shadow: 0 0 20px rgba(255, 234, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1; /* Center text vertically */
+            background: rgba(0, 0, 0, 0.6); /* Keep a slight bg */
             backdrop-filter: blur(5px);
         }
-
-        /* Corner Accent Glow */
-        .corner-glow {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1;
+        .sec { /* Style for the "s" */
+             font-size: 0.5em;
+             color: var(--volt-yellow);
+             margin-left: 2px;
+             font-weight: 700;
+             font-family: 'Inter', sans-serif;
+             transform: translateY(1px); /* Align it better */
         }
+        /* Removed .countdown-clock::before */
 
-        .corner-glow.top-left {
-            top: -75px;
-            left: -75px;
-            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
-            animation: glowPulse 4s ease-in-out infinite;
+        /* Responsive Safety */
+        @media (max-height: 700px) {
+            .scene { padding: 8vh 8vw 16vh 8vw; }
         }
-
-        .corner-glow.bottom-right {
-            bottom: -75px;
-            right: -75px;
-            background: radial-gradient(circle, rgba(255, 0, 128, 0.2), transparent 70%);
-            animation: glowPulse 4s ease-in-out infinite 2s;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.2); opacity: 0.6; }
-        }
-
-        /* Hide scenes by default */
-        .scene { display: none; }
-        .scene.active { display: flex; }
-
-        .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @media (max-width: 380px) {
+            .mega-title { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-
-<div id="container">
-    <div class="grid-bg"></div>
-    <div class="corner-glow top-left"></div>
-    <div class="corner-glow bottom-right"></div>
-    
-    <!-- Total scene count is 19 -->
-    <div class="scene-counter"><span id="current">1</span>/<span id="total">19</span></div>
-    
-    <!-- 
-    ====================================================================
-    NEW SCENE CONTENT FOR CHILLER SIZING (92.5s Total)
-    ====================================================================
-    -->
-
-    <!-- Scene 1: HOOK (4.0s) -->
-    <div class="scene active" data-duration="4000">
-        <div class="mega-title">CHILLER SIZING</div>
-        <div class="subtitle">Get It Wrong? 🌡️ <span class="critical">MELTDOWN!</span></div>
-        <div class="mega-icon shake-danger">❄️</div>
-        <div class="emphasis">Master It in 90 Seconds!</div>
-    </div>
-
-    <!-- Scene 2: Why Size Right? (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="subtitle">WHY SIZE RIGHT?</div>
-        <div class="split-box">
-            <div class="split-item">
-                <div class="split-icon">📉</div>
-                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">UNDERSIZE</span></div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Hot Product! / <span class="critical">FAIL!</span></div>
-            </div>
-            <div class="split-item">
-                <div class="split-icon">💸</div>
-                <div style="font-weight: 800; margin-bottom: 1vh;"><span class="critical">OVERSIZE</span></div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">Wasted Energy!</span> / High Cost!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scene 3: STEP 1 - The Goal (4.0s) -->
-    <div class="scene" data-duration="4000">
-        <div class="step-number">1</div>
-        <div class="subtitle">FIND THE HEAT LOAD (Q)</div>
-        <div class="mega-icon">🔥</div>
-        <div class="emphasis" style="color: #fff;">This is your <span class="critical">TARGET!</span></div>
-    </div>
-
-    <!-- Scene 4: The Unit: TR (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="subtitle">THE UNIT: (TR)</div>
-        <div class="mega-icon">❄️</div>
-        <div class="emphasis">"Tons of Refrigeration"</div>
-        <div class="subtitle" style="margin-top: 1vh;">(Or kW of Cooling)</div>
-    </div>
-
-    <!-- Scene 5: The Golden Formula (6.0s) -->
-    <div class="scene" data-duration="6000">
-        <div class="subtitle">THE GOLDEN FORMULA</div>
-        <div class="mega-icon">🧮</div>
-        <div class="content-box pulse-border-anim" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1.5rem, 6.5vw, 2.2rem); padding: 3vh 4vw;">
-            Q = m * c<sub style="font-size: 0.7em;">p</sub> * ΔT
-        </div>
-        <div class="emphasis" style="color: var(--danger-red);"><span class="critical">THIS IS THE LAW!</span></div>
-    </div>
-
-    <!-- Scene 6: Formula: Q (4.0s) -->
-    <div class="scene" data-duration="4000">
-        <div class="subtitle" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(2rem, 9vw, 3rem);">Q = HEAT LOAD</div>
-        <div class="mega-icon">🔥</div>
-        <div class="emphasis">The "Tons" you must remove!</div>
-    </div>
-
-    <!-- Scene 7: Formula: m (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="subtitle" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1.6rem, 7vw, 2.5rem);">m = MASS FLOW RATE</div>
-        <div class="mega-icon">💧</div>
-        <div class="emphasis">How much fluid? (GPM / LPH)</div>
-        <div class="subtitle" style="margin-top: 1vh;">This is <span class="critical">CRITICAL!</span></div>
-    </div>
-
-    <!-- Scene 8: Formula: cp (5.0s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1.6rem, 7vw, 2.5rem);">c<sub style="font-size: 0.7em;">p</sub> = SPECIFIC HEAT</div>
-        <div class="mega-icon">🧪</div>
-        <div class="emphasis">What fluid? <span class="highlight">Water? Glycol? Oil?</span></div>
-        <div class="subtitle" style="margin-top: 1vh;"><span class="critical">They are NOT the same!</span></div>
-    </div>
-
-    <!-- Scene 9: Formula: ΔT (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="subtitle" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(2rem, 9vw, 3rem);">ΔT = TEMP. DROP</div>
-        <div class="mega-icon">🌡️</div>
-        <div class="content-box" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1.2rem, 5vw, 1.8rem); padding: 2vh 3vw;">
-            ΔT = T<sub style="font-size: 0.7em;">in</sub> - T<sub style="font-size: 0.7em;">out</sub>
-        </div>
-        <div class="emphasis" style="margin-top: 1vh;">(e.g., 12°C - 7°C = <span class="highlight">5°C</span>)</div>
-    </div>
-
-    <!-- Scene 10: STEP 2 - Convert! (5.0s) -->
-    <div class="scene" data-duration="5000">
-        <div class="step-number">2</div>
-        <div class="subtitle">CONVERT Q to TR</div>
-        <div class="mega-icon">🔄</div>
-        <div class="content-box" style="font-family: 'JetBrains Mono', monospace; font-size: clamp(1rem, 4.5vw, 1.4rem); padding: 2vh 3vw; line-height: 1.5;">
-            <span class="highlight">1 TR = 3.517 kW</span><br>
-            --- OR ---<br>
-            <span class="highlight">1 TR = 12,000 BTU/hr</span>
-        </div>
-    </div>
-
-    <!-- Scene 11: STEP 3 - Chiller Type (4.0s) -->
-    <div class="scene" data-duration="4000">
-        <div class="step-number">3</div>
-        <div class="subtitle">CHILLER TYPE?</div>
-        <div class="mega-icon">🏭</div>
-        <div class="emphasis">Air-Cooled or Water-Cooled?</div>
-    </div>
-
-    <!-- Scene 12: Type Deep Dive (5.0s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle">AIR vs. WATER</div>
-        <div class="split-box">
-            <div class="split-item">
-                <div class="split-icon">🌬️</div>
-                <div style="font-weight: 800; margin-bottom: 1vh;">AIR-COOLED</div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);">Cheaper Install<br>Needs Airflow</div>
-            </div>
-            <div class="split-item">
-                <div class="split-icon">💧</div>
-                <div style="font-weight: 800; margin-bottom: 1vh;">WATER-COOLED</div>
-                <div style="font-size: clamp(0.85rem, 3.5vw, 1.1rem);"><span class="highlight">More Efficient</span><br>Needs Tower</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scene 13: STEP 4 - Derating (4.0s) -->
-    <div class="scene" data-duration="4000">
-        <div class="step-number">4</div>
-        <div class="mega-icon shake-danger" style="color: var(--danger-red);">👻</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 3rem);">THE HIDDEN KILLER!</div>
-        <div class="subtitle"><span class="critical">DERATING!</span></div>
-    </div>
-
-    <!-- Scene 14: Derating: Air-Cooled (5.0s) -->
-    <div class="scene" data-duration="5000">
-        <div class="subtitle">DERATING (AIR-COOLED)</div>
-        <div class="mega-icon">📉</div>
-        <div class="content-box">
-            <div class="bullet-item"><span class="bullet-icon">🔥</span> High Ambient Temp?</div>
-            <div class="bullet-item"><span class="bullet-icon">🏔️</span> High Altitude?</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> = <span class="critical">LESS COOLING!</span></div>
-        </div>
-        <div class="emphasis" style="color: var(--danger-red);"><span class="critical">MUST SIZE UP!</span></div>
-    </div>
-
-    <!-- Scene 15: Derating: Water-Cooled (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="subtitle">DERATING (WATER-COOLED)</div>
-        <div class="mega-icon">📉</div>
-        <div class="content-box" style="padding: 1.5vh 3vw;">
-            <div class="bullet-item"><span class="bullet-icon">🌡️</span> High Condenser Temp?</div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> <span class="critical">FOULING FACTOR?</span></div>
-            <div class="bullet-item"><span class="bullet-icon">➡️</span> = <span class="critical">SIZE UP!</span></div>
-        </div>
-    </div>
-
-    <!-- Scene 16: STEP 5 - Growth (4.5s) -->
-    <div class="scene" data-duration="4500">
-        <div class="step-number">5</div>
-        <div class="subtitle">FUTURE GROWTH</div>
-        <div class="mega-icon">🚀</div>
-        <div class="emphasis" style="color: #fff;">Plan for the future!</div>
-        <div class="emphasis"><span class="highlight">Add 20-25%</span> Safety Factor!</div>
-    </div>
-
-    <!-- Scene 17: Quick Checklist (7.0s) -->
-    <div class="scene" data-duration="7000">
-        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.5rem);">FINAL CHECKLIST!</div>
-        <div class="content-box" style="width: 85%; padding: 2vh 4vw; font-size: clamp(0.8rem, 3.5vw, 1.1rem);">
-            <div class="bullet-item"><span class="bullet-icon">✅</span> <span class="critical">Heat Load (Q) Calc?</span></div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Converted to <span class="highlight">TR</span>?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Fluid Type (c<sub style="font-size: 0.8em">p</sub>)?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Type (Air/Water)?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Derated (Temp/Alt)?</div>
-            <div class="bullet-item"><span class="bullet-icon">✅</span> Growth Added?</div>
-        </div>
-    </div>
-
-    <!-- Scene 18: The Result (4.0s) -->
-    <div class="scene" data-duration="4000">
-        <div class="mega-icon">🎯</div>
-        <div class="mega-title" style="font-size: clamp(1.8rem, 8vw, 2.8rem);">NAIL THIS =</div>
-        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);">PERFECT TEMP!</div>
-        <div class="emphasis" style="font-size: clamp(1.5rem, 6.5vw, 2.2rem); color: var(--success-green);"><span class="highlight" style="color: var(--success-green);">ZERO SPOILAGE!</span></div>
-    </div>
-
-    <!-- Scene 19: FINAL CTA (7.0s) -->
-    <div class="scene" data-duration="7000">
-        <div class="mega-icon">👍</div>
-        <div class="mega-title" style="font-size: clamp(1.6rem, 7vw, 2.4rem);">WANT PRECISION TOOLS?</div>
-        <div class="final-cta">EXACT CALCULATIONS</div>
-        <div class="subtitle" style="margin-top: 2vh;">Visit Website:</div>
-        <a href="https://designcalculators.co.in" class="website-link" target="_blank">
-            https://designcalculators.co.in
-        </a>
-    </div>
-
-    <!-- Footer Brand - Shows on ALL pages (Same as original) -->
-    <div class="footer-brand">
-        <div class="footer-text">PREPARED BY:</div>
-        <div class="footer-website">https://designcalculators.co.in</div>
-    </div>
-
-    <!-- Progress Bar - Above footer (Same as original) -->
-    <div class="progress-bar" id="progress"></div>
-
-</div>
-
-<script>
-    // All JavaScript is identical to the provided file for functionality
-    const container = document.getElementById('container');
-    const scenes = document.querySelectorAll('.scene');
-    const progressBar = document.getElementById('progress');
-    const currentCounter = document.getElementById('current');
-    const totalCounter = document.getElementById('total');
-    
-    let currentScene = 0;
-    let sceneTimer;
-    let progressInterval;
-    let progressValue = 0;
-    
-    // Set total scene count dynamically
-    totalCounter.textContent = scenes.length;
-    
-    // Create enhanced particles
-    function createParticles() {
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 4 + 's';
-            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
-            container.appendChild(particle);
-        }
-    }
-    
-    // Create lightning effects
-    function createLightning() {
-        for (let i = 0; i < 5; i++) {
-            const lightning = document.createElement('div');
-            lightning.className = 'lightning';
-            lightning.style.left = Math.random() * 100 + '%';
-            lightning.style.animationDelay = Math.random() * 8 + 's';
-            container.appendChild(lightning);
-        }
-    }
-    
-    createParticles();
-    createLightning();
-    
-    function showScene(index) {
-        // Hide all scenes
-        scenes.forEach(s => s.classList.remove('active'));
+    <div id="container">
+        <!-- Background Effects -->
+        <div class="grid-3d"></div>
         
-        // Show current scene
-        if (scenes[index]) {
-            scenes[index].classList.add('active');
-            scenes[index].classList.add('fade-in');
-            currentCounter.textContent = index + 1;
+        <!-- Start Overlay -->
+        <div id="start-overlay">
+            <div id="start-button">▶️</div>
+            <p>TAP TO START</p>
+        </div>
+
+        <!-- UI Controls -->
+        <!-- Mute Toggle Removed -->
+        <div class="countdown-clock"><span id="countdown">60</span><span class="sec">s</span></div>
+
+        <!-- Scene 1: Hook (4s) -->
+        <div class="scene active" data-duration="4000">
+            <div class="mega-title">BUYING AN AC?</div>
+            <div class="subtitle">Your 60-Second PRO Guide!</div>
+            <div class="mega-icon" style="color: var(--electric-blue);">❄️</div>
+            <div class="emphasis" style="color: var(--neon-green);">Don't Waste Money! 💰</div>
+        </div>
+
+        <!-- Scene 2: Room Size Guide (7s) -->
+        <div class="scene" data-duration="7000">
+            <div class="subtitle">STEP 1: Pick Right Size!</div>
+            <div class="info-block-stack two-col">
+                <div class="info-block">
+                    <div class="info-block-value">1 Ton</div>
+                    <div class="info-block-label">Small Room (≤110 sq ft)</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">1.2 Ton</div>
+                    <div class="info-block-label">Medium (110-150 sq ft)</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">1.5 Ton</div>
+                    <div class="info-block-label">Large (150-200 sq ft)</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">2 Ton</div>
+                    <div class="info-block-label">Huge! (200+ sq ft)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Why Size Matters (5s) -->
+        <div class="scene" data-duration="5000">
+            <div class="mega-icon" style="color: var(--volt-orange);">⚠️</div>
+            <div class="subtitle">Size is CRITICAL!</div>
+            <div class="simple-list">
+                <div><span class="critical">⛔️ TOO SMALL?</span><br>Runs 24/7! High Bills!</div>
+                <div><span class="critical">⛔️ TOO BIG?</span><br>Wastes Money! Won't Dehumidify!</div>
+            </div>
+        </div>
+
+        <!-- Scene 4: AC Types (6s) -->
+        <div class="scene" data-duration="6000">
+            <div class="subtitle">STEP 2: Choose Your Type</div>
+            <div class="info-block-stack three-col">
+                <div class="info-block">
+                    <div class="info-block-value">🔲</div>
+                    <div class="info-block-label">Split AC (Best!)</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">🪟</div>
+                    <div class="info-block-label">Window AC (Budget)</div>
+                </div>
+                 <div class="info-block">
+                    <div class="info-block-value">🚚</div>
+                    <div class="info-block-label">Portable AC (Renters)</div>
+                </div>
+            </div>
+            <div class="emphasis" style="font-size: clamp(1rem, 4.2vw, 1.5rem); margin-top: 3vh;">
+                🏆 <span style="color: var(--ice-white);">Pro Tip: Get a</span> Split AC
+            </div>
+        </div>
+
+        <!-- Scene 5: NEW - Inverter vs Non-Inverter (9s) -->
+        <div class="scene" data-duration="9000">
+            <div class="subtitle">STEP 3: Inverter AC!</div>
+            <div class="emphasis" style="margin-top: -1vh; margin-bottom: 2vh; color: var(--ice-white);">(The #1 Money Saver!)</div>
+            <div class="info-block-stack two-col">
+                <div class="info-block" style="border-color: var(--neon-green); box-shadow: 0 0 30px var(--neon-green);">
+                    <div class="info-block-value">✅ Inverter</div>
+                    <div class="info-block-label">Smart Compressor<br>Saves 30-50% Power!<br>Super Quiet</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">⛔️ Non-Inverter</div>
+                    <div class="info-block-label">Old Tech (On/Off)<br>Uses More Power<br>Noisy</div>
+                </div>
+            </div>
+            <div class="emphasis" style="margin-top: 2vh;">ALWAYS Get <span class="highlight">Inverter AC</span>!</div>
+        </div>
+
+        <!-- Scene 6: NEW - Star Rating (7s) -->
+        <div class="scene" data-duration="7000">
+            <div class="subtitle">STEP 4: Check The Stars ⭐</div>
+             <div class="info-block-stack two-col">
+                <div class="info-block" style="border-color: var(--neon-green); box-shadow: 0 0 30px var(--neon-green);">
+                    <div class="info-block-value">⭐⭐⭐⭐⭐</div>
+                    <div class="info-block-label">Use it <span class="highlight">EVERY DAY?</span><br>BUY THIS!</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-block-value">⭐⭐⭐</div>
+                    <div class="info-block-label">Use it <span style="color: var(--volt-orange);">SOMETIMES?</span><br>3-Star is OK.</div>
+                </div>
+            </div>
+            <div class="emphasis" style="font-size: clamp(1rem, 4.2vw, 1.5rem); margin-top: 2vh; color: var(--ice-white);">
+                Daily Use = <span class="highlight">5-Star</span>. No debate.
+            </div>
+        </div>
+
+        <!-- Scene 7: NEW - Must-Have Features (9s) -->
+        <div class="scene" data-duration="9000">
+            <div class="subtitle">STEP 5: CHECK THIS ⚡️</div>
+            <div class="simple-list">
+                <div>✅ <span class="highlight">100% Copper Coils</span><br><span style="font-size: 0.8em; color: var(--ice-white);">(Long Life, Better Cooling)</span></div>
+                <div>✅ <span class="highlight">Good Air Filter</span><br><span style="font-size: 0.8em; color: var(--ice-white);">(PM 2.5 / Anti-Virus)</span></div>
+                <div>✅ <span class="highlight">Good Warranty</span><br><span style="font-size: 0.8em; color: var(--ice-white);">(5+ Yrs on Compressor)</span></div>
+            </div>
+        </div>
+
+        <!-- Scene 8: Quick Buying Tips (7s) -->
+        <div class="scene" data-duration="7000">
+            <div class="subtitle">⚡️ FINAL PRO-TIPS ⚡️</div>
+            <div class="simple-list" style="font-size: clamp(0.95rem, 4.2vw, 1.3rem); line-height: 1.8;">
+                <div>✅ <span class="highlight">Measure</span> your room FIRST!</div>
+                <div>✅ <span class="highlight">Sunny</span> room? Go <span class="highlight">ONE SIZE UP!</span></div>
+                <div>✅ Top floor? Go <span class="highlight">ONE SIZE UP!</span></div>
+                <div>✅ Check <span class="highlight">Installation</span> costs!</div>
+            </div>
+        </div>
+
+        <!-- Scene 9: Final Summary (6s) -->
+        <div class="scene" data-duration="6000">
+            <div class="mega-icon" style="color: var(--electric-blue);">🎯</div>
+            <div class="subtitle">Your Perfect AC</div>
+            <div class="simple-list" style="font-size: clamp(1rem, 4.5vw, 1.4rem); line-height: 1.8;">
+                <div>1. Get the <span class="highlight">Right Size</span></div>
+                <div>2. Get an <span class="highlight">Inverter</span> AC</div>
+                <div>3. Get <span class="highlight">5-Stars</span> (for daily use)</div>
+                <div>4. Get <span class="highlight">Copper</span> Coils</div>
+            </div>
+            <div class="emphasis" style="margin-top: 2vh; color: var(--ice-white);">You're a Pro! Stay Cool 😎</div>
+        </div>
+
+        <!-- Footer Brand -->
+        <div class="footer-brand">
+            <div class="footer-text">Powered By</div>
+            <div class="footer-website">designcalculators.co.in</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <script>
+        // Updated JS: Removed all audio-related code (Tone.js, mute toggle, etc.)
+
+        const container = document.getElementById('container');
+        const scenes = document.querySelectorAll('.scene');
+        const progressBar = document.getElementById('progress');
+        const countdownDisplay = document.getElementById('countdown');
+        const startOverlay = document.getElementById('start-overlay');
+        // muteToggle reference removed
+
+        let currentScene = 0;
+        let sceneTimer;
+        let progressInterval;
+        let countdownInterval;
+        let progressValue = 0;
+        let totalTimeRemaining = 60; // 60 seconds total
+        // isMuted removed
+        let isPlaying = false;
+
+        // Audio setup function REMOVED
+
+        function showScene(index) {
+            scenes.forEach(s => s.classList.remove('active'));
             
-            // Reset and start progress bar
+            if (scenes[index]) {
+                scenes[index].classList.add('active');
+                const duration = parseInt(scenes[index].dataset.duration);
+                startProgress(duration);
+                scheduleNextScene(duration);
+                
+                // SFX trigger removed
+            }
+        }
+
+        function scheduleNextScene(duration) {
+            clearTimeout(sceneTimer);
+            sceneTimer = setTimeout(() => {
+                currentScene++;
+                if (currentScene < scenes.length) {
+                    showScene(currentScene);
+                } else {
+                    // Loop back to start
+                    currentScene = 0;
+                    totalTimeRemaining = 60;
+                    countdownDisplay.textContent = totalTimeRemaining; // Reset text
+                    showScene(currentScene);
+                }
+            }, duration);
+        }
+
+        function startProgress(duration) {
             progressValue = 0;
-            const duration = parseInt(scenes[index].dataset.duration);
-            const updateInterval = 50; // Update every 50ms
+            const updateInterval = 30;
             const increment = (100 / duration) * updateInterval;
             
             clearInterval(progressInterval);
@@ -782,67 +620,45 @@
                 progressBar.style.width = progressValue + '%';
             }, updateInterval);
         }
-    }
-    
-    function nextScene() {
-        currentScene = (currentScene + 1) % scenes.length;
-        showScene(currentScene);
-        scheduleNextScene();
-    }
-    
-    function prevScene() {
-        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
-        showScene(currentScene);
-        scheduleNextScene();
-    }
-    
-    function scheduleNextScene() {
-        clearTimeout(sceneTimer);
-        const duration = parseInt(scenes[currentScene].dataset.duration);
-        sceneTimer = setTimeout(nextScene, duration);
-    }
-    
-    // Start the show
-    showScene(0);
-    scheduleNextScene();
-    
-    // Click to advance
-    let clickDisabled = false;
-    container.addEventListener('click', (e) => {
-        // Do not advance if clicking a link
-        if (clickDisabled || e.target.tagName === 'A' || e.target.closest('A')) return;
-        clickDisabled = true;
-        nextScene();
-        setTimeout(() => clickDisabled = false, 300);
-    });
-    
-    // Swipe support
-    let touchStartX = 0;
-    container.addEventListener('touchstart', (e) => {
-        if (e.target.tagName === 'A' || e.target.closest('A')) return;
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    container.addEventListener('touchend', (e) => {
-        if (!touchStartX || e.target.tagName === 'A' || e.target.closest('A')) {
-            touchStartX = 0;
-            return;
+
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                if (totalTimeRemaining > 0) {
+                    totalTimeRemaining--;
+                    countdownDisplay.textContent = totalTimeRemaining;
+                } else {
+                    totalTimeRemaining = 60; // Handled by scene loop, but good fallback.
+                }
+            }, 1000);
         }
-        const touchEndX = e.changedTouches[0].screenX;
-        const diff = touchEndX - touchStartX;
-        touchStartX = 0;
-        
-        if (Math.abs(diff) > 50) {
-            if (!clickDisabled) {
-                clickDisabled = true;
-                if (diff < 0) nextScene(); // Swipe left
-                else prevScene(); // Swipe right
-                setTimeout(() => clickDisabled = false, 300);
+
+        // Start button - Simplified (no audio)
+        startOverlay.addEventListener('click', () => {
+            if (isPlaying) return; // Prevent multiple clicks
+
+            startOverlay.style.opacity = '0';
+            startOverlay.style.pointerEvents = 'none';
+            
+            isPlaying = true;
+            showScene(0);
+            startCountdown();
+        });
+
+        // Mute toggle listener REMOVED
+
+        // Create particles
+        function createParticles() {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle-glow';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 7 + 's';
+                particle.style.animationDuration = (5 + Math.random() * 3) + 's';
+                container.appendChild(particle);
             }
         }
-    }, { passive: true });
-</script>
-
+        createParticles();
+    </script>
 </body>
 </html>
-
