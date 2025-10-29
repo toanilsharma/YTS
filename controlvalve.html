@@ -2,534 +2,890 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Industrial Control Valve Sizing Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎯 Let's Draw √5 (WOW Version)!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0066ff;
-            --accent: #ff0066;
-            --success: #00cc44;
-            --warning: #ff9900;
-            --dark-bg: #0d0f1a;
-            --card-bg: #1a1f3a;
-            --text-main: #ffffff;
-            --text-dim: #b0b8c8;
+            --electric-cyan: #00ffff;
+            --neon-pink: #ff0080;
+            --volt-yellow: #ffff00;
+            --plasma-purple: #bf00ff;
+            --danger-red: #ff1744;
+            --success-green: #00ff41;
+            --dark: #0a0a0f;
+            --darker: #050508;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html, body {
+            width: 100%; height: 100%; overflow: hidden;
+            background: var(--darker);
+        }
+
         body {
-            background: linear-gradient(135deg, #0d0f1a 0%, #1a1f3a 50%, #0d0f1a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            padding: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Inter', sans-serif; color: #fff;
         }
 
         #container {
-            width: 100%;
-            max-width: 540px;
-            aspect-ratio: 9/16;
-            background: var(--dark-bg);
-            border: 3px solid var(--primary);
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(0, 102, 255, 0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            width: 100%; max-width: 450px; height: 100vh; max-height: 800px;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1f 100%);
+            position: relative; overflow: hidden; cursor: pointer;
+            box-shadow: 0 0 100px rgba(0, 255, 255, 0.4);
+        }
+
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, 40px); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: var(--electric-cyan);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 4s linear infinite;
+            box-shadow: 0 0 12px var(--electric-cyan);
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20vh) translateX(50px) scale(1); opacity: 0; }
         }
 
         .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 30px 25px;
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 6vh 6vw 12vh 6vw;
             text-align: center;
-            opacity: 0;
-            animation: fadeInScene 1s ease-out forwards;
-            overflow-y: auto;
-            scrollbar-width: none;
+            z-index: 10;
         }
 
-        .scene::-webkit-scrollbar { display: none; }
+        .mega-title {
+            font-size: clamp(2.2rem, 9vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite, titlePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 1.5vh;
+            filter: drop-shadow(0 0 25px rgba(0, 255, 255, 0.6));
+        }
 
-        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUpIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDownIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleUpIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
 
-        .hidden { display: none !important; }
-
-        /* Text Styles */
-        .title {
-            font-size: 56px;
-            font-weight: 800;
-            margin-bottom: 15px;
-            line-height: 1.15;
-            animation: slideDownIn 0.8s ease-out;
+        @keyframes titlePop {
+            0% { transform: scale(0.3) rotate(-5deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
         .subtitle {
-            font-size: 40px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            line-height: 1.2;
-            animation: slideUpIn 0.8s ease-out 0.15s forwards;
-            opacity: 0;
+            font-size: clamp(1rem, 4.5vw, 1.6rem);
+            font-weight: 800;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 25px rgba(255, 255, 0, 0.7);
+            animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s backwards;
+            margin-bottom: 1vh;
         }
 
-        .text-primary { color: var(--primary); }
-        .text-accent { color: var(--accent); }
-        .text-success { color: var(--success); }
-        .text-warning { color: var(--warning); }
-        .text-white { color: white; }
-        .text-dim { color: var(--text-dim); }
-
-        .description {
-            font-size: 28px;
-            font-weight: 500;
-            margin: 12px 0;
-            line-height: 1.3;
-            animation: slideUpIn 0.8s ease-out 0.3s forwards;
-            opacity: 0;
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Cards */
-        .card {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--primary);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 8px 0;
-            animation: scaleUpIn 0.7s ease-out;
-            width: 100%;
+        .mega-icon {
+            font-size: clamp(3rem, 15vw, 6rem);
+            animation: iconEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards,
+                         iconFloat 3s ease-in-out infinite 1s;
+            margin: 1vh 0;
+            filter: drop-shadow(0 0 35px currentColor);
         }
 
-        .card.accent {
-            background: rgba(255, 0, 102, 0.1);
-            border-color: var(--accent);
+        @keyframes iconEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
 
-        .card.success {
-            background: rgba(0, 204, 68, 0.1);
-            border-color: var(--success);
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .step-number {
+            font-size: clamp(2.5rem, 12vw, 4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: numberZoom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            line-height: 1;
+            margin-bottom: 0.5vh;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.6));
+        }
+
+        @keyframes numberZoom {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .formula-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.2rem, 5.5vw, 2rem);
+            line-height: 1.6;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            padding: 1.5vh 3vw;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in;
         }
         
-        .card.warning {
-            background: rgba(255, 153, 0, 0.1);
-            border-color: var(--warning);
+        .formula-text-small {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1rem, 4.8vw, 1.6rem);
+            line-height: 1.5;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            padding: 1vh 3vw;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in;
         }
 
-        .card-title {
-            font-size: 30px;
-            font-weight: 700;
-            margin-bottom: 8px;
+        .highlight {
+            color: var(--volt-yellow);
+            font-weight: 900;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 0.6);
+        }
+        
+        .mono {
+             font-family: 'JetBrains Mono', monospace;
+             font-weight: 700;
+        }
+        
+        /* WOW: New text glow animation */
+        .text-glow {
+            animation: textGlow 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes textGlow {
+            from { text-shadow: 0 0 15px rgba(255, 255, 0, 0.6); }
+            to { text-shadow: 0 0 30px rgba(255, 255, 0, 1); }
+        }
+        .text-glow-cyan {
+            color: var(--electric-cyan);
+            animation: textGlowCyan 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes textGlowCyan {
+            from { text-shadow: 0 0 15px rgba(0, 255, 255, 0.6); }
+            to { text-shadow: 0 0 30px rgba(0, 255, 255, 1); }
         }
 
-        .card-value {
-            font-size: 50px;
-            font-weight: 800;
-            margin: 10px 0;
+
+        .emphasis {
+            font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            color: var(--success-green);
+            text-shadow: 0 0 25px rgba(0, 255, 65, 0.7);
+            animation: emphasize 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+            margin: 1vh 0;
         }
 
-        .card-text {
-            font-size: 24px;
-            font-weight: 500;
-            margin: 8px 0;
-            line-height: 1.3;
+        @keyframes emphasize {
+            0% { transform: scale(0); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        /* List */
-        .list {
-            text-align: left;
-            margin: 10px 0;
+        .final-cta {
+            background: linear-gradient(135deg, var(--neon-pink), var(--plasma-purple));
+            padding: 2vh 5vw;
+            border-radius: 50px;
+            font-size: clamp(1rem, 4.5vw, 1.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 2vh 0;
+            animation: ctaPulseWow 1.5s ease-in-out infinite, ctaEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s backwards;
+            box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6);
+        }
+        
+        /* WOW: Bigger CTA pulse */
+        @keyframes ctaPulseWow {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 40px rgba(255, 0, 128, 0.6); }
+            50% { transform: scale(1.1); box-shadow: 0 10px 60px rgba(255, 0, 128, 1); }
+        }
+
+        @keyframes ctaEntrance {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .footer-brand {
+            position: absolute;
+            bottom: 6vh;
+            left: 0;
             width: 100%;
+            text-align: center;
+            z-index: 100;
+            padding: 1.5vh 4vw;
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7) 50%, rgba(0, 0, 0, 0.9));
         }
 
-        .list-item {
-            font-size: 26px;
-            font-weight: 500;
-            margin: 8px 0;
-            padding-left: 15px;
-            animation: slideUpIn 0.6s ease-out forwards;
-            opacity: 0;
-            line-height: 1.3;
-        }
-
-        .list-item:nth-child(1) { animation-delay: 0.2s; }
-        .list-item:nth-child(2) { animation-delay: 0.35s; }
-        .list-item:nth-child(3) { animation-delay: 0.5s; }
-        .list-item:nth-child(4) { animation-delay: 0.65s; }
-        .list-item:nth-child(5) { animation-delay: 0.8s; }
-        .list-item:nth-child(6) { animation-delay: 0.95s; }
-
-        /* CTA Box */
-        .cta-box {
-            background: rgba(0, 204, 68, 0.15);
-            border: 2px solid var(--success);
-            border-radius: 16px;
-            padding: 18px;
-            margin-top: 15px;
-            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
-            opacity: 0;
-            width: 100%;
-        }
-
-        .cta-text {
-            font-size: 24px;
+        .footer-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.7rem, 3.2vw, 0.95rem);
             font-weight: 600;
-            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5vh;
         }
 
-        .cta-url {
-            font-size: 28px; /* Reduced size to fit on one line */
-            font-weight: 800;
-            animation: pulse 2s ease-in-out infinite;
-            white-space: nowrap; /* Ensures it stays on one line */
-        }
-
-        .icon {
-            font-size: 60px;
-            margin: 12px 0;
-            animation: scaleUpIn 0.7s ease-out 0.2s forwards;
-            opacity: 0;
-        }
-
-        .formula {
-            font-size: 34px;
+        .footer-website {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.85rem, 3.8vw, 1.15rem);
             font-weight: 700;
-            margin: 15px 0;
-            animation: scaleUpIn 0.7s ease-out 0.3s forwards;
-            opacity: 0;
-            word-wrap: break-word;
+            color: var(--volt-yellow);
+            text-shadow: 0 0 15px rgba(255, 255, 0, 0.6);
+            animation: footerPulse 3s ease-in-out infinite;
         }
 
-        .spacing-small { height: 8px; }
-        .spacing-medium { height: 12px; }
+        @keyframes footerPulse {
+            0%, 100% { opacity: 0.85; }
+            50% { opacity: 1; }
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 4vh;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--electric-cyan), var(--neon-pink), var(--volt-yellow), var(--plasma-purple));
+            background-size: 200% 100%;
+            animation: progressGradient 3s linear infinite;
+            transition: width 0.1s linear;
+            z-index: 101;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            border-radius: 0 5px 5px 0;
+        }
+
+        @keyframes progressGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        .scene-counter {
+            position: absolute;
+            top: 2vh; right: 4vw;
+            font-size: clamp(0.85rem, 3.8vw, 1.1rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.8vh 2vw;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .corner-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corner-glow.top-left {
+            top: -75px;
+            left: -75px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        .corner-glow.bottom-right {
+            bottom: -75px;
+            right: -75px;
+            background: radial-gradient(circle, rgba(255, 0, 128, 0.2), transparent 70%);
+            animation: glowPulse 4s ease-in-out infinite 2s;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+
+        .scene { display: none; }
+        .scene.active { display: flex; }
+
+        /* WOW: New scene transition */
+        .pop-in-scene {
+            animation: popInScene 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes popInScene {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+
+        /* DIAGRAM STYLES */
+        .diagram-container {
+            width: 90%;
+            max-width: 380px;
+            height: 280px;
+            position: relative;
+            margin: 1vh auto;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .line {
+            stroke: #fff;
+            stroke-width: 4;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+        }
+
+        .line-yellow {
+            stroke: var(--volt-yellow);
+            stroke-width: 5;
+            filter: drop-shadow(0 0 12px var(--volt-yellow));
+        }
+
+        .line-pink {
+            stroke: var(--neon-pink);
+            stroke-width: 5;
+            filter: drop-shadow(0 0 12px var(--neon-pink));
+        }
+
+        .line-green {
+            stroke: var(--success-green);
+            stroke-width: 5;
+            filter: drop-shadow(0 0 15px var(--success-green));
+        }
+
+        .diagram-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 16px;
+            fill: #fff;
+        }
+        
+        .diagram-text-small {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 14px;
+            fill: #fff;
+        }
+
+        .diagram-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .label-yellow { fill: var(--volt-yellow); }
+        .label-pink { fill: var(--neon-pink); }
+        .label-green { fill: var(--success-green); }
+        .label-cyan { fill: var(--electric-cyan); }
+
+        /* WOW: Animation classes */
+        .draw-line-wow {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLineWow 0.8s ease-out forwards;
+        }
+        
+        .draw-line-wow-long {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLineWow 1.2s ease-out forwards;
+        }
+
+        @keyframes drawLineWow {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .draw-line-wow-fast {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLineWow 0.4s ease-out forwards;
+        }
+        
+        /* WOW: New pulse animation for lines */
+        .pulse-line-yellow {
+            animation: pulseLineYellow 1s ease-in-out 2 forwards;
+        }
+        @keyframes pulseLineYellow {
+            0%, 100% { filter: drop-shadow(0 0 12px var(--volt-yellow)); }
+            50% { filter: drop-shadow(0 0 25px var(--volt-yellow)); }
+        }
+        .pulse-line-pink {
+            animation: pulseLinePink 1s ease-in-out 2 forwards;
+        }
+        @keyframes pulseLinePink {
+            0%, 100% { filter: drop-shadow(0 0 12px var(--neon-pink)); }
+            50% { filter: drop-shadow(0 0 25px var(--neon-pink)); }
+        }
+        
+        /* WOW: New "charge" animation for hypotenuse */
+        .charge-glow-green {
+            animation: chargeGlowGreen 1.2s ease-in-out infinite;
+        }
+        @keyframes chargeGlowGreen {
+            0%, 100% { 
+                stroke: var(--success-green);
+                filter: drop-shadow(0 0 15px var(--success-green)); 
+            }
+            50% { 
+                stroke: #fff;
+                filter: drop-shadow(0 0 30px var(--success-green)); 
+            }
+        }
+        
+        /* WOW: Compass ping animation */
+        .ping-origin {
+            stroke: var(--volt-yellow);
+            fill: var(--volt-yellow);
+            animation: pingOrigin 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            transform-origin: 80px 180px;
+        }
+        @keyframes pingOrigin {
+            0% { transform: scale(1); opacity: 1; }
+            75%, 100% { transform: scale(3); opacity: 0; }
+        }
+
+
+        .swing-arc-wow {
+            transform-origin: 80px 180px; /* Point O */
+            animation: swingArcActualWow 2s ease-in-out forwards;
+        }
+        
+        .draw-arc-path-wow {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLineWow 2s ease-in-out forwards;
+        }
+
+        @keyframes swingArcActualWow {
+            0% { transform: rotate(-26.5deg); } /* Hypotenuse */
+            100% { transform: rotate(0deg); }   /* Number line */
+        }
+        
+        /* WOW: New "slam down" animation for the pin */
+        .slam-down {
+            animation: slamDown 0.5s cubic-bezier(0.76, 0.01, 0.2, 1.32) forwards;
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        @keyframes slamDown {
+            0% { transform: translateY(-50px); opacity: 0; }
+            60% { transform: translateY(5px); opacity: 1; }
+            80% { transform: translateY(-3px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .pop-in-wow {
+            opacity: 0;
+            animation: popInWow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes popInWow {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .pop-in-label-wow {
+             opacity: 0;
+            animation: popInWow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        
+        .result-pulse {
+            animation: resultPulse 1s ease-in-out;
+            transform-origin: 50% 50%;
+        }
+        @keyframes resultPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+
+        .shake-danger {
+            animation: screenShake 0.5s cubic-bezier(.36,.07,.19,.97);
+        }
+
+        @keyframes screenShake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <!-- Scene 1: Hook -->
-    <div id="scene1" class="scene">
-        <div class="icon">🎛️</div>
-        <div class="title text-primary">THE FINAL CONTROL ELEMENT</div>
-        <div class="subtitle text-warning">Control Valve Sizing</div>
-        <div class="description text-dim">Get this wrong, and your plant is uncontrollable.</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-white" style="font-size: 30px; animation-delay: 0.4s;">(As per IEC 60534)</div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 2: The Goal: Find Cv -->
-    <div id="scene2" class="scene">
-        <div class="title text-success">The Goal</div>
-        <div class="subtitle text-dim" style="font-size: 30px;">Find ONE key number:</div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">C<sub>v</sub> (Flow Coefficient)</div>
-            <div class="card-text text-white" style="font-size: 22px;">A value that defines the valve's flow capacity. (GPM of water at 1 psi drop).</div>
-            <div class="card-value text-primary" style="font-size: 40px;">Bigger C<sub>v</sub> = Bigger Valve</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 3: Step 1: Process Data (Foundation) -->
-    <div id="scene3" class="scene">
-        <div class="title text-accent">Step 1: Process Data</div>
-        <div class="subtitle text-white" style="font-size: 30px;">This is 90% of the job.</div>
-        
-        <div class="list" style="font-size: 22px;">
-            <div class="list-item text-warning" style="font-size: 24px;">1. Fluid (Liquid, Gas, Steam)</div>
-            <div class="list-item text-warning" style="font-size: 24px;">2. Flow (Min / Normal / Max)</div>
-            <div class="list-item text-warning" style="font-size: 24px;">3. Inlet Pressure (P<sub>1</sub>)</div>
-            <div class="list-item text-warning" style="font-size: 24px;">4. Outlet Pressure (P<sub>2</sub>)</div>
-            <div class="list-item text-warning" style="font-size: 24px;">5. Temperature (T)</div>
-            <div class="list-item text-warning" style="font-size: 24px;">6. Fluid Properties (Density, Viscosity, Vapor Pressure P<sub>v</sub>)</div>
-        </div>
+    <div class="grid-bg"></div>
+    <div class="corner-glow top-left"></div>
+    <div class="corner-glow bottom-right"></div>
     
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 4: Step 2: Liquid Formula (Simple) -->
-    <div id="scene4" class="scene">
-        <div class="title text-primary">Step 2: Liquids (Simple)</div>
-        <div class="subtitle text-white" style="font-size: 32px;">The Basic C<sub>v</sub> Formula</div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">Non-Choked Flow</div>
-            <div class="formula text-white" style="font-size: 30px;">C<sub>v</sub> = Q × √(SG / ΔP)</div>
-            <div class="card-text text-dim" style="font-size: 20px;">Q = Flow (GPM)</div>
-            <div class="card-text text-dim" style="font-size: 20px;">SG = Specific Gravity</div>
-            <div class="card-text text-dim" style="font-size: 20px;">ΔP = P<sub>1</sub> - P<sub>2</sub> (psi)</div>
-        </div>
-        <div class="card-text text-warning" style="font-size: 24px; margin-top: 10px;">But... you CAN'T always use this!</div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-
-    <!-- Scene 5: The #1 MISTAKE (Liquids) -->
-    <div id="scene5" class="scene">
-        <div class="icon">❌</div>
-        <div class="title text-white">THE #1 MISTAKE</div>
-        <div class="subtitle text-warning">Ignoring Choked Flow</div>
-        
-        <div class="card accent">
-            <div class="card-title text-accent">FLASHING</div>
-            <div class="card-text text-white" style="font-size: 22px;">If P<sub>2</sub> < P<sub>v</sub> (Vapor Pressure), liquid boils and STAYS vapor. Destroys trim.</div>
-        </div>
-        
-        <div class="card warning">
-            <div class="card-title text-warning">CAVITATION</div>
-            <div class="card-text text-white" style="font-size: 22px;">Liquid boils at the valve, then collapses back to liquid. Extreme damage.</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
+    <div class="scene-counter"><span id="current">1</span>/<span id="total">11</span></div>
     
-    <!-- Scene 6: The FIX (Liquids) -->
-    <div id="scene6" class="scene">
-        <div class="title text-success">The Fix (Liquids)</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Use the F<sub>L</sub> Factor</div>
-        
-        <div class="card success">
-            <div class="card-title text-success">F<sub>L</sub> = Recovery Factor</div>
-            <div class="card-text text-white" style="font-size: 22px;">Get this from the valve OEM. It defines the choke point.</div>
+    <!-- Scene 1: HOOK (3.5s) -->
+    <div class="scene active" data-duration="3500">
+        <div class="mega-title">LET'S DRAW <span class="mono">√5</span>!</div>
+        <div class="subtitle"><span class="highlight">GEOMETRY HACK!</span></div>
+        <div class="mega-icon shake-danger">📐</div>
+        <div class="emphasis pop-in-wow" style="animation-delay: 0.8s;">60-Second Magic!</div>
+    </div>
+
+    <!-- Scene 2: The Secret (3.0s) -->
+    <div class="scene" data-duration="3000">
+        <div class="subtitle pop-in-wow">THE SECRET?</div>
+        <div class="mega-icon">🏛️</div>
+        <div class="mega-title pop-in-wow" style="font-size: clamp(1.8rem, 8vw, 3rem); color: var(--plasma-purple); animation-delay: 0.3s;">PYTHAGORAS!</div>
+    </div>
+
+    <!-- Scene 3: The Formula (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="subtitle pop-in-wow" style="animation-delay: 0.2s;">THE KEY FORMULA:</div>
+        <div class="formula-text mono pop-in-wow" style="animation-delay: 0.5s;">
+            a² + b² = <span class="text-glow">c²</span>
         </div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">Find ΔP<sub>choked</sub></div>
-            <div class="formula text-white" style="font-size: 26px;">ΔP<sub>choked</sub> = F<sub>L</sub>² × (P<sub>1</sub> - P<sub>v</sub>)</div>
-            <div class="card-text text-white" style="font-size: 22px;">If your actual ΔP is > ΔP<sub>choked</sub>, you MUST use ΔP<sub>choked</sub> in the C<sub>v</sub> formula!</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+        <div class="emphasis pop-in-wow" style="margin-top: 2vh; color: #fff; animation-delay: 1.0s;">We need <span class="highlight mono text-glow">c = √5</span></div>
+    </div>
+
+    <!-- Scene 4: The Setup (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="subtitle pop-in-wow" style="animation-delay: 0.2s;">THE MAGIC COMBO: 🔥</div>
+        <div class="formula-text-small pop-in-wow" style="animation-delay: 0.5s;">
+            Let <span class="highlight mono">a = 2</span> and <span class="highlight mono">b = 1</span>
+            <br><br>
+            <span class="mono pop-in-wow" style="color: #fff; animation-delay: 1.2s;">2² + 1² = 4 + 1 = 5</span>
+            <br><br>
+            <span class="mono highlight pop-in-wow text-glow" style="animation-delay: 2.0s;">c² = 5  ➔  c = √5 ✅</span>
         </div>
     </div>
 
-    <!-- Scene 7: The #1 MISTAKE (Gases) -->
-    <div id="scene7" class="scene">
-        <div class="icon">❌</div>
-        <div class="title text-white">THE #1 MISTAKE</div>
-        <div class="subtitle text-warning">Ignoring Choked Flow (Gases)</div>
-        
-        <div class="card accent">
-            <div class="card-title text-accent">Sonic Velocity</div>
-            <div class="card-text text-white" style="font-size: 22px;">Gases also choke when the velocity reaches the speed of sound at the valve trim.</div>
-            <div class="card-text text-dim" style="font-size: 20px;">(This is NOT the same as cavitation)</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-    
-    <!-- Scene 8: The FIX (Gases) -->
-    <div id="scene8" class="scene">
-        <div class="title text-success">The Fix (Gases)</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Use the x<sub>T</sub> Factor</div>
-        
-        <div class="card success">
-            <div class="card-title text-success">x<sub>T</sub> = Pressure Drop Factor</div>
-            <div class="card-text text-white" style="font-size: 22px;">Get this from the valve OEM.</div>
-        </div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">Find ΔP<sub>choked</sub></div>
-            <div class="formula text-white" style="font-size: 26px;">ΔP<sub>choked</sub> = x<sub>T</sub> × P<sub>1</sub></div>
-            <div class="card-text text-white" style="font-size: 22px;">Again: If your actual ΔP is > ΔP<sub>choked</sub>, you MUST use ΔP<sub>choked</sub> in the gas C<sub>v</sub> formula.</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 5: Step 1 (5.5s) -->
+    <div class="scene" data-duration="5500">
+        <div class="step-number">1</div>
+        <div class="subtitle pop-in-wow">DRAW NUMBER LINE</div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <line x1="30" y1="180" x2="320" y2="180" class="line draw-line-wow-fast" style="animation-delay: 0.2s"/>
+                
+                <line x1="80" y1="170" x2="80" y2="190" class="line draw-line-wow-fast" style="animation-delay: 0.7s"/>
+                <text x="80" y="210" class="diagram-text pop-in-label-wow" style="text-anchor: middle; animation-delay: 1.2s">O (0)</text>
+                
+                <line x1="150" y1="170" x2="150" y2="190" class="line draw-line-wow-fast" style="animation-delay: 1.7s"/>
+                <text x="150" y="210" class="diagram-text pop-in-label-wow" style="text-anchor: middle; animation-delay: 2.2s">1</text>
+                
+                <line x1="220" y1="170" x2="220" y2="190" class="line draw-line-wow-fast" style="animation-delay: 2.7s"/>
+                <text x="220" y="210" class="diagram-text pop-in-label-wow" style="text-anchor: middle; animation-delay: 3.2s">A (2)</text>
+                
+                <line x1="290" y1="170" x2="290" y2="190" class="line draw-line-wow-fast" style="animation-delay: 3.7s"/>
+                <text x="290" y="210" class="diagram-text pop-in-label-wow" style="text-anchor: middle; animation-delay: 4.2s">3</text>
+            </svg>
         </div>
     </div>
 
-    <!-- Scene 9: Step 3: Valve Selection -->
-    <div id="scene9" class="scene">
-        <div class="title text-primary">Step 3: Selection</div>
-        <div class="subtitle text-white" style="font-size: 32px;">"The 30-80% Rule"</div>
-        
-        <div class="card primary">
-            <div class="card-title text-primary">The Goal</div>
-            <div class="card-text text-white" style="font-size: 22px;">Your *calculated* C<sub>v</sub> (at normal flow) should be 30% to 80% of the *valve's* rated C<sub>v</sub>.</div>
-        </div>
-        
-        <div class="card warning">
-            <div class="card-title text-warning">Oversizing is BAD</div>
-            <div class="card-text text-white" style="font-size: 22px;">A valve running at < 10% open has poor control and high wear. The smallest valve that works is the BEST valve.</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-    
-    <!-- Scene 10: Valve Characteristic -->
-    <div id="scene10" class="scene">
-        <div class="title text-success">Expert Step</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Flow Characteristic</div>
-        
-        <div class="card success">
-            <div class="card-title text-success">Equal % (Default)</div>
-            <div class="card-text text-white" style="font-size: 22px;">Use for most processes (pressure, flow, temp) where ΔP across the valve changes.</div>
-        </div>
-
-        <div class="card primary">
-            <div class="card-title text-primary">Linear</div>
-            <div class="card-text text-white" style="font-size: 22px;">Use only when ΔP is constant (e.g., some level control or speed control).</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 6: Step 2 (4.5s) -->
+    <div class="scene" data-duration="4500">
+        <div class="step-number">2</div>
+        <div class="subtitle pop-in-wow">BASE (a) = <span class="highlight mono">2</span></div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <!-- Base number line (static) -->
+                <line x1="30" y1="180" x2="320" y2="180" class="line" style="opacity: 0.5;"/>
+                <line x1="80" y1="170" x2="80" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="150" y1="170" x2="150" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="220" y1="170" x2="220" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="290" y1="170" x2="290" y2="190" class="line" style="opacity: 0.5;"/>
+                <text x="80" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">O (0)</text>
+                <text x="150" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">1</text>
+                <text x="220" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">A (2)</text>
+                <text x="290" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">3</text>
+                <!-- Step 2: Draw base -->
+                <line x1="80" y1="180" x2="220" y2="180" class="line-yellow draw-line-wow pulse-line-yellow" style="animation-delay: 0.3s, 1.2s;"/>
+                <text x="150" y="165" class="diagram-label label-yellow pop-in-label-wow" style="text-anchor: middle; animation-delay: 1.2s">OA = 2</text>
+            </svg>
         </div>
     </div>
 
-    <!-- Scene 11: Dos and Don'ts (Safety/Installation) -->
-    <div id="scene11" class="scene">
-        <div class="title text-warning">Dos & Don'ts (Safety)</div>
-        <div class="subtitle text-white" style="font-size: 32px;">Installation & Safety</div>
-        
-        <div class="list" style="font-size: 22px;">
-            <div class="list-item text-success" style="font-size: 24px;">DO: Define Fail-Safe Mode (Fail Open or Fail Close).</div>
-            <div class="list-item text-success" style="font-size: 24px;">DO: Install upstream strainer/filter.</div>
-            <div class="list-item text-success" style="font-size: 24px;">DO: Install block & bypass valves.</div>
-            <div class="list-item text-success" style="font-size: 24px;">DO: Allow 5-10 pipe diameters of straight run.</div>
-            <div class="list-item text-accent" style="font-size: 24px;">DON'T: Ignore noise (it's cavitation or high velocity).</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
-        </div>
-    </div>
-    
-    <!-- Scene 12: Final OEM Specification -->
-    <div id="scene12" class="scene">
-        <div class="title text-primary">OEM Spec Sheet</div>
-        <div class="subtitle text-white" style="font-size: 32px;">(What to tell the vendor)</div>
-        
-        <div class="list" style="font-size: 24px;">
-            <div class="list-item text-white" style="font-size: 20px;">✓ Full Process Data (All Cases)</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Calculated C<sub>v</sub> (Min/Norm/Max)</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Valve Type (Globe, Ball, etc.)</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Body & Trim Materials (e.g., SS316)</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Characteristic (Equal % / Linear)</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Actuator Type & Fail-Safe Mode</div>
-            <div class="list-item text-white" style="font-size: 20px;">✓ Noise / Cavitation Limits</div>
-        </div>
-    <!-- ADDED FOOTER -->
-        <div class="text-dim" style="font-size: 20px; margin-top: auto; padding-top: 15px;">
-            prepared by https://designcalculators.co.in
+    <!-- Scene 7: Step 3 (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="step-number">3</div>
+        <div class="subtitle pop-in-wow">HEIGHT (b) = <span class="highlight mono">1</span></div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <!-- Base elements (static) -->
+                <line x1="30" y1="180" x2="320" y2="180" class="line" style="opacity: 0.5;"/>
+                <line x1="80" y1="170" x2="80" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="150" y1="170" x2="150" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="220" y1="170" x2="220" y2="190" class="line" style="opacity: 0.5;"/>
+                <line x1="290" y1="170" x2="290" y2="190" class="line" style="opacity: 0.5;"/>
+                <text x="80" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">O (0)</text>
+                <text x="150" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">1</text>
+                <text x="220" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">A (2)</text>
+                <text x="290" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.5;">3</text>
+                <line x1="80" y1="180" x2="220" y2="180" class="line-yellow" style="opacity: 0.5;"/>
+                <text x="150" y="165" class="diagram-label label-yellow" style="text-anchor: middle; opacity: 0.5;">OA = 2</text>
+                <!-- Step 3: Draw height, then right-angle, then label -->
+                <line x1="220" y1="180" x2="220" y2="110" class="line-pink draw-line-wow pulse-line-pink" style="animation-delay: 0.3s, 1.2s;"/>
+                <text x="225" y="100" class="diagram-text-small label-pink pop-in-label-wow" style="text-anchor: left; animation-delay: 1.5s">B</text>
+                <rect x="210" y="170" width="10" height="10" fill="none" stroke="#fff" stroke-width="2" class="pop-in-label-wow" style="animation-delay: 1.2s"/>
+                <text x="235" y="145" class="diagram-label label-pink pop-in-label-wow" style="animation-delay: 1.7s">AB = 1</text>
+            </svg>
         </div>
     </div>
 
-    <!-- Scene 13: Final Message -->
-    <div id="scene13" class="scene">
-        <div class="icon" style="font-size: 80px;">✅</div>
-        <div class="title text-accent">DON'T GUESS.</div>
-        <div class="title text-primary">CALCULATE.</div>
-        <div class="spacing-medium"></div>
-        <div class="description text-success" style="font-size: 26px;">A valve sized for control is the key to a stable plant.</div>
-        
-        <div class="spacing-medium"></div>
-
-        <div class="cta-box">
-            <div class="cta-text text-white">For precise engineering calculations, visit:</div>
-            <div class="cta-url text-success">https://designcalculators.co.in</div>
+    <!-- Scene 8: Step 4 (6.0s) -->
+    <div class="scene" data-duration="6000">
+        <div class="step-number">4</div>
+        <div class="subtitle pop-in-wow">HYPOTENUSE (c) = <span class="mono highlight">√5</span></div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <!-- Faded elements -->
+                <line x1="30" y1="180" x2="320" y2="180" class="line" style="opacity: 0.3;"/>
+                <text x="80" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.3;">O (0)</text>
+                <text x="220" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.3;">A (2)</text>
+                <line x1="80" y1="180" x2="220" y2="180" class="line-yellow" style="opacity: 0.4"/>
+                <line x1="220" y1="180" x2="220" y2="110" class="line-pink" style="opacity: 0.4"/>
+                <text x="225" y="100" class="diagram-text-small label-pink" style="text-anchor: left; opacity: 0.4;">B</text>
+                <rect x="210" y="170" width="10" height="10" fill="none" stroke="#fff" stroke-width="2" style="opacity: 0.4"/>
+                <!-- Step 4: Draw hypotenuse, then CHARGE, then label pops in -->
+                <line x1="80" y1="180" x2="220" y2="110" class="line-green draw-line-wow-long charge-glow-green" style="animation-delay: 0.3s, 1.6s;"/>
+                <text x="130" y="130" class="diagram-label label-green pop-in-label-wow" style="animation-delay: 2.0s; font-size: 16px;">OB = √5</text>
+            </svg>
         </div>
-
-        <div class="spacing-medium"></div>
-        <div class="description text-dim" style="font-size: 22px;">Save & Share With Your Engineering Team</div>
     </div>
+
+    <!-- Scene 9: Step 5 (7.0s) -->
+    <div class="scene" data-duration="7000">
+        <div class="step-number">5</div>
+        <div class="subtitle pop-in-wow">SWING THE COMPASS!</div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <!-- Faded elements -->
+                <line x1="30" y1="180" x2="320" y2="180" class="line" style="opacity: 0.3;"/>
+                <text x="80" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.3;">O (0)</text>
+                <text x="220" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.3;">A (2)</text>
+                <text x="290" y="210" class="diagram-text" style="text-anchor: middle; opacity: 0.3;">3</text>
+                <line x1="80" y1="180" x2="220" y2="180" class="line-yellow" style="opacity: 0.2"/>
+                <line x1="220" y1="180" x2="220" y2="110" class="line-pink" style="opacity: 0.2"/>
+                <text x="225" y="100" class="diagram-text-small label-pink" style="text-anchor: left; opacity: 0.4;">B</text>
+                
+                <!-- Step 5: Compass point, arc, and line swing -->
+                <circle cx="80" cy="180" r="5" fill="none" class="ping-origin" style="animation-delay: 0.3s;"/>
+                
+                <!-- Arc path from B(220, 110) to P(236.5, 180) with radius 156.5 -->
+                <path d="M 220 110 A 156.5 156.5 0 0 1 236.5 180" fill="none" stroke="var(--success-green)" stroke-width="2" stroke-dasharray="5,5" class="draw-arc-path-wow" style="animation-delay: 1.0s; opacity: 0.6;"/>
+                
+                <!-- Solid line swinging from OB to OP -->
+                <line x1="80" y1="180" x2="236.5" y2="180" class="line-green charge-glow-green swing-arc-wow" style="animation-delay: 0.8s, 1.0s;"/>
+                <text x="130" y="130" class="diagram-label label-green pop-in-label-wow" style="animation-delay: 1.5s; font-size: 16px;">Radius = √5</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Scene 10: The Answer! (6.0s) -->
+    <div class="scene" data-duration="6000">
+        <div class="subtitle pop-in-wow" style="font-size: clamp(1.5rem, 6vw, 2rem);">🎉 POINT P = <span class="mono highlight">√5</span> ! 🎉</div>
+        <div class="diagram-container">
+            <svg class="diagram-svg" viewBox="0 0 350 250">
+                <!-- Base number line (static) -->
+                <line x1="30" y1="180" x2="320" y2="180" class="line"/>
+                <line x1="80" y1="170" x2="80" y2="190" class="line"/>
+                <line x1="150" y1="170" x2="150" y2="190" class="line"/>
+                <line x1="220" y1="170" x2="220" y2="190" class="line"/>
+                <line x1="290" y1="170" x2="290" y2="190" class="line"/>
+                <text x="80" y="210" class="diagram-text" style="text-anchor: middle">O (0)</text>
+                <text x="150" y="210" class="diagram-text" style="text-anchor: middle">1</text>
+                <text x="220" y="210" class="diagram-text" style="text-anchor: middle">A (2)</text>
+                <text x="290" y="210" class="diagram-text" style="text-anchor: middle">3</text>
+
+                <!-- Final result: Tick, Pin, and Label with a PULSE -->
+                <line x1="236.5" y1="170" x2="236.5" y2="190" class="line draw-line-wow-fast" style="stroke: var(--success-green); stroke-width: 5; animation-delay: 0.3s;"/>
+                <text x="236.5" y="155" class="slam-down" style="font-size: 40px; animation-delay: 0.8s; text-anchor: middle;">📍</text>
+                <text x="236.5" y="225" class="diagram-label label-green result-pulse" style="text-anchor: middle; font-size: 20px; animation-delay: 1.2s; filter: drop-shadow(0 0 15px var(--success-green));">P</text>
+            </svg>
+        </div>
+        <div class="emphasis pop-in-label-wow text-glow-cyan" style="margin-top: 1vh; animation-delay: 1.8s; font-size: 1.5rem;">OP = OB = <span class="mono">√5</span> ≈ 2.236</div>
+    </div>
+
+    <!-- Scene 11: FINAL CTA (5.0s) -->
+    <div class="scene" data-duration="5000">
+        <div class="mega-icon pop-in-wow" style="animation-delay: 0.1s;">👍</div>
+        <div class="mega-title pop-in-label-wow" style="font-size: clamp(1.6rem, 7vw, 2.4rem); animation-delay: 0.3s;">EASY!</div>
+        <div class="subtitle pop-in-label-wow" style="color: #fff; margin-top: 2vh; animation-delay: 0.6s;">Try √10 (3² + 1²) next!</div>
+        <div class="final-cta" style="animation-delay: 0.9s;">LIKE & SUBSCRIBE!</div>
+        
+        <div class="footer-brand" style="background: none; bottom: 8vh;">
+            <div class="footer-text pop-in-label-wow" style="animation-delay: 1.3s;">MATH MADE SIMPLE BY:</div>
+            <div class="footer-website pop-in-label-wow" style="animation-delay: 1.5s;">ALKA MA'AM</div>
+        </div>
+    </div>
+
+    <div class="progress-bar" id="progress"></div>
+
 </div>
 
 <script>
-    const scenes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]; 
-    // Durations in ms, matched to each scene by index
-    const sceneDurations = [
-        7000,  // Scene 1 (Hook)
-        7000,  // Scene 2 (Goal Cv)
-        10000, // Scene 3 (Process Data)
-        9000,  // Scene 4 (Liquid Simple)
-        9000,  // Scene 5 (Mistake Liquid)
-        10000, // Scene 6 (Fix Liquid)
-        7000,  // Scene 7 (Mistake Gas)
-        9000,  // Scene 8 (Fix Gas)
-        9000,  // Scene 9 (Selection)
-        8000,  // Scene 10 (Characteristic)
-        10000, // Scene 11 (Dos/Donts)
-        10000, // Scene 12 (Spec Sheet)
-        7000   // Scene 13 (Final Message)
-    ];
+    const container = document.getElementById('container');
+    const progressBar = document.getElementById('progress');
+    const currentCounter = document.getElementById('current');
+    const totalCounter = document.getElementById('total');
+    
     let currentScene = 0;
-    let sceneTimeout; // Use setTimeout instead of setInterval
-
-    function showScene(index) {
-        // Clear any existing timer
-        clearTimeout(sceneTimeout);
-
-        document.querySelectorAll('.scene').forEach(s => s.classList.add('hidden'));
-        const sceneElement = document.getElementById(`scene${scenes[index]}`);
-        if(sceneElement) {
-            sceneElement.classList.remove('hidden');
-            sceneElement.scrollTop = 0;
+    let sceneTimer;
+    let progressInterval;
+    let progressValue = 0;
+    
+    let liveScenes = document.querySelectorAll('.scene');
+    totalCounter.textContent = liveScenes.length;
+    
+    function createParticles() {
+        if (!container) return; 
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            particle.style.animationDuration = (3 + Math.random() * 2) + 's';
+            container.appendChild(particle);
         }
+    }
+    
+    createParticles();
+    
+    function updateSceneReferences() {
+        liveScenes = document.querySelectorAll('.scene');
+    }
+    
+    function showScene(index) {
+        liveScenes.forEach(s => s.classList.remove('active'));
         
-        // Ensure index is valid for durations array
-        const durationIndex = index % sceneDurations.length;
-        const duration = sceneDurations[durationIndex];
-        
-        // Schedule the next scene based on the current scene's duration
-        sceneTimeout = setTimeout(nextScene, duration);
+        const currentSceneElement = liveScenes[index];
+        if (currentSceneElement) {
+            // This cloneNode trick is the key to re-triggering all animations
+            const newScene = currentSceneElement.cloneNode(true);
+            currentSceneElement.parentNode.replaceChild(newScene, currentSceneElement);
+            updateSceneReferences(); 
+            
+            newScene.classList.add('active');
+            newScene.classList.add('pop-in-scene'); // WOW: Add new transition
+            currentCounter.textContent = index + 1;
+            
+            progressValue = 0;
+            const duration = parseInt(newScene.dataset.duration);
+            const updateInterval = 30; 
+            const increment = (100 / duration) * updateInterval;
+            
+            clearInterval(progressInterval);
+            if (progressBar) {
+                progressBar.style.width = '0%'; 
+            }
+            
+            progressInterval = setInterval(() => {
+                progressValue += increment;
+                if (progressValue >= 100) {
+                    progressValue = 100;
+                    clearInterval(progressInterval);
+                }
+                if (progressBar) {
+                    progressBar.style.width = progressValue + '%';
+                }
+            }, updateInterval);
+        }
     }
 
+    function scheduleNextScene() {
+        clearTimeout(sceneTimer);
+        const duration = parseInt(liveScenes[currentScene].dataset.duration);
+        sceneTimer = setTimeout(nextScene, duration);
+    }
+    
     function nextScene() {
-        currentScene = (currentScene + 1) % scenes.length;
+        currentScene = (currentScene + 1) % liveScenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
     
     function prevScene() {
-        currentScene = (currentScene - 1 + scenes.length) % scenes.length;
+        currentScene = (currentScene - 1 + liveScenes.length) % liveScenes.length;
         showScene(currentScene);
+        scheduleNextScene();
     }
-    
-    // Initial load
-    showScene(0); // This will show scene 0 and schedule scene 1
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === ' ') {
-            e.preventDefault();
-            nextScene(); // This will show the next scene and reset the timer
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            prevScene(); // This will show the previous scene and reset the timer
-        }
-    });
+    showScene(0);
+    scheduleNextScene();
+    
+    let clickDisabled = false;
+    if (container) {
+        container.addEventListener('click', (e) => {
+            if (clickDisabled || e.target.tagName === 'A' || e.target.closest('A')) return;
+            clickDisabled = true;
+            nextScene();
+            setTimeout(() => clickDisabled = false, 250); 
+        });
+        
+        let touchStartX = 0;
+        container.addEventListener('touchstart', (e) => {
+            if (e.target.tagName === 'A' || e.target.closest('A')) return;
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        container.addEventListener('touchend', (e) => {
+            if (!touchStartX || e.target.tagName === 'A' || e.target.closest('A')) {
+                touchStartX = 0;
+                return;
+            }
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            touchStartX = 0;
+            
+            if (Math.abs(diff) > 40) { 
+                if (!clickDisabled) {
+                    clickDisabled = true;
+                    if (diff < 0) {
+                        nextScene();
+                    } else {
+                        prevScene();
+                    }
+                    setTimeout(() => clickDisabled = false, 250);
+                }
+            }
+        }, { passive: true });
+    }
 </script>
 
 </body>
